@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const idProf = require('./teacher');
 
 var id=0; //contador id
 
@@ -25,7 +26,7 @@ router.get('/:id', function (req, res) {
         res.send(filterestCourses[0]);
     else
         res.status(404);
-    res.send('Curso não encontrado ');
+        res.send('Curso não encontrado ');
 });
 
 router.delete('/', function (req, res) {
