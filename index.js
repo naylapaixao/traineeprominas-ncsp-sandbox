@@ -1,17 +1,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const userRoute = require('./routes/user');
+const studentRoute = require('./routes/student');
+const courseRoute = require('./routes/course');
+const teacherRoute = require('./routes/course');
+
+const baseAPI = "/api/v1";
 
 app.use(bodyParser.json());
 
-var students = [
+app.use(`${baseAPI}/user`, userRoute);
+app.use(`${baseAPI}/student`, studentRoute);
+app.use(`${baseAPI}/course`, courseRoute);
+app.use(`${baseAPI}/teacher`, teacherRoute);
+
+
+app.get('/', function (req, res) {
+    res.send('NodeJS - Treinamento 1');
+});
+
+app.post('/', function (req, res) {
+    res.send('Hello World - POST - Teste');
+});
+
+const listener = app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server running on PORT ${listener.address().port}`);
+});
+
+
+/* var students = [
     {"name": "Marcos", "idade":"23"},
     {"name": "Pedro", "idade":"23"},
     {"name": "Lucas", "idade":"22"}
 
     ]
 
-app.get('/', function (req, res) {
+app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET - Teste');
 })
 
@@ -44,4 +69,4 @@ app.post('/', function (req, res) {
     res.send('Hello World - POST');
 })
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT); */
