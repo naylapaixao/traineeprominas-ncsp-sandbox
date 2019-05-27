@@ -44,4 +44,4 @@ app.post('/', function (req, res) {
     res.send('Hello World - POST');
 })
 
-app.listen(3000);
+app.listen(process.env.PORT);
