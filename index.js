@@ -12,7 +12,7 @@ var students = [
     ]
 
 app.get('/', function (req, res) {
-    res.send('Hello World - GET');
+    res.send('Hello World - GET - Teste');
 })
 
 app.post('/students', function (req, res) {
