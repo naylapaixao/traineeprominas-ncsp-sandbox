@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
     var newcourse = req.body;
-    newcourse.id = id++;
+    newcourse.id = ++id;
     //var filteredTeacher = newcourse.teacher.filter();
     for (var i=0;i<newcourse.teacher.length;i++){
         var teacherId = newcourse.teacher[i];
@@ -41,7 +41,7 @@ router.put('/:id', function (req, res) {
         filterestCourses[0].city = req.body.city;
 
         filterestCourses[0].teacher =req.body.teacher.map(item => {
-            return teacherConsult.getTeacher(item)
+            return teacherConsult.getTeacher(item);
         });
     }
     res.send('Editado com sucesso');

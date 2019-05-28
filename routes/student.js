@@ -17,10 +17,11 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
     var newstudent = req.body;
     newstudent.id = ++id;
-    for (var i=0;i<newstudent.course.length;i++){
-        var courseId = newstudent.course[i];
+    //for (var i=0;i<newstudent.course.length;i++){
+        //var courseId = newstudent.course[i];
+    var courseId = newstudent.course;
         newstudent.course = courseConsult.getCourse(courseId);
-    }
+    //}
     students.push(newstudent);
     res.send('Usuario Cadastrado com sucesso');
 });
@@ -35,7 +36,6 @@ router.put('/:id', function (req, res) {
         filterestStudents[0].course = req.body.course;
 
         filterestStudents[0].course = courseConsult.getCourse(req.body.course);
-
     }
 
     res.send('Editado com sucesso');
