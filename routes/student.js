@@ -5,10 +5,7 @@ const  courseConsult = require('./course');
 
 var id=0; //contador id
 
-var students = [
-    {"id":++id,"name": "Marcos", "lastname":"Alves","age":"23", "course":"Sistemas de Informação"},
-    {"id":++id,"name": "Pedro", "lastname":"Cavalcanti","age":"25","course":"Arquitetura"}
-]
+var students = [];
 
 router.get('/', function (req, res) {
     res.send(students);

@@ -3,10 +3,7 @@ const router = express.Router();
 
 var id=0; //contador id
 
-var teachers = [
-    {"id":++id,"name": "XXX", "lastname":"YYY","phd":"não"},
-    {"id":++id,"name": "YYY", "lastname":"XXX","phd":"sim"}
-]
+var teachers = [];
 
 router.get('/', function (req, res) {
     res.send(teachers);
