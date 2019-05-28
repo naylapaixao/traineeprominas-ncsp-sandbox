@@ -16,11 +16,11 @@ app.use(`${baseAPI}/course`, courseRoute.router);
 app.use(`${baseAPI}/teacher`, teacherRoute.router);
 
 
-app.get('/', function (req, res) {
+app.get(baseAPI, function (req, res) {
     res.send('NodeJS - Treinamento 1');
 });
 
-app.post('/', function (req, res) {
+app.post(baseAPI, function (req, res) {
     res.send('Hello World - POST - Teste');
 });
 
