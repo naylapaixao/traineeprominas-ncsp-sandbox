@@ -4,7 +4,7 @@ const app = express();
 const userRoute = require('./routes/user');
 const studentRoute = require('./routes/student');
 const courseRoute = require('./routes/course');
-const teacherRoute = require('./routes/course');
+const teacherRoute = require('./routes/teacher');
 
 const baseAPI = "/api/v1";
 
@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 app.use(`${baseAPI}/user`, userRoute);
 app.use(`${baseAPI}/student`, studentRoute);
-app.use(`${baseAPI}/course`, courseRoute);
-app.use(`${baseAPI}/teacher`, teacherRoute);
+app.use(`${baseAPI}/course`, courseRoute.router);
+app.use(`${baseAPI}/teacher`, teacherRoute.router);
 
 
 app.get('/', function (req, res) {

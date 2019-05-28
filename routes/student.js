@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const  courseConsult = require('./course');
+
 
 var id=0; //contador id
 
@@ -13,9 +15,31 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    var  student = req.body;
-    students.push(student);
+    var newstudent = req.body;
+    newstudent.id = ++id;
+    for (var i=0;i<newstudent.course.length;i++){
+        var courseId = newstudent.course[i];
+        newstudent.course = courseConsult.getCourse(courseId);
+    }
+    students.push(newstudent);
     res.send('Usuario Cadastrado com sucesso');
+});
+
+router.put('/:id', function (req, res) {
+    var id = req.params.id;
+    var filterestStudents = students.filter((s) => {return (s.id == id); });
+    if (filterestStudents.length >= 1){
+        filterestStudents[0].name = req.body.name;
+        filterestStudents[0].lastname = req.body.lastname;
+        filterestStudents[0].age = req.body.age;
+        filterestStudents[0].course = req.body.course;
+
+        filterestStudents[0].course = courseConsult.getCourse(req.body.course);
+
+    }
+
+    res.send('Editado com sucesso');
+
 });
 
 router.get('/:id', function (req, res) {
@@ -31,6 +55,22 @@ router.get('/:id', function (req, res) {
 router.delete('/', function (req, res) {
     students = [];
     res.send('Estudantes removidos com sucesso ');
+});
+
+router.delete('/:id', function (req, res) {
+    var id = req.params.id;
+    var deleteStudent = students.filter((c) => {return (c.id == id); });
+    if (deleteStudent.length >= 1) {
+        for(var i=0;i<students.length;i++){
+            if (students[i].id == id){
+                students.splice(i,1);
+                res.send('Deletado com sucesso ');
+            }
+        }
+
+    }
+    else
+        res.send('Estudante não encontrado ');
 });
 
 module.exports = router;

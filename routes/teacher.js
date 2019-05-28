@@ -3,24 +3,36 @@ const router = express.Router();
 
 var id=0; //contador id
 
-var professors = [
+var teachers = [
     {"id":++id,"name": "XXX", "lastname":"YYY","phd":"não"},
     {"id":++id,"name": "YYY", "lastname":"XXX","phd":"sim"}
 ]
 
 router.get('/', function (req, res) {
-    res.send(professors);
+    res.send(teachers);
+});
+
+router.put('/:id', function (req, res) {
+    var id = req.params.id;
+    var filterestProfessors = teachers.filter((s) => {return (s.id == id); });
+    if (filterestProfessors.length >= 1){
+        filterestProfessors[0].name = req.body.name;
+        filterestProfessors[0].lastname = req.body.lastname;
+        filterestProfessors[0].phd = req.body.phd;
+    }
+    res.send('Editado com sucesso');
+
 });
 
 router.post('/', function (req, res) {
     var  professor = req.body;
-    professors.push(professor);
-    res.send('Curso Cadastrado com sucesso');
+    teachers.push(professor);
+    res.send('Professor Cadastrado com sucesso');
 });
 
 router.get('/:id', function (req, res) {
     var id = req.params.id; //o parametro name tem que ser exatamente o mesmo que na rota
-    var filterestProfessors = professors.filter((s) => {return (s.id == id); });
+    var filterestProfessors = teachers.filter((s) => {return (s.id == id); });
     if (filterestProfessors.length >= 1)
         res.send(filterestProfessors[0]);
     else
@@ -29,9 +41,34 @@ router.get('/:id', function (req, res) {
 });
 
 router.delete('/', function (req, res) {
-    professors = [];
+    teachers = [];
     res.send('Cursos removidos com sucesso ');
 });
 
+router.delete('/:id', function (req, res) {
+    var id = req.params.id;
+    var deleteTeacher = teachers.filter((c) => {return (c.id == id); });
+    if (deleteTeacher.length >= 1) {
+        for(var i=0;i<teachers.length;i++){
+            if (teachers[i].id == id){
+                teachers.splice(i,1);
+                res.send('Deletado com sucesso ');
+            }
+        }
 
-module.exports = router;
+    }
+    else
+        res.send('Estudante não encontrado ');
+});
+
+function getTeacher(teacherId){
+    teacherId = parseInt(teacherId);
+
+    for(var i=0;i<teachers.length;i++){
+        if(teacherId == teachers[i].id){
+            return teachers[i];
+        }
+    }
+}
+
+module.exports = {router, getTeacher};
