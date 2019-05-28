@@ -36,9 +36,9 @@ router.put('/:id', function (req, res) {
     var id = req.params.id;
     var filterestCourses = courses.filter((s) => {return (s.id == id); });
     if (filterestCourses.length >= 1){
-        filterestCourses[0].name = req.body.name;
-        filterestCourses[0].period = req.body.period;
-        filterestCourses[0].city = req.body.city;
+        filterestCourses[0].name = req.body.name || filterestCourses[0].name;
+        filterestCourses[0].period = req.body.period || filterestCourses[0].period;
+        filterestCourses[0].city = req.body.city || filterestCourses.city;
 
         filterestCourses[0].teacher =req.body.teacher.map(item => {
             return teacherConsult.getTeacher(item);

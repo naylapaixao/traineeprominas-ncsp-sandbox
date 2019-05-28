@@ -30,10 +30,10 @@ router.put('/:id', function (req, res) {
     var id = req.params.id;
     var filterestStudents = students.filter((s) => {return (s.id == id); });
     if (filterestStudents.length >= 1){
-        filterestStudents[0].name = req.body.name;
-        filterestStudents[0].lastname = req.body.lastname;
-        filterestStudents[0].age = req.body.age;
-        filterestStudents[0].course = req.body.course;
+        filterestStudents[0].name = req.body.name || filterestStudents[0].name  ;
+        filterestStudents[0].lastname = req.body.lastname || filterestStudents[0].lastname ;
+        filterestStudents[0].age = req.body.age || filterestStudents[0].age;
+        filterestStudents[0].course = req.body.course || filterestStudents[0].course;
 
         filterestStudents[0].course = courseConsult.getCourse(req.body.course);
     }

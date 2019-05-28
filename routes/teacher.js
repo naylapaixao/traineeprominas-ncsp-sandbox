@@ -16,9 +16,9 @@ router.put('/:id', function (req, res) {
     var id = req.params.id;
     var filterestProfessors = teachers.filter((s) => {return (s.id == id); });
     if (filterestProfessors.length >= 1){
-        filterestProfessors[0].name = req.body.name;
-        filterestProfessors[0].lastname = req.body.lastname;
-        filterestProfessors[0].phd = req.body.phd;
+        filterestProfessors[0].name = req.body.name || filterestProfessors[0].name  ;
+        filterestProfessors[0].lastname = req.body.lastname || filterestProfessors[0].lastname ;
+        filterestProfessors[0].phd = req.body.phd || filterestProfessors[0].phd ;
     }
     res.send('Editado com sucesso');
 
@@ -26,6 +26,7 @@ router.put('/:id', function (req, res) {
 
 router.post('/', function (req, res) {
     var  professor = req.body;
+    professor.id = ++id;
     teachers.push(professor);
     res.send('Professor Cadastrado com sucesso');
 });
