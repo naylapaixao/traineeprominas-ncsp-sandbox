@@ -49,7 +49,19 @@ router.post('/', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
-    var id = req.params.id;
+    var id = parseInt(req.params.id);
+    var bodyuser = req.body;
+
+    if(bodyuser == {}){
+        res.status('400');
+        res.send('Solicitação não autorizada')
+    }
+    else {
+        collection.update({'id':id}, bodyuser);
+        res.send('Editado com sucesso');
+    }
+
+    /* var id = req.params.id;
     var filterestStudents = students.filter((s) => {return (s.id == id); });
     if (filterestStudents.length >= 1){
         filterestStudents[0].name = req.body.name || filterestStudents[0].name  ;
@@ -59,8 +71,7 @@ router.put('/:id', function (req, res) {
 
         filterestStudents[0].course = courseConsult.getCourse(req.body.course);
     }
-
-    res.send('Editado com sucesso');
+    res.send('Editado com sucesso'); */
 
 });
 
