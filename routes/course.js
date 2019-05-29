@@ -36,20 +36,25 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
    var newcourse = req.body;
-    newcourse.id = ++id;
-        //var filteredTeacher = newcourse.teacher.filter();
-    /*for (var i=0;i<newcourse.teacher.length;i++){
-        var teacherId = newcourse.teacher[i];
-        newcourse.teacher[i] = teacherConsult.getTeacher(teacherId);
-    } */
-        /*console.log(filteredTeacher);
-        if (filteredTeacher.length >= 1){
-            newcourse.push(filteredTeacher[0]);
-            res.send('Novo Curso Cadastrado ');
-        } */
-    db.collection('course').insert(newcourse);
-    res.send('Curso Cadastrado com sucesso');
+   newcourse.id = ++id;
+
+   
+
 });
+
+const getTeacher = function(id) {
+
+    return new Promise((resolve, reject) => {
+
+        teacherCollection.findOne({ "id" : id }, (err, teacher) => {
+            if (err)
+                return reject(err);
+            else
+                return resolve(teacher);
+        });
+
+    });
+};
 
 router.put('/:id', function (req, res) {
     var id = parseInt(req.params.id);

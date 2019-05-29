@@ -155,7 +155,7 @@ router.delete('/:id', function (req, res) {
         res.send('Estudante não encontrado '); */
 });
 
-function getTeacher(teacherId){
+/*function getTeacher(teacherId){
     teacherId = parseInt(teacherId);
 
     for(var i=0;i<teachers.length;i++){
@@ -163,6 +163,6 @@ function getTeacher(teacherId){
             return teachers[i];
         }
     }
-}
+} */
 
 module.exports = {router, getTeacher};
