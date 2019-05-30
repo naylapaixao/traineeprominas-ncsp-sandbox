@@ -35,7 +35,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-   var newcourse = req.body;
+   let newcourse = req.body;
    newcourse.id = ++id;
 
    console.log('Oi');
@@ -77,17 +77,33 @@ const getTeacher = function(id) {
 };
 
 router.put('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
-    var bodyuser = req.body;
-
+    let id = parseInt(req.params.id);
+    let bodyuser = req.body;
+    bodyuser.id = parseInt(req.params.id);
 
     if(bodyuser == {}){
         res.status('400');
         res.send('Solicitação não autorizada')
     }
     else {
-        collection.update({'id':id}, bodyuser);
-        res.send('Editado com sucesso');
+        (async function() {
+
+            for (let i = 0; i < bodyuser.teacher.length; i++) {
+                let teacherId = await getTeacher(bodyuser.teacher[i]);
+                bodyuser.teacher[i] = teacherId;
+            }
+
+            db.collection('course').update({'id':id},bodyuser, (err, result) => {
+
+                if (err) {
+                    console.error("Erro ao editar Um Novo Curso", err);
+                    res.status(500).send("Erro ao Criar Um Novo Curso");
+                } else {
+                    res.status(201).send("Curso Editado com Sucesso.");
+                }
+            });
+
+        })();
     }
 
     /* var id = req.params.id;
