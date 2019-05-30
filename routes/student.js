@@ -39,14 +39,50 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
     var newstudent = req.body;
     newstudent.id = ++id;
+
+    (async function() {
+
+        for (let i = 0; i < newstudent.course.length; i++) {
+            let courseId = await getCourse(newstudent.course[i]);
+            newstudent.course[i] = courseId;
+        }
+
+        db.collection('student').insertOne(newstudent, (err, result) => {
+
+            if (err) {
+                console.error("Erro ao Criar Um Novo Estudante", err);
+                res.status(500).send("Erro ao Criar Um Novo Estudante");
+            } else {
+                res.status(201).send("Estudante Cadastrado com Sucesso.");
+            }
+        });
+
+    })();
+
     //for (var i=0;i<newstudent.course.length;i++){
         //var courseId = newstudent.course[i];
-    var courseId = newstudent.course;
+    /*var courseId = newstudent.course;
     newstudent.course = courseConsult.getCourse(courseId);
     //}
     db.collection('student').insert(newstudent);
-    res.send('Usuario Cadastrado com sucesso');
+    res.send('Usuario Cadastrado com sucesso'); */
 });
+
+const getCourse = function(id) {
+
+    return new Promise((resolve, reject) => {
+
+        db.collection('course').findOne({ "id" : id }, (err, course) => {
+            if (err){
+                return reject(err);
+            }
+            else{
+                return resolve(course);
+            }
+        });
+
+    });
+};
 
 router.put('/:id', function (req, res) {
     var id = parseInt(req.params.id);

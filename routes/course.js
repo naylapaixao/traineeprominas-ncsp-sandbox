@@ -197,7 +197,7 @@ router.delete('/:id', function (req, res) {
         res.send('Curso não encontrado '); */
 });
 
-function getCourse(courseId){
+/* function getCourse(courseId){
     courseId = parseInt(courseId);
 
     for(var i=0;i<courses.length;i++){
@@ -205,6 +205,6 @@ function getCourse(courseId){
             return courses[i];
         }
     }
-}
+} */
 
-module.exports = {router, getCourse};
+module.exports = {router};
