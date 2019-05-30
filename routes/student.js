@@ -87,14 +87,32 @@ const getCourse = function(id) {
 router.put('/:id', function (req, res) {
     var id = parseInt(req.params.id);
     var bodyuser = req.body;
+    bodyuser.id = parseInt(req.params.id);
 
     if(bodyuser == {}){
         res.status('400');
         res.send('Solicitação não autorizada')
     }
     else {
-        collection.update({'id':id}, bodyuser);
-        res.send('Editado com sucesso');
+
+        (async function() {
+
+            for (let i = 0; i < bodyuser.course.length; i++) {
+                let courseId = await getCourse(bodyuser.course[i]);
+                bodyuser.course[i] = courseId;
+            }
+
+            db.collection('student').update({'id':id},bodyuser, (err, result) => {
+
+                if (err) {
+                    console.error("Erro ao Criar Um Novo Estudante", err);
+                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                } else {
+                    res.status(201).send("Estudante Editado com Sucesso.");
+                }
+            });
+
+        })();
     }
 
     /* var id = req.params.id;

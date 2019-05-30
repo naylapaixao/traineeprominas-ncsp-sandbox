@@ -80,6 +80,7 @@ router.put('/:id', function (req, res) {
     var id = parseInt(req.params.id);
     var bodyuser = req.body;
 
+
     if(bodyuser == {}){
         res.status('400');
         res.send('Solicitação não autorizada')
