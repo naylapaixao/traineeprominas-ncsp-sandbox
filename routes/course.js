@@ -38,19 +38,39 @@ router.post('/', function (req, res) {
    var newcourse = req.body;
    newcourse.id = ++id;
 
-   
+   console.log('Oi');
+    (async function() {
 
+        for (let i = 0; i < newcourse.teacher.length; i++) {
+            let teacherId = await getTeacher(newcourse.teacher[i]);
+            newcourse.teacher[i] = teacherId;
+        }
+
+        db.collection('course').insertOne(newcourse, (err, result) => {
+
+            if (err) {
+                console.error("Erro ao Criar Um Novo Curso", err);
+                res.status(500).send("Erro ao Criar Um Novo Curso");
+            } else {
+                res.status(201).send("Curso Cadastrado com Sucesso.");
+            }
+        });
+
+    })();
 });
 
 const getTeacher = function(id) {
 
     return new Promise((resolve, reject) => {
 
-        teacherCollection.findOne({ "id" : id }, (err, teacher) => {
-            if (err)
+        db.collection('teacher').findOne({ "id" : id }, (err, teacher) => {
+            if (err){
+                console.log('Oi 3');
                 return reject(err);
-            else
+            }
+            else{
                 return resolve(teacher);
+            }
         });
 
     });
