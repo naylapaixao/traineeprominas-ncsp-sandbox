@@ -165,7 +165,6 @@ router.delete('/', function (req, res) {
             }
         }
     });
-    res.send('Estudantes removidos com sucesso ');
 });
 
 router.delete('/:id', function (req, res) {

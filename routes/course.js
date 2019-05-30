@@ -170,7 +170,6 @@ router.delete('/', function (req, res) {
             }
         }
     });
-    res.send('Cursos removidos com sucesso ');
 
     //courses = [];
     //res.send('Cursos removidos com sucesso ');

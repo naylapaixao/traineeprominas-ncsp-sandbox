@@ -113,7 +113,6 @@ router.delete('/', function (req, res) {
             }
         }
     });
-    res.send('Usuário removido com sucesso ');
 });
 
 router.delete('/:id', function (req, res) {
