@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13df07cc-5d60-4482-8882-ce7049fff2df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/student.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/student.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -29,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="892">
-              <caret line="87" column="3" lean-forward="true" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
+            <state relative-caret-position="142">
+              <caret line="50" column="172" selection-start-line="50" selection-start-column="172" selection-end-line="50" selection-end-column="172" />
             </state>
           </provider>
         </entry>
@@ -82,8 +80,8 @@
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/routes/course.js" />
         <option value="$PROJECT_DIR$/routes/teacher.js" />
-        <option value="$PROJECT_DIR$/routes/user.js" />
         <option value="$PROJECT_DIR$/routes/student.js" />
+        <option value="$PROJECT_DIR$/routes/user.js" />
       </list>
     </option>
   </component>
@@ -165,12 +163,12 @@
       <workItem from="1559128428192" duration="26342000" />
       <workItem from="1559214379234" duration="12420000" />
       <workItem from="1559239640058" duration="9877000" />
-      <workItem from="1559300733224" duration="11050000" />
+      <workItem from="1559300733224" duration="15015000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="114098000" />
+    <option name="totallyTimeSpent" value="118063000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -266,8 +264,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="892">
-          <caret line="87" column="3" lean-forward="true" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
+        <state relative-caret-position="142">
+          <caret line="50" column="172" selection-start-line="50" selection-start-column="172" selection-end-line="50" selection-end-column="172" />
         </state>
       </provider>
     </entry>

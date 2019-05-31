@@ -36,15 +36,21 @@ router.get('/', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
-    let userAlter = req.body;
 
     if (req.body.name && req.body.lastname && req.body.profile){
+        let userAlter = req.body;
         let id = parseInt(req.params.id);
         userAlter.id = id;
+        userAlter.name = req.body.name;
+        userAlter.lastname = req.body.lastname;
+        userAlter.profile = req.body.profile;
         userAlter.status =1;
 
-        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:userAlter}, function (err, result) {
-            if (err){
+        console.log(userAlter);
+
+        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:{id: userAlter.id, name:userAlter.name, lastname: userAlter.lastname, profile: userAlter.profile}}, function (err, result) {
+            console.log(result.value);
+            if (result.value == null){
                 res.status(404);
                 res.send("Nenhum Campo atualizado");
             }
@@ -76,6 +82,7 @@ router.post('/', function (req, res) {
     if (newuser.name && newuser.lastname && newuser.profile){
         console.log(newuser);
         newuser.id = id++;
+        newuser.status = 1;
 
         res.status(201);
         db.collection('user').insert(newuser);
