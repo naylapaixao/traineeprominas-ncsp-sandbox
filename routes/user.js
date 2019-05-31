@@ -19,13 +19,12 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
 
 //var collection = db.collection('user');
 
-var id=0; //contador id
+var id=1; //contador id
 
 var users = [];
 
 router.get('/', function (req, res) {
-    //res.send(users);
-    collection.find({}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, id:1, name:1, lasname:1, profile:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -37,38 +36,41 @@ router.get('/', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
-    //var filterestUsers = users.filter((s) => {return (s.id == id); });
-    var bodyuser = req.body;
+    let id = parseInt(req.params.id);
+    let bodyuser = req.body;
 
     if(bodyuser == {}){
         res.status('400');
-        res.send('Solicitação não autorizada')
+        res.send('Solicitação não autorizada');
     }
     else {
         collection.update({'id':id}, bodyuser);
         res.send('Editado com sucesso');
     }
 
-    /* if (filterestUsers.length >= 1){
-        filterestUsers[0].name = req.body.name;
-        filterestUsers[0].lastname = req.body.lastname;
-        filterestUsers[0].profile = req.body.profile;
-    } */
 });
 
 router.post('/', function (req, res) {
-    var  newuser = req.body;
-    newuser.id = ++id;
-    //users.push(newuser);
-    db.collection('user').insert(newuser);
-    res.send('Usuario Cadastrado com sucesso');
+    let  newuser = req.body;
+
+    if (newuser.name && newuser.lastname && newuser.profile){
+        console.log(newuser);
+        newuser.id = id++;
+
+        res.status(201);
+        db.collection('user').insert(newuser);
+        res.send('Usuario Cadastrado com sucesso');
+    }
+    else {
+        res.status(403);
+        res.send('Insira todos os campos obrigatorios')
+    }
 });
 
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastname:1, profile:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -83,17 +85,9 @@ router.get('/:id', function (req, res) {
             }
         }
     });
-
-    /*var filterestUser = users.filter((u) => {return (u.id == id); });
-    if (filterestUser.length >= 1)
-        res.send(filterestUser[0]);
-    else
-        res.status(404);
-        res.send('Usuário não encontrado '); */
 });
 
 router.delete('/', function (req, res) {
-    //users = [];
     collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
             console.error('Ocorreu erro');
@@ -137,18 +131,6 @@ router.delete('/:id', function (req, res) {
             }
         }
     });
-
-    /* var deleteUser = users.filter((c) => {return (c.id == id); });
-    if (deleteUser.length >= 1) {
-        for(var i=0;i<users.length;i++){
-            if (users[i].id == id){
-                users.splice(i,1);
-                res.send('Deletado com sucesso ');
-            }
-        }
-    }
-    else
-        res.send('Estudante não encontrado '); */
 });
 
 module.exports = router;
