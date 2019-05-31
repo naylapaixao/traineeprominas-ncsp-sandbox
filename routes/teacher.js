@@ -53,6 +53,11 @@ router.post('/', function (req, res) {
     let newteacher = req.body;
 
     if (newteacher.name && newteacher.lastname){
+
+        if(typeof (req.body.phd == boolean)){
+            return req.body.phd;
+        }
+
         console.log(newteacher);
         newteacher.id = ++id;
         newteacher.status = 1;
@@ -113,7 +118,7 @@ router.delete('/', function (req, res) {
 });
 
 router.delete('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
+    let id = parseInt(req.params.id);
 
     collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
@@ -121,7 +126,7 @@ router.delete('/:id', function (req, res) {
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            let numRemoved = info.result.n; //n: é um numero
 
             if (numRemoved > 0){
                 console.log("INF: Usuário (" + numRemoved + ") foram removidos");
