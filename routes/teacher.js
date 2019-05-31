@@ -23,7 +23,7 @@ var id=0; //contador id
 var teachers = [];
 
 router.get('/', function (req, res) {
-    collection.find({}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, phd:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -53,7 +53,17 @@ router.post('/', function (req, res) {
     let newteacher = req.body;
 
     if (newteacher.name && newteacher.lastname){
-        
+        console.log(newteacher);
+        newteacher.id = ++id;
+        newteacher.status = 1;
+
+        res.status(201);
+        db.collection('teacher').insert(newteacher);
+        res.send('Professor Cadastrado com sucesso');
+    }
+    else {
+        res.status(401);
+        res.send('Insira todos os campos obrigatorios')
     }
     /* newteacher.id = ++id;
     db.collection('teacher').insert(newteacher);
@@ -63,7 +73,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1,lastname:1, phd:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao Teacher');
             res.status(500);
@@ -87,12 +97,12 @@ router.delete('/', function (req, res) {
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            let numRemoved = info.result.n; //n: é um numero
 
             if (numRemoved > 0){
                 console.log("INF: Todos os professores (" + numRemoved + ") foram removidos");
                 res.status(204);
-                res.send('Todos os professores removidos com sucesso');
+                res.send('Todos os professores foram removidos com sucesso');
             }
             else {
                 res.send('Nenhum professor foi removido');
