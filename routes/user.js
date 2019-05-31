@@ -5,6 +5,7 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?ret
 var db; //variavel global que pode ser vista por outras rotas
 var collection;
 
+// CONNECT TO MONGODB
 mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     if(err){
         console.error("Ocorreu um erro ao conectar mongoDB")
@@ -23,6 +24,7 @@ var id=1; //contador id
 
 var users = [];
 
+// GET ALL USERS
 router.get('/', function (req, res) {
     collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, profile:1}}).toArray((err, users) =>{
         if(err) {
@@ -35,6 +37,7 @@ router.get('/', function (req, res) {
     });
 });
 
+// UPDATE USER
 router.put('/:id', function (req, res) {
 
     if (req.body.name && req.body.lastname && req.body.profile){
@@ -48,7 +51,7 @@ router.put('/:id', function (req, res) {
 
         console.log(userAlter);
 
-        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:{id: userAlter.id, name:userAlter.name, lastname: userAlter.lastname, profile: userAlter.profile}}, function (err, result) {
+        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:{name:userAlter.name, lastname: userAlter.lastname, profile: userAlter.profile}}, function (err, result) {
             console.log(result.value);
             if (result.value == null){
                 res.status(404);
@@ -76,6 +79,7 @@ router.put('/:id', function (req, res) {
 
 });
 
+// CREATE USER
 router.post('/', function (req, res) {
     let  newuser = req.body;
 
@@ -89,11 +93,12 @@ router.post('/', function (req, res) {
         res.send('Usuario Cadastrado com sucesso');
     }
     else {
-        res.status(403);
+        res.status(401);
         res.send('Insira todos os campos obrigatorios')
     }
 });
 
+// GET ONE USER
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
@@ -114,6 +119,7 @@ router.get('/:id', function (req, res) {
     });
 });
 
+// DELETE ALL
 router.delete('/', function (req, res) {
     collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
@@ -136,6 +142,7 @@ router.delete('/', function (req, res) {
     });
 });
 
+// DELETE ONE USER
 router.delete('/:id', function (req, res) {
     var id = parseInt(req.params.id);
 
