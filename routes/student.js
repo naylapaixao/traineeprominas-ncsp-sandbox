@@ -38,7 +38,6 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
     var newstudent = req.body;
-    newstudent.id = ++id;
 
     (async function() {
 
@@ -46,6 +45,20 @@ router.post('/', function (req, res) {
             let courseId = await getCourse(newstudent.course[i]);
             newstudent.course[i] = courseId;
         }
+
+        //TAREFA 4
+        /*if (newstudent.name && newstudent.lastname && newstudent.age && newstudent.course){
+            console.log(newstudent);
+            newstudent.id = ++id;
+
+            res.status(201);
+            db.collection('student').insertOne(newstudent);
+            res.send('Estudante Cadastrado com sucesso');
+        }
+        else {
+            res.status(403);
+            res.send('Insira todos os campos obrigatorios')
+        } */
 
         db.collection('student').insertOne(newstudent, (err, result) => {
 

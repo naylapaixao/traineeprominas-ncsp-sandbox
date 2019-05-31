@@ -24,7 +24,7 @@ var id=1; //contador id
 var users = [];
 
 router.get('/', function (req, res) {
-    collection.find({}, {projection: {_id:0, id:1, name:1, lasname:1, profile:1}}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, profile:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -36,8 +36,28 @@ router.get('/', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
-    let id = parseInt(req.params.id);
-    let bodyuser = req.body;
+    let userAlter = req.body;
+
+    if (req.body.name && req.body.lastname && req.body.profile){
+        let id = parseInt(req.params.id);
+        userAlter.id = id;
+        userAlter.status =1;
+
+        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:userAlter}, function (err, result) {
+            if (err){
+                res.status(404);
+                res.send("Nenhum Campo atualizado");
+            }
+            else {
+                res.send("Editado com sucesso");
+            }
+        })
+    }
+    else{
+        res.status(403);
+        res.send("Solicitação não autorizada");
+    }
+    /*let bodyuser = req.body;
 
     if(bodyuser == {}){
         res.status('400');
@@ -46,7 +66,7 @@ router.put('/:id', function (req, res) {
     else {
         collection.update({'id':id}, bodyuser);
         res.send('Editado com sucesso');
-    }
+    } */
 
 });
 
