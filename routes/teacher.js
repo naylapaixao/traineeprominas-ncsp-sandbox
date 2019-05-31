@@ -50,11 +50,14 @@ router.put('/:id', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    var  professor = req.body;
+    let newteacher = req.body;
 
-    professor.id = ++id;
-    db.collection('teacher').insert(professor);
-    res.send('Professor Cadastrado com sucesso');
+    if (newteacher.name && newteacher.lastname){
+        
+    }
+    /* newteacher.id = ++id;
+    db.collection('teacher').insert(newteacher);
+    res.send('Professor Cadastrado com sucesso'); */
 });
 
 router.get('/:id', function (req, res) {

@@ -121,7 +121,7 @@ router.get('/:id', function (req, res) {
 
 // DELETE ALL
 router.delete('/', function (req, res) {
-    collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
+    collection.remove({}, function (err, info) { //true: remove apenas 1 false ou deixar vazio: remove todos
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
@@ -144,15 +144,14 @@ router.delete('/', function (req, res) {
 
 // DELETE ONE USER
 router.delete('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
-
-    collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+    let id = parseInt(req.params.id);
+    db.collection('user').findOneAndUpdate({'id':id, 'status':0}, {projection: {_id:0, id:0, name:0, lastname:0, profile:0}}, function (err, info) {
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            let numRemoved = info.result.n; //n: é um numero
 
             if (numRemoved > 0){
                 console.log("INF: Usuário (" + numRemoved + ") foram removidos");
@@ -165,6 +164,26 @@ router.delete('/:id', function (req, res) {
             }
         }
     });
+
+    /* collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+        if (err){
+            console.error('Ocorreu erro');
+            res.status(500);
+        }
+        else {
+            let numRemoved = info.result.n; //n: é um numero
+
+            if (numRemoved > 0){
+                console.log("INF: Usuário (" + numRemoved + ") foram removidos");
+                res.status(200);
+                res.send(' Usuario removido com sucesso');
+            }
+            else {
+                res.send('Nenhum usuário foi removido');
+                res.status(404);
+            }
+        }
+    }); */
 });
 
 module.exports = router;
