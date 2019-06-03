@@ -124,20 +124,20 @@ const getTeacher = function(id) {
     });
 };
 
-// CONSERTAR PUT!!!!!!!!!!!!!!!!!!!
+// UPDATE COURSE
 router.put('/:id', function (req, res) {
     if(req.body.name && req.body.city){
         let id = parseInt(req.params.id);
         let alterCourse = req.body;
         alterCourse.id = parseInt(req.params.id);
-        alterCourse.name = req.body;
-        alterCourse.period = req.body || 8;
-        alterCourse.city = req.body;
+        alterCourse.name = req.body.name;
+        alterCourse.period = req.body.period || 8;
+        alterCourse.city = req.body.city;
         alterCourse.status = 1;
 
         (async function() {
 
-            //IF INFORM TEACHER GET TEACHER ID
+            //IF INFORM TEACHER, GET TEACHER INFO
             if(req.body.teacher){
                 for (let i = 0; i < alterCourse.teacher.length; i++) {
                     let teacherId = await getTeacher(alterCourse.teacher[i]);
@@ -148,8 +148,8 @@ router.put('/:id', function (req, res) {
             //INSERT INFO IN DB
             db.collection('course').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterCourse}}, function (err, result) {
                 if (err) {
-                    console.error("Erro ao Criar Um Novo Curso", err);
-                    res.status(500).send("Erro ao Criar Um Novo Curso");
+                    console.error("Erro ao Editar Um Novo Curso", err);
+                    res.status(500).send("Erro ao Editar Um Novo Curso");
                 } else {
                     res.status(201).send("Curso Cadastrado com Sucesso.");
                 }
