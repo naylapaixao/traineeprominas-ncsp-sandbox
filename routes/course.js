@@ -175,19 +175,20 @@ router.delete('/', function (req, res) {
     //res.send('Cursos removidos com sucesso ');
 });
 
+//DELETE STUDENT (CHANGE THE STATUS 1 TO 0)
 router.delete('/:id', function (req, res) {
     var id = parseInt(req.params.id);
 
-    collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+    db.collection('course').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}},function(err,info) { //true: remove apenas 1 false: remove todos
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            //var numRemoved = info.result.n; //n: é um numero
 
-            if (numRemoved > 0){
-                console.log("INF: Curso (" + numRemoved + ") foram removidos");
+            if (info.value != null){
+                console.log("INF: Curso foram removidos");
                 res.status(200);
                 res.send(' Curso removido com sucesso');
             }
