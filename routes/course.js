@@ -14,6 +14,7 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     else {
         db = database.db('trainee-prominas');
         collection = db.collection('course');
+        db.collection('course').find({}).toArray((err, course) =>{id = course.length});
     }
     db = database.db('trainee-prominas');
 });
@@ -55,7 +56,6 @@ router.post('/', function (req, res) {
 
            //INSERT INFO IN DB
            db.collection('course').insertOne(newcourse, (err, result) => {
-
                if (err) {
                    console.error("Erro ao Criar Um Novo Curso", err);
                    res.status(500).send("Erro ao Criar Um Novo Curso");
@@ -111,11 +111,17 @@ const getTeacher = function(id) {
 };
 
 router.put('/:id', function (req, res) {
-    let id = parseInt(req.params.id);
-    let bodyuser = req.body;
-    bodyuser.id = parseInt(req.params.id);
+    if(req.body.name && req.body.city){
+        let id = parseInt(req.params.id);
+        let alterCourse = req.body;
+        alterCourse.id = parseInt(req.params.id);le
 
-    if(bodyuser == {}){
+        
+    }
+
+
+
+    /* if(bodyuser == {}){
         res.status('400');
         res.send('Solicitação não autorizada')
     }
@@ -138,7 +144,7 @@ router.put('/:id', function (req, res) {
             });
 
         })();
-    }
+    } */
 
     /* var id = req.params.id;
     var filterestCourses = courses.filter((s) => {return (s.id == id); });

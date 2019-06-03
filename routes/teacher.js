@@ -14,6 +14,7 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     else {
         db = database.db('trainee-prominas');
         collection = db.collection('teacher');
+        db.collection('teacher').find({}).toArray((err, teacher) =>{id = teacher.length});
     }
     db = database.db('trainee-prominas');
 });
@@ -23,7 +24,7 @@ var id=0; //contador id
 var teachers = [];
 
 router.get('/', function (req, res) {
-    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, phd:1}}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, status:0}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao Teacher');
             res.status(500);

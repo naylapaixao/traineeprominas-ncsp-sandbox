@@ -6,6 +6,11 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?ret
 var db; //variavel global que pode ser vista por outras rotas
 var collection;
 
+var id=0; //contador id
+
+var students = [];
+
+
 //CONECT TO MONGODB
 mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     if(err){
@@ -15,14 +20,12 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     else {
         db = database.db('trainee-prominas');
         collection = db.collection('student');
+        db.collection('student').find({}).toArray((err, student) =>{id = student.length});
     }
     db = database.db('trainee-prominas');
 });
 
 
-var id=0; //contador id
-
-var students = [];
 
 // GET ALL STUDENTS
 router.get('/', function (req, res) {
@@ -46,11 +49,20 @@ router.post('/', function (req, res) {
         newstudent.id = ++id;
         newstudent.status = 1;
         (async function () {
+            //let courseId = await getCourse(parseInt(req.body.course));
 
-            for (let i = 0; i < newstudent.course.length; i++) {
+
+
+            /*for (let i = 0; i < newstudent.course.length; i++) {
                 let courseId = await getCourse(newstudent.course[i]);
                 newstudent.course[i] = courseId;
-            }
+
+                if (!courseId){
+                    res.status(401);
+                    res.send("Curso inválido!");
+                    continue;
+                }
+            } */
 
             db.collection('student').insertOne(newstudent, (err, result) => {
 

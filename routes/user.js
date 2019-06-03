@@ -5,6 +5,10 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?ret
 var db; //variavel global que pode ser vista por outras rotas
 var collection;
 
+var id=1; //contador id
+
+var users = [];
+
 // CONNECT TO MONGODB
 mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     if(err){
@@ -14,19 +18,19 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     else {
         db = database.db('trainee-prominas');
         collection = db.collection('user');
+        db.collection('user').find({}).toArray((err, user) =>{id = user.length});
+
     }
     db = database.db('trainee-prominas');
 });
 
 //var collection = db.collection('user');
 
-var id=1; //contador id
 
-var users = [];
 
 // GET ALL USERS
 router.get('/', function (req, res) {
-    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, profile:1}}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, status:0}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -120,27 +124,28 @@ router.get('/:id', function (req, res) {
 });
 
 // DELETE ALL
-/*router.delete('/', function (req, res) {
-    collection.remove({}, function (err, info) { //true: remove apenas 1 false ou deixar vazio: remove todos
+router.delete('/', function (req, res) {
+    collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            let numRemoved = info.result.n; //n: é um numero
 
             if (numRemoved > 0){
-                console.log("INF: Todos od usários (" + numRemoved + ") foram removidos");
+                console.log("INF: Todos os professores (" + numRemoved + ") foram removidos");
                 res.status(204);
-                res.send('Todos os usuarios removidos com sucesso');
+                res.send('Todos os professores foram removidos com sucesso');
             }
             else {
-                res.send('Nenhum usuário foi removido');
+                res.send('Nenhum professor foi removido');
                 res.status(404);
             }
         }
     });
-}); */
+});
+
 
 // DELETE ONE USER
 router.delete('/:id', function (req, res) {
