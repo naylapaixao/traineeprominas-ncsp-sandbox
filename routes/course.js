@@ -22,10 +22,11 @@ var id=0; //contador id
 
 var courses = [];
 
+//GET ALL COURSES
 router.get('/', function (req, res) {
-    collection.find({}).toArray((err, users) =>{
+    collection.find({},{projection: {_id:0, id:1, name:1, period:1, teacher:1, city:1}}).toArray((err, users) =>{
         if(err) {
-            console.error('Ocorreu um erro ao conectar ao User');
+            console.error('Ocorreu um erro ao conectar ao course');
             res.status(500);
         }
         else {
@@ -123,9 +124,9 @@ router.put('/:id', function (req, res) {
 
 
 router.get('/:id', function (req, res) {
-    var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
+    let id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, period:1, teacher:1, city:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao Teacher');
             res.status(500);
@@ -177,7 +178,7 @@ router.delete('/', function (req, res) {
 
 //DELETE STUDENT (CHANGE THE STATUS 1 TO 0)
 router.delete('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
+    let id = parseInt(req.params.id);
 
     db.collection('course').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}},function(err,info) { //true: remove apenas 1 false: remove todos
         if (err){
