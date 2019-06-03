@@ -66,7 +66,7 @@ router.post('/', function (req, res) {
     }
     else {
         res.status(401);
-        res.send('Insira todos os campos obrigatorios')
+        res.send('Insira todos os campos obrigatorios');
     }
 
     /*let newstudent = req.body;
@@ -116,11 +116,41 @@ const getCourse = function(id) {
 };
 
 router.put('/:id', function (req, res) {
-    let id = parseInt(req.params.id);
-    let bodyuser = req.body;
-    bodyuser.id = parseInt(req.params.id);
+    if (req.body.name && req.body.lastname && req.body.age && req.body.course){
+        let id = parseInt(req.params.id);
+        let alterStudent = req.body;
+        alterStudent.id = parseInt(req.params.id);
+        alterStudent.name = req.body.name;
+        alterStudent.lastname = req.body.lastname;
+        alterStudent.age = req.body.age;
+        alterStudent.course = req.body.course;
 
-    if(bodyuser == {}){
+        (async function() {
+
+            for (let i = 0; i < alterStudent.course.length; i++) {
+                let courseId = await getCourse(alterStudent.course[i]);
+                alterStudent.course[i] = courseId;
+            }
+
+            db.collection('student').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterStudent}}, function (err, result) {
+
+                if (err) {
+                    console.error("Erro ao Criar Um Novo Estudante", err);
+                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                } else {
+                    res.status(201).send("Estudante Editado com Sucesso.");
+                }
+            });
+
+        })();
+    }
+    else{
+        res.status(401);
+        res.send('Insira todos os campos obrigatorios');
+    }
+
+
+    /* if(bodyuser == {}){
         res.status('400');
         res.send('Solicitação não autorizada')
     }
@@ -144,7 +174,7 @@ router.put('/:id', function (req, res) {
             });
 
         })();
-    }
+    } */
 });
 
 //GET ONE STUDENT
