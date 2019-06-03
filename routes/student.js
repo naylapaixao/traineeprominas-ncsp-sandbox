@@ -39,7 +39,37 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    var newstudent = req.body;
+    if (req.body.name && req.body.lastname && req.body.age && req.body.course) {
+
+        let newstudent = req.body;
+        newstudent.id = ++id;
+        newstudent.status = 1;
+        (async function () {
+
+            for (let i = 0; i < newstudent.course.length; i++) {
+                let courseId = await getCourse(newstudent.course[i]);
+                newstudent.course[i] = courseId;
+            }
+
+            db.collection('student').insertOne(newstudent, (err, result) => {
+
+                if (err) {
+                    console.error("Erro ao Criar Um Novo Estudante", err);
+                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                } else {
+                    res.status(201).send("Estudante Cadastrado com Sucesso.");
+                }
+            });
+
+        })()
+
+    }
+    else {
+        res.status(401);
+        res.send('Insira todos os campos obrigatorios')
+    }
+
+    /*let newstudent = req.body;
 
     (async function() {
 
@@ -47,20 +77,6 @@ router.post('/', function (req, res) {
             let courseId = await getCourse(newstudent.course[i]);
             newstudent.course[i] = courseId;
         }
-
-        //TAREFA 4
-        /*if (newstudent.name && newstudent.lastname && newstudent.age && newstudent.course){
-            console.log(newstudent);
-            newstudent.id = ++id;
-
-            res.status(201);
-            db.collection('student').insertOne(newstudent);
-            res.send('Estudante Cadastrado com sucesso');
-        }
-        else {
-            res.status(403);
-            res.send('Insira todos os campos obrigatorios')
-        } */
 
         db.collection('student').insertOne(newstudent, (err, result) => {
 
@@ -72,7 +88,7 @@ router.post('/', function (req, res) {
             }
         });
 
-    })();
+    })(); */
 
     //for (var i=0;i<newstudent.course.length;i++){
         //var courseId = newstudent.course[i];
@@ -129,7 +145,6 @@ router.put('/:id', function (req, res) {
 
         })();
     }
-
 });
 
 //GET ONE STUDENT

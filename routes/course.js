@@ -39,7 +39,6 @@ router.post('/', function (req, res) {
    let newcourse = req.body;
    newcourse.id = ++id;
 
-   console.log('Oi');
     (async function() {
 
         for (let i = 0; i < newcourse.teacher.length; i++) {
@@ -122,7 +121,7 @@ router.put('/:id', function (req, res) {
 
 });
 
-
+// GET ONE COURSE
 router.get('/:id', function (req, res) {
     let id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
@@ -176,7 +175,7 @@ router.delete('/', function (req, res) {
     //res.send('Cursos removidos com sucesso ');
 });
 
-//DELETE STUDENT (CHANGE THE STATUS 1 TO 0)
+//DELETE COURSE (CHANGE THE STATUS 1 TO 0)
 router.delete('/:id', function (req, res) {
     let id = parseInt(req.params.id);
 
