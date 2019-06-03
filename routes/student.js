@@ -139,6 +139,7 @@ router.put('/:id', function (req, res) {
         alterStudent.lastname = req.body.lastname;
         alterStudent.age = req.body.age;
         alterStudent.course = req.body.course;
+        alterStudent.status = 1;
 
         (async function() {
 

@@ -5,9 +5,6 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?ret
 var db; //variavel global que pode ser vista por outras rotas
 var collection;
 
-var id=1; //contador id
-
-var users = [];
 
 // CONNECT TO MONGODB
 mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
@@ -23,6 +20,10 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     }
     db = database.db('trainee-prominas');
 });
+
+var id=0; //contador id
+
+var users = [];
 
 //var collection = db.collection('user');
 
@@ -85,11 +86,10 @@ router.put('/:id', function (req, res) {
 
 // CREATE USER
 router.post('/', function (req, res) {
-    let  newuser = req.body;
-
-    if (newuser.name && newuser.lastname && newuser.profile){
+    if (req.body.name && req.body.lastname && req.body.profile){
+        let  newuser = req.body;
         console.log(newuser);
-        newuser.id = id++;
+        newuser.id = ++id;
         newuser.status = 1;
 
         res.status(201);
