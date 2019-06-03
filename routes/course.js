@@ -46,12 +46,22 @@ router.post('/', function (req, res) {
 
        (async function() {
 
-           //IF INFORM TEACHER GET TEACHER ID
+           let validos = [];
+           let invalidos = [];
+
+           //IF INFORM TEACHER, GET TEACHER ID
            if(req.body.teacher){
                for (let i = 0; i < newcourse.teacher.length; i++) {
-                   let teacherId = await getTeacher(newcourse.teacher[i]);
-                   newcourse.teacher[i] = teacherId;
+                   let teacher = await getTeacher(newcourse.teacher[i]);
+                   // newcourse.teacher[i] = teacher;
+
+                   if (teacher !== null)
+                       validos.push(teacher);
+                   else
+                       invalidos.push(newcourse.teacher[i]); //retorna id de professor inválido
                }
+
+               newcourse.teacher = validos; //retorna corpo de professores validos
            }
 
            //INSERT INFO IN DB
@@ -60,6 +70,10 @@ router.post('/', function (req, res) {
                    console.error("Erro ao Criar Um Novo Curso", err);
                    res.status(500).send("Erro ao Criar Um Novo Curso");
                } else {
+
+                   if(invalidos !== null){
+                       return res.status(201).send("Id de professor inexistente curso cadastrado");
+                   }
                    res.status(201).send("Curso Cadastrado com Sucesso.");
                }
            });
@@ -110,6 +124,7 @@ const getTeacher = function(id) {
     });
 };
 
+// CONSERTAR PUT!!!!!!!!!!!!!!!!!!!
 router.put('/:id', function (req, res) {
     if(req.body.name && req.body.city){
         let id = parseInt(req.params.id);
@@ -141,7 +156,6 @@ router.put('/:id', function (req, res) {
             });
 
         })();
-
     }
 
     /* if(bodyuser == {}){
