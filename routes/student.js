@@ -51,18 +51,14 @@ router.post('/', function (req, res) {
         (async function () {
             //let courseId = await getCourse(parseInt(req.body.course));
 
+            for (let i = 0; i < newstudent.course.length; i++) {
+               let course = await getCourse(newstudent.course[i]);
+               newstudent.course[i] = course;
 
-
-            /*for (let i = 0; i < newstudent.course.length; i++) {
-                let courseId = await getCourse(newstudent.course[i]);
-                newstudent.course[i] = courseId;
-
-                if (!courseId){
-                    res.status(401);
-                    res.send("Curso inválido!");
-                    continue;
-                }
-            } */
+               if(!course){
+                   return res.status(401).send("Curso Inválido!");
+               }
+           }
 
             db.collection('student').insertOne(newstudent, (err, result) => {
 
@@ -75,7 +71,6 @@ router.post('/', function (req, res) {
             });
 
         })()
-
     }
     else {
         res.status(401);
