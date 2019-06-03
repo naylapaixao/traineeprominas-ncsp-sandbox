@@ -45,11 +45,15 @@ router.post('/', function (req, res) {
 
        (async function() {
 
-           for (let i = 0; i < newcourse.teacher.length; i++) {
-               let teacherId = await getTeacher(newcourse.teacher[i]);
-               newcourse.teacher[i] = teacherId;
+           //IF INFORM TEACHER GET TEACHER ID
+           if(req.body.teacher){
+               for (let i = 0; i < newcourse.teacher.length; i++) {
+                   let teacherId = await getTeacher(newcourse.teacher[i]);
+                   newcourse.teacher[i] = teacherId;
+               }
            }
 
+           //INSERT INFO IN DB
            db.collection('course').insertOne(newcourse, (err, result) => {
 
                if (err) {
@@ -89,6 +93,7 @@ router.post('/', function (req, res) {
     })(); */
 });
 
+// FUNCTION TO GET IDTEACHER AND INFORMATIONS ABOUT IT
 const getTeacher = function(id) {
 
     return new Promise((resolve, reject) => {
