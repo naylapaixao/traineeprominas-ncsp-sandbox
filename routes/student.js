@@ -6,6 +6,7 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?ret
 var db; //variavel global que pode ser vista por outras rotas
 var collection;
 
+//CONECT TO MONGODB
 mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
     if(err){
         console.error("Ocorreu um erro ao conectar mongoDB")
@@ -23,9 +24,10 @@ var id=0; //contador id
 
 var students = [];
 
+// GET ALL STUDENTS
 router.get('/', function (req, res) {
     //res.send(students);
-    collection.find({}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, age:1, course:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -130,18 +132,19 @@ router.put('/:id', function (req, res) {
 
 });
 
+//GET ONE STUDENT
 router.get('/:id', function (req, res) {
     let id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastname:1, age:1, course:1}}).toArray((err, user) =>{
         if(err) {
-            console.error('Ocorreu um erro ao conectar ao Teacher');
+            console.error('Ocorreu um erro ao conectar ao Student');
             res.status(500);
         }
         else {
             if (user == []){
                 res.status(404);
-                res.send('Professor não encontrado');
+                res.send('Estudante não encontrado');
             }
             else {
                 res.send(user);
@@ -180,19 +183,20 @@ router.delete('/', function (req, res) {
     });
 });
 
+//DELETE STUDENT (CHANGE THE STATUS 1 TO 0)
 router.delete('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
+    let id = parseInt(req.params.id);
 
-    collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+    db.collection('student').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}}, function (err, info) {
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
         }
         else {
-            var numRemoved = info.result.n; //n: é um numero
+            //var numRemoved = info.result.n; //n: é um numero
 
-            if (numRemoved > 0){
-                console.log("INF: Estudante (" + numRemoved + ") foram removidos");
+            if (info.value != null){
+                console.log("INF: Estudante foram removidos");
                 res.status(200);
                 res.send(' Estudante removido com sucesso');
             }
@@ -212,7 +216,6 @@ router.delete('/:id', function (req, res) {
                 res.send('Deletado com sucesso ');
             }
         }
-
     }
     else
         res.send('Estudante não encontrado '); */

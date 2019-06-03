@@ -120,7 +120,7 @@ router.get('/:id', function (req, res) {
 });
 
 // DELETE ALL
-router.delete('/', function (req, res) {
+/*router.delete('/', function (req, res) {
     collection.remove({}, function (err, info) { //true: remove apenas 1 false ou deixar vazio: remove todos
         if (err){
             console.error('Ocorreu erro');
@@ -140,27 +140,27 @@ router.delete('/', function (req, res) {
             }
         }
     });
-});
+}); */
 
 // DELETE ONE USER
 router.delete('/:id', function (req, res) {
     let id = parseInt(req.params.id);
-    db.collection('user').findOneAndUpdate({'id':id, 'status':0}, {projection: {_id:0, id:0, name:0, lastname:0, profile:0}}, function (err, info) {
+    db.collection('user').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}}, function (err, info) {
         if (err){
-            console.error('Ocorreu erro');
+            console.error('Ocorreu um erro ao deletar usuário');
             res.status(500);
         }
         else {
-            let numRemoved = info.result.n; //n: é um numero
+            //let numRemoved = info.result.n; //n: é um numero
 
-            if (numRemoved > 0){
-                console.log("INF: Usuário (" + numRemoved + ") foram removidos");
+            if (info.value != null){
+                console.log(info);
                 res.status(200);
                 res.send(' Usuario removido com sucesso');
             }
             else {
                 res.send('Nenhum usuário foi removido');
-                res.status(404);
+                res.status(204);
             }
         }
     });

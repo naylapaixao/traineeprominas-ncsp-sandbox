@@ -25,7 +25,7 @@ var teachers = [];
 router.get('/', function (req, res) {
     collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, phd:1}}).toArray((err, users) =>{
         if(err) {
-            console.error('Ocorreu um erro ao conectar ao User');
+            console.error('Ocorreu um erro ao conectar ao Teacher');
             res.status(500);
         }
         else {
@@ -34,8 +34,40 @@ router.get('/', function (req, res) {
     });
 });
 
+// UPDATE ONE PROFESSOR
 router.put('/:id', function (req, res) {
-    var id = parseInt(req.params.id);
+    if (req.body.name && req.body.lastname) {
+
+        let alterTeacher = req.body;
+        let id = parseInt(req.params.id);
+        alterTeacher.name = req.body.name;
+        alterTeacher.lastname = req.body.lastname;
+        alterTeacher.id = id;
+        alterTeacher.status = 1;
+
+
+        if(req.body.phd && typeof (req.body.phd == 'boolean')){
+            alterTeacher.phd = req.body.phd;
+        }
+
+
+        db.collection('teacher').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterTeacher}}, function (err, result) {
+            console.log(alterTeacher);
+            if (result.value == null){
+                res.status(404);
+                res.send("Nenhum Campo atualizado");
+            }
+            else {
+                res.send("Editado com sucesso");
+            }
+        })
+    }
+    else {
+        es.status(403);
+        res.send("Solicitação não autorizada");
+    }
+
+    /*var id = parseInt(req.params.id);
     var bodyuser = req.body;
     bodyuser.id = parseInt(req.body);
 
@@ -46,21 +78,21 @@ router.put('/:id', function (req, res) {
     else {
         collection.update({'id':id}, bodyuser);
         res.send('Professor editado com sucesso');
-    }
+    } */
 });
 
+// CREATE NEW TEACHER
 router.post('/', function (req, res) {
-    let newteacher = req.body;
+    if (req.body.name && req.body.lastname){
 
-    if (newteacher.name && newteacher.lastname){
-
-        if(typeof (req.body.phd == boolean)){
-            return req.body.phd;
-        }
-
+        let newteacher = req.body;
         console.log(newteacher);
         newteacher.id = ++id;
         newteacher.status = 1;
+
+        if(req.body.phd && typeof (req.body.phd == 'boolean')){
+            newteacher.phd = req.body.phd;
+        }
 
         res.status(201);
         db.collection('teacher').insert(newteacher);
@@ -75,6 +107,7 @@ router.post('/', function (req, res) {
     res.send('Professor Cadastrado com sucesso'); */
 });
 
+// GET ONE TEACHER
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
@@ -95,6 +128,7 @@ router.get('/:id', function (req, res) {
     });
 });
 
+//DELETE ALL
 router.delete('/', function (req, res) {
    collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
@@ -117,21 +151,23 @@ router.delete('/', function (req, res) {
     });
 });
 
+//DELETE ONE TEACHER
 router.delete('/:id', function (req, res) {
     let id = parseInt(req.params.id);
 
-    collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+    //collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
+    db.collection('teacher').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}}, function (err, info){
         if (err){
             console.error('Ocorreu erro');
             res.status(500);
         }
         else {
-            let numRemoved = info.result.n; //n: é um numero
+            //let numRemoved = info.result.n; //n: é um numero
 
-            if (numRemoved > 0){
-                console.log("INF: Usuário (" + numRemoved + ") foram removidos");
+            if (info.value != null){
+                console.log("INF: Usuário  foi removidos");
                 res.status(200);
-                res.send(' Usuario removido com sucesso');
+                res.send('Professor removido com sucesso');
             }
             else {
                 res.send('Nenhum usuário foi removido');
