@@ -54,16 +54,19 @@ router.post('/', function (req, res) {
                for (let i = 0; i < newcourse.teacher.length; i++) {
                    let teacher = await getTeacher(newcourse.teacher[i]);
                    // newcourse.teacher[i] = teacher;
-
-                   if (teacher !== null)
+                    console.log(teacher);
+                   if (teacher != null) {
                        validos.push(teacher);
-                   else
+                   }
+                   else {
                        invalidos.push(newcourse.teacher[i]); //retorna id de professor inválido
+                   }
                }
 
                newcourse.teacher = validos; //retorna corpo de professores validos
            }
 
+           console.log(invalidos);
            //INSERT INFO IN DB
            db.collection('course').insertOne(newcourse, (err, result) => {
                if (err) {
@@ -71,7 +74,10 @@ router.post('/', function (req, res) {
                    res.status(500).send("Erro ao Criar Um Novo Curso");
                } else {
 
-                   if(invalidos !== null){
+                   if(invalidos.length == 0){
+                       return res.status(201).send("Professor Existe");
+                   }
+                   else {
                        return res.status(201).send("Id de professor inexistente curso cadastrado");
                    }
                    res.status(201).send("Curso Cadastrado com Sucesso.");

@@ -46,13 +46,45 @@ router.put('/:id', function (req, res) {
         alterTeacher.id = id;
         alterTeacher.status = 1;
 
-
         if(req.body.phd && typeof (req.body.phd == 'boolean')){
             alterTeacher.phd = req.body.phd;
         }
 
 
-        db.collection('teacher').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterTeacher}}, function (err, result) {
+        collection.findOneAndUpdate({"id":id,"status":1},{$set:{...alterTeacher}}, {returnOriginal: false}, function(err, info){
+            (async () => {
+                let updateTeacher = info.value;
+
+                try {
+                    await db.collection('course').updateMany(
+                        {"status":1, "teacher.id":parseInt(req.params.id)},
+                        {$set: {"teacher.$": updateTeacher}});
+
+                    let courses = await de.collection('course').find({"status":1, "teacher.id":parseInt(req.params.id)}).toArray();
+
+                    for (let i = 0; i<courses.length; i++){
+                        await db.collection('student').findOneAndReplace(
+                            {"status":1, "course.id":courses[i].id},
+                            {$set: {"course":courses[i]}});
+                    }
+
+                } catch(err){
+                    console.log(err);
+                }
+
+            })();
+            if(err){
+                console.log(err);
+                res.status(401).send('Não é possível editar professor inexistente');
+            }else{
+                res.status(200).send('Professor editado com sucesso!');
+            }});
+    }else{
+        res.status(401).send('Não foi possível editar o professor');
+    }
+})
+
+        /*db.collection('teacher').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterTeacher}}, function (err, result) {
             console.log(alterTeacher);
             if (result.value == null){
                 res.status(404);
@@ -61,12 +93,12 @@ router.put('/:id', function (req, res) {
             else {
                 res.send("Editado com sucesso");
             }
-        })
-    }
+        }) */
+   /* }
     else {
         es.status(403);
         res.send("Solicitação não autorizada");
-    }
+    } */
 
     /*var id = parseInt(req.params.id);
     var bodyuser = req.body;
@@ -80,7 +112,7 @@ router.put('/:id', function (req, res) {
         collection.update({'id':id}, bodyuser);
         res.send('Professor editado com sucesso');
     } */
-});
+// });
 
 // CREATE NEW TEACHER
 router.post('/', function (req, res) {
