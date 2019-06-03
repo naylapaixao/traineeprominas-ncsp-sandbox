@@ -38,6 +38,7 @@ router.get('/', function (req, res) {
     });
 });
 
+// CREATE NEW STUDENT
 router.post('/', function (req, res) {
     if (req.body.name && req.body.lastname && req.body.age && req.body.course) {
 
@@ -99,6 +100,7 @@ router.post('/', function (req, res) {
     res.send('Usuario Cadastrado com sucesso'); */
 });
 
+// FUNCTION TO GET IDCOURSE AND INFORMATIONS ABOUT IT
 const getCourse = function(id) {
 
     return new Promise((resolve, reject) => {
@@ -115,6 +117,7 @@ const getCourse = function(id) {
     });
 };
 
+// UPDATE STUDENT
 router.put('/:id', function (req, res) {
     if (req.body.name && req.body.lastname && req.body.age && req.body.course){
         let id = parseInt(req.params.id);

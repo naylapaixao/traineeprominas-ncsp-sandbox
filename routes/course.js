@@ -35,8 +35,38 @@ router.get('/', function (req, res) {
     });
 });
 
+// CREATE COURSE
 router.post('/', function (req, res) {
-   let newcourse = req.body;
+   if(req.body.name && req.body.city){
+       let newcourse = req.body;
+       newcourse.id = ++id;
+       newcourse.period = parseInt(req.body.period) || 8;
+       newcourse.status = 1;
+
+       (async function() {
+
+           for (let i = 0; i < newcourse.teacher.length; i++) {
+               let teacherId = await getTeacher(newcourse.teacher[i]);
+               newcourse.teacher[i] = teacherId;
+           }
+
+           db.collection('course').insertOne(newcourse, (err, result) => {
+
+               if (err) {
+                   console.error("Erro ao Criar Um Novo Curso", err);
+                   res.status(500).send("Erro ao Criar Um Novo Curso");
+               } else {
+                   res.status(201).send("Curso Cadastrado com Sucesso.");
+               }
+           });
+
+       })();
+   }
+   else{
+       res.status(401);
+       res.send('Insira todos os campos obrigatorios');
+   }
+    /*let newcourse = req.body;
    newcourse.id = ++id;
 
     (async function() {
@@ -56,7 +86,7 @@ router.post('/', function (req, res) {
             }
         });
 
-    })();
+    })(); */
 });
 
 const getTeacher = function(id) {
@@ -65,7 +95,6 @@ const getTeacher = function(id) {
 
         db.collection('teacher').findOne({ "id" : id }, (err, teacher) => {
             if (err){
-                console.log('Oi 3');
                 return reject(err);
             }
             else{
