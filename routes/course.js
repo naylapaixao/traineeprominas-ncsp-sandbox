@@ -284,9 +284,9 @@ router.delete('/', function (req, res) {
 });
 
 //DELETE COURSE (CHANGE THE STATUS 1 TO 0)
-/*router.delete('/:id', function (req, res){ //DELETE FILTERED
-    db.collection('course').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}},function(err,info){
-        db.collection('student').findOneAndUpdate({'status':1, 'course.id':parseInt(req.params.id)}, {$set: {status:0}}, (err, info) =>{
+router.delete('/:id', function (req, res){ //DELETE FILTERED
+    collection.findOneAndUpdate({"id":parseInt(req.params.id), "status":1}, {$set: {status:0}}, function (err, info){
+        db.collection('student').findOneAndUpdate({"status":1, "course.id":parseInt(req.params.id)}, {$set: {status:0}}, (err, info) =>{
             if(err){
                 console.log(err);
             }else{
@@ -294,22 +294,19 @@ router.delete('/', function (req, res) {
             }
         });
         if(err){
-            console.error('Ocorreu um erro ao deletar os cursos');
+            console.error('Ocorreu um erro ao deletar o curso');
             res.status(500);
         }else{
-            //var numRemoved = info.result.n; //n: é um numero
-
-            if (info.value != null){
-                console.log("INF: Curso foram removidos");
-                res.status(200);
-                res.send(' Curso removido com sucesso');
+            if(info.value != null){
+                console.log('O curso foi removido com sucesso');
+                res.status(200).send('Curso removido com sucesso');
             }else{
                 console.log('Nenhum curso foi removido');
                 res.status(204).send('Nenhum cursos foi removido');
             }
         }
     });
-}); */
+});
 
 
 /*router.;delete('/:id', function (req, res) {
