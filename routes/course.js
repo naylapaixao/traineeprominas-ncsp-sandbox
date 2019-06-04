@@ -75,7 +75,7 @@ router.post('/', function (req, res) {
                } else {
 
                    if(invalidos.length == 0){
-                       return res.status(201).send("Professor Existe");
+                       return res.status(201).send("Curso Cadastrado com sucesso");
                    }
                    else {
                        return res.status(201).send("Id de professor inexistente curso cadastrado");
