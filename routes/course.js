@@ -258,7 +258,8 @@ router.get('/:id', function (req, res) {
         res.send('Curso não encontrado '); */
 });
 
-router.delete('/', function (req, res) {
+//DELETE ALL DESUSO
+/*router.delete('/', function (req, res) {
     collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
             console.error('Ocorreu erro');
@@ -281,7 +282,7 @@ router.delete('/', function (req, res) {
 
     //courses = [];
     //res.send('Cursos removidos com sucesso ');
-});
+}); */
 
 //DELETE COURSE (CHANGE THE STATUS 1 TO 0)
 router.delete('/:id', function (req, res){ //DELETE FILTERED

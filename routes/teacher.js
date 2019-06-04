@@ -159,8 +159,8 @@ router.get('/:id', function (req, res) {
     });
 });
 
-//DELETE ALL
-router.delete('/', function (req, res) {
+//DELETE ALL DESUSO
+/* router.delete('/', function (req, res) {
    collection.remove({}, function (err, info) { //true: remove apenas 1 false: remove todos
         if (err){
             console.error('Ocorreu erro');
@@ -180,7 +180,7 @@ router.delete('/', function (req, res) {
             }
         }
     });
-});
+}); */
 
 //DELETE ONE TEACHER
 router.delete('/:id', function (req, res) {
