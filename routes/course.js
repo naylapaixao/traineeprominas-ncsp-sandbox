@@ -141,6 +141,8 @@ router.put('/:id', function (req, res) {
         alterCourse.city = req.body.city;
         alterCourse.status = 1;
 
+        let ide = parseInt(req.params.id);
+
         (async function() {
 
             //IF INFORM TEACHER, GET TEACHER INFO
@@ -151,17 +153,40 @@ router.put('/:id', function (req, res) {
                 }
             }
 
+            db.collection('course').updateOne({"id": ide}, { $set: alterCourse }, (err, result) => {
+                if (err) {
+                    console.error("Erro ao Criar Um Novo Curso", err);
+                    res.status(201).send("Erro ao Criar Um Novo Curso");
+                } else {
+                    console.log('-------------------',alterCourse);
+                    db.collection('student').updateMany({ "course.id": alterCourse.id }, { $set: { "course.$": alterCourse } }, function(err_course, results){
+                            if(err_course){
+                                res.send("Erro na inserção do curso");
+                            }
+                            else if(results.matchedCount >= 0){
+                                res.send("curso modificado com sucesso");
+                            }
+                            else{
+                                res.send('Erro na modificação');
+                            }
+                        })
+                    //res.status(201).send("Curso modificado com Sucesso.");
+                }
+            });
+
             //INSERT INFO IN DB
-            db.collection('course').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterCourse}}, function (err, result) {
+            /*db.collection('course').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterCourse}}, function (err, result) {
                 if (err) {
                     console.error("Erro ao Editar Um Novo Curso", err);
                     res.status(500).send("Erro ao Editar Um Novo Curso");
                 } else {
                     res.status(201).send("Curso Cadastrado com Sucesso.");
                 }
-            });
+            }); */
 
         })();
+    } else {
+        res.status(403).send('Todos os dados devem ser preenchidos')
     }
 
     /* if(bodyuser == {}){
@@ -259,7 +284,35 @@ router.delete('/', function (req, res) {
 });
 
 //DELETE COURSE (CHANGE THE STATUS 1 TO 0)
-router.delete('/:id', function (req, res) {
+/*router.delete('/:id', function (req, res){ //DELETE FILTERED
+    db.collection('course').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}},function(err,info){
+        db.collection('student').findOneAndUpdate({'status':1, 'course.id':parseInt(req.params.id)}, {$set: {status:0}}, (err, info) =>{
+            if(err){
+                console.log(err);
+            }else{
+                console.log("O curso foi deletado em estudante");
+            }
+        });
+        if(err){
+            console.error('Ocorreu um erro ao deletar os cursos');
+            res.status(500);
+        }else{
+            //var numRemoved = info.result.n; //n: é um numero
+
+            if (info.value != null){
+                console.log("INF: Curso foram removidos");
+                res.status(200);
+                res.send(' Curso removido com sucesso');
+            }else{
+                console.log('Nenhum curso foi removido');
+                res.status(204).send('Nenhum cursos foi removido');
+            }
+        }
+    });
+}); */
+
+
+/*router.;delete('/:id', function (req, res) {
     let id = parseInt(req.params.id);
 
     db.collection('course').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}},function(err,info) { //true: remove apenas 1 false: remove todos
@@ -280,7 +333,7 @@ router.delete('/:id', function (req, res) {
                 res.status(404);
             }
         }
-    });
+    }); */
 
     /* var id = req.params.id;
     var deleteCourse = courses.filter((c) => {return (c.id == id); });
@@ -295,7 +348,6 @@ router.delete('/:id', function (req, res) {
     }
     else
         res.send('Curso não encontrado '); */
-});
 
 /* function getCourse(courseId){
     courseId = parseInt(courseId);

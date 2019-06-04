@@ -56,11 +56,9 @@ router.put('/:id', function (req, res) {
                 let updateTeacher = info.value;
 
                 try {
-                    await db.collection('course').updateMany(
-                        {"status":1, "teacher.id":parseInt(req.params.id)},
-                        {$set: {"teacher.$": updateTeacher}});
+                    await db.collection('course').updateMany({"status":1, "teacher.id":parseInt(req.params.id)}, {$set: {"teacher.$": updateTeacher}});
 
-                    let courses = await de.collection('course').find({"status":1, "teacher.id":parseInt(req.params.id)}).toArray();
+                    let courses = await db.collection('course').find({"status":1, "teacher.id":parseInt(req.params.id)}).toArray();
 
                     for (let i = 0; i<courses.length; i++){
                         await db.collection('student').findOneAndReplace(
