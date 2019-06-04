@@ -189,20 +189,21 @@ router.delete('/:id', function (req, res) {
     //collection.remove({'id':id},true, function (err, info) { //true: remove apenas 1 false: remove todos
     db.collection('teacher').findOneAndUpdate({'id':id, 'status':1}, {$set:{status:0}}, function (err, info){
         if (err){
-            console.error('Ocorreu erro');
+            console.error('Ocorreu erro ao deletar a coleção');
             res.status(500);
         }
         else {
             //let numRemoved = info.result.n; //n: é um numero
 
             if (info.value != null){
-                console.log("INF: Usuário  foi removidos");
+                db.collection('course').updateMany({}, {$pull: {teacher: {"id": id}}});
+                db.collection('student').updateMany({}, {$pull: {'course.teacher': {"id": id}}});
                 res.status(200);
                 res.send('Professor removido com sucesso');
             }
             else {
                 res.send('Nenhum usuário foi removido');
-                res.status(404);
+                res.status(204);
             }
         }
     });
