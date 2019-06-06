@@ -1,40 +1,27 @@
-// MONGODB CONNECTION
-const mongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
-
-let db;
-
-mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
-
-    if (err) {
-        console.error('Ocorreu um erro ao conectar ao mongoDB', err);
-        // send.status(500);
-    }
-    else {
-        console.log('User CONECTOU!');
-
-        db = database.db("trainee-prominas");
-    }
-});
-// MONGODB CONNECTION
-
+const chai = require('chai');
+const assert = chai.assert;
 const request = require('supertest');
-const express = require('express');
-const bodyparser = require('body-parse');
 
-const app = express();
+const app = require('../index');
 
-let user = require('../models/user');
+describe('Unit testing index', function() {
 
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../server');
-let should = chai.should();
+    this.timeout(12000);
 
-chai.use(chaiHttp);
+    before(done => {
 
+        setTimeout(() => {
+            done();
+        }, 10000);
 
+    });
 
+    it('GET index should return OK status', function() {
+        return request(app)
+            .get('/api/v1')
+            .then(function(res){
+                assert.equal(res.status, 200)
+            })
+    });
 
+});

@@ -38,8 +38,14 @@ exports.findOne = function (query, projection) {
 }
 
 exports.insertOne = (user) =>{
-    user.id = ++id
-    return userCollection.insertOne(user);
+    if (user.profile == 'admin' || user.profile == 'guess') {
+        user.id = ++id;
+        return userCollection.insertOne(user);
+    }
+    else {
+        return false;
+    }
+
 }
 
 exports.update = (id, document) =>{
