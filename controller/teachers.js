@@ -79,7 +79,7 @@ exports.postTeacher =  (req,res) => {
 };
 
 exports.putTeacher = (req, res) => {
-    if (req.body.name && req.body.lastname){
+    if (req.body.name && req.body.lastname && (req.body.phd == true)){
         let teacherAlter = req.body;
         let id = parseInt(req.params.id);
         teacherAlter.id = id;
@@ -100,9 +100,6 @@ exports.putTeacher = (req, res) => {
 
                 (async () => {
 
-
-
-
                     try {
 
                         // // Updates the teacher from all courses that he is associated
@@ -119,8 +116,8 @@ exports.putTeacher = (req, res) => {
                         console.error(err);
                     }
 
-                    console.log(`INF: Professor Atualizado`);
-                    res.status(200).send(`Professor Atualizado`);
+                    //console.log(`INF: Professor Atualizado`);
+                    res.status(201).send(`Professor Atualizado`);
 
                 })();
 
@@ -140,7 +137,7 @@ exports.putTeacher = (req, res) => {
                 res.status(500).send("Erro ao Criar Um Novo Usuário");
             }); */
     }else {
-        res.status(403).send("Campo Inválido");
+        res.status(401).send("Campo Inválido");
     }
 }
 
@@ -159,7 +156,6 @@ exports.deleteTeacher = (req, res) =>{
                 }
 
             });
-
 
             if (results.value == null){
                 res.status(204).send("Não foi possivel encontrar professor");

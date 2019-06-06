@@ -46,12 +46,69 @@ let app = require('../index');
 
         it('should return ok status for One user', function () {
             return request(app)
-                .get('/api/v1/teacher/15')
+                .get('/api/v1/teacher/10')
                 .then(function (res) {
                     assert.equal(res.status, 200);
                 });
         });
+
+        it('should return 404 status for wrong user', function () {
+            return request(app)
+                .get('/api/v1/teacher/0')
+                .then(function (res) {
+                    assert.equal(res.status, 404);
+                });
+        });
     });
+
+    describe("PUT for teacher", function () {
+        it('should NOT update an user if phd = false ', function () {
+            return request(app)
+                .put('/api/v1/teacher/1')
+                .send({name: "Update Teacher", lastname:"Test Lastname", phd:false})
+                .then(function (res) {
+                    assert.equal(res.status, 401);
+                });
+        });
+
+        it("should register a teacher if phd = true ", function () {
+            return request(app)
+                .put('/api/v1/teacher/5')
+                .send({name: "Update2 Teacher", lastname:"Test Lastname", phd:true})
+                .then(function (res) {
+                    assert.equal(res.status, 201);
+                });
+        });
+
+        it("should register a teacher if phd = true ", function () {
+            return request(app)
+                .put('/api/v1/teacher/6')
+                .send({name: "Update3 Teacher", lastname:"Test Lastname", phd:true})
+                .then(function (res) {
+                    assert.equal(res.status, 201);
+                });
+        });
+    });
+
+    describe("DELETE for teacher", function () {
+        xit('should  delete the user (status 1 to 0)', function () {
+            return request(app)
+                .delete('/api/v1/teacher/16')
+                .then(function (res) {
+                    assert.equal(res.status, 200);
+                });
+        });
+
+        it('should return 204 status to not found teacher', function () {
+            return request(app)
+                .delete('/api/v1/teacher/0')
+                .then(function (res) {
+                    assert.equal(res.status, 204);
+                });
+        });
+    });
+
+
 
 
 
