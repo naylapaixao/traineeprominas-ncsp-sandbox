@@ -36,7 +36,7 @@ exports.getOneUser = function (req, res) {
 };
 
 exports.postUser =  (req,res) => {
-    if (req.body.name && req.body.lastname && req.body.profile){
+    if (req.body.name && req.body.lastname && (req.body.profile == 'admin' || req.body.profile == 'guess')){  //(req.body.profile == true)
         let  newuser = req.body;
         newuser.id = 0;
         newuser.name =req.body.name;
@@ -53,7 +53,7 @@ exports.postUser =  (req,res) => {
                 res.status(500).send("Erro ao Criar Um Novo Usuário");
             });
     }else {
-        res.status(403).send("Não foi possível cadastrar usuário profile invalido");
+        res.status(401).send("Não foi possível cadastrar usuário profile invalido");
     }
 };
 

@@ -43,7 +43,9 @@ exports.insertOne = (user) =>{
         return userCollection.insertOne(user);
     }
     else {
-        return false;
+        return new Promise((resolve, reject) => {
+            resolve(false);
+        });
     }
 
 }

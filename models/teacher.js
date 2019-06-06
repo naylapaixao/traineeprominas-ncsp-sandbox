@@ -36,8 +36,16 @@ exports.findOne = async function (query, projection) {
 };
 
 exports.insertOne = (teacher) =>{
-  teacher.id = ++id;
-  return teacherCollection.insertOne(teacher);
+  if (teacher.phd == true) {
+    teacher.id = ++id;
+    return teacherCollection.insertOne(teacher);
+  }
+  else {
+    return new Promise((resolve, reject) => {
+      resolve(false);
+    });
+  }
+
 }
 
 exports.update = (teacher, where) =>{

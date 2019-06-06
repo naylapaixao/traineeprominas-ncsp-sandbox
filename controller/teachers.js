@@ -53,7 +53,7 @@ exports.getOneTeacher = function (req, res) {
 };
 
 exports.postTeacher =  (req,res) => {
-    if (req.body.name && req.body.lastname){
+    if (req.body.name && req.body.lastname && (req.body.phd == true)){
         let  newteacher = req.body;
         newteacher.id = ++id;
         newteacher.name =req.body.name;
@@ -74,7 +74,7 @@ exports.postTeacher =  (req,res) => {
                 res.status(500).send("Erro ao Criar Um Novo Professor");
             });
     }else {
-        res.status(403).send("Campo Inválido");
+        res.status(401).send("Campo Inválido");
     }
 };
 
