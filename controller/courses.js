@@ -55,7 +55,6 @@ exports.postCourse = (req, res) => {
                     let teacherId = parseInt(req.body.teacher[i]);
                     let teacher = await teacherModel.findOne({ id: teacherId });
 
-                    console.log(teacher);
                     if (teacher) {
                         validos.push(teacher);
                     }
@@ -66,6 +65,10 @@ exports.postCourse = (req, res) => {
                 newcourse.teacher = validos; //retorna corpo de professores validos
             }
 
+            if (newcourse.teacher.length < 2){
+                return res.status(401).send('O curso deverá ter ao menos dois professores válidos.');
+
+            }
             courseModel.insertOne(newcourse)
                 .then(result => {
 

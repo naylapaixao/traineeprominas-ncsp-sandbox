@@ -35,10 +35,13 @@ exports.getOneStudent = function (req, res) {
 };
 
 exports.postStudent =  (req,res) => {
-    if (req.body.name && req.body.lastname && req.body.age && req.body.course){
+    if (req.body.name && req.body.lastname && req.body.course && (req.body.age >= 17)){
         let newstudent = req.body;
         newstudent.id = 0;
         newstudent.status = 1;
+
+        // if (req.body.age < 17)
+        //     return res.status(401).send("A idade mínima para cadastro de aluno é 17");
 
         (async function () {
             //let courseId = await getCourse(parseInt(req.body.course));
@@ -69,7 +72,7 @@ exports.postStudent =  (req,res) => {
         })();
 
     }else {
-        res.status(401).send("Insira todos os campos obrigatorios");
+        res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
     }
 };
 
