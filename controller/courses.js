@@ -122,6 +122,10 @@ exports.putCourse = (req, res) =>{
                 alterCourse.teacher = validos; //retorna corpo de professores validos
             }
 
+            if (alterCourse.teacher.length < 2){
+                return res.status(401).send('O curso deverá ter ao menos dois professores válidos.');
+            }
+
             let query = { id: parseInt(req.params.id), status: 1 };
             // updates the course if it exists and it is active
             courseModel.update(query, alterCourse)
@@ -137,7 +141,7 @@ exports.putCourse = (req, res) =>{
                                 if (invalidos.length > 0)
                                     return res.status(201).send(`Curso Atualizado com Sucesso. Os ids dos professores não foram encontrados: ${invalidos}`);
 
-                                console.log(`INF: Curso Atualizado`);
+                                //console.log(`INF: Curso Atualizado`);
                                 res.status(200).send(`Curso Atualizado`);
 
                             // })
