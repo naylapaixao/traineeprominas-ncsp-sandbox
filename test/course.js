@@ -15,7 +15,7 @@ describe('POST for Course', function () {
             });
     });
 
-    it("should not register aa course if has less than 2 teachers valid ", function () {
+    it("should not register aa course if has at least 2 teachers valid ", function () {
         return request(app)
             .post('/api/v1/course')
             .send({name: "Test2 course", period:"1", teacher:[1, 2], city:"new york"})

@@ -35,5 +35,23 @@ let app = require('../index');
 
     });
 
+    describe("GET for teacher", function () {
+        it('should return ok status', function () {
+            return request(app)
+                .get('/api/v1/teacher')
+                .then(function (res) {
+                    assert.equal(res.status, 200);
+                });
+        });
+
+        it('should return ok status for One user', function () {
+            return request(app)
+                .get('/api/v1/teacher/15')
+                .then(function (res) {
+                    assert.equal(res.status, 200);
+                });
+        });
+    });
+
 
 

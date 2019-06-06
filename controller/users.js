@@ -58,7 +58,7 @@ exports.postUser =  (req,res) => {
 };
 
 exports.putUser = (req, res) => {
-    if (req.body.name && req.body.lastname && req.body.profile){
+    if (req.body.name && req.body.lastname && (req.body.profile == 'admin' || req.body.profile == 'guess') ){
         let userAlter = req.body;
         let id = parseInt(req.params.id);
         userAlter.id = id;
@@ -76,7 +76,7 @@ exports.putUser = (req, res) => {
                 res.status(500).send("Erro ao Criar Um Novo Usuário");
             });
     }else {
-        res.status(403).send("Campo Inválido");
+        res.status(401).send("Campo Inválido");
     }
 }
 
@@ -89,7 +89,7 @@ exports.deleteUser = (req, res) =>{
                 res.status(204).send("Não foi possivel encontrar usuário");
             }
             else {
-                res.send("Usuario excluido com sucesso");
+                res.status(200).send("Usuario excluido com sucesso");
             }
         })
         .catch(err =>{
