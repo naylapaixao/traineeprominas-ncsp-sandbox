@@ -172,11 +172,11 @@ exports.deleteCourse = (req, res) => {
         .then(result => {
             studentModel.deleteCourse(parseInt(req.params.id));
             if(result.value){
-                console.log('O curso foi removido');
+                //console.log('O curso foi removido');
                 res.status(200).send('O curso foi removido com sucesso');
             }else{
-                console.log('Nenhum curso foi removido');
-                res.status(204).send();
+                //console.log('Nenhum curso foi removido');
+                res.status(204).send('Nenhum curso foi removido');
             }
         })
         .catch(err => {

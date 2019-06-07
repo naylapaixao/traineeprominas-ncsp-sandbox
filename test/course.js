@@ -72,3 +72,22 @@ describe('POST for Course', function () {
         });
 
     });
+
+    describe("DELETE for course", function () {
+        xit('should delete the user (status 1 to 0)', function () {
+            return request(app)
+                .delete('/api/v1/course/10')
+                .then(function (res) {
+                    assert.equal(res.status, 200);
+                });
+        });
+
+        it('should return 204 status to not found course', function () {
+            return request(app)
+                .delete('/api/v1/course/0')
+                .then(function (res) {
+                    assert.equal(res.status, 204);
+                });
+        });
+
+    });

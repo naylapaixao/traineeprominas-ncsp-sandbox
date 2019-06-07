@@ -77,7 +77,7 @@ exports.postStudent =  (req,res) => {
 };
 
 exports.putStudent = (req, res) => {
-    if (req.body.name && req.body.lastname && req.body.age && req.body.course) {
+    if (req.body.name && req.body.lastname && req.body.course && (req.body.age >= 17)) {
         let id = parseInt(req.params.id);
         let alterStudent = req.body;
         alterStudent.id = parseInt(req.params.id);
@@ -95,7 +95,7 @@ exports.putStudent = (req, res) => {
                 let course = await courseModel.getCourse(alterStudent.course[i]);
                 //newstudent.course[i] = course;
 
-                if(!course){
+                if(course == false){  //!course
                     return res.status(401).send("Curso Inválido!");
                 }else{
                     alterStudent.course[i] = course[0];
@@ -108,7 +108,7 @@ exports.putStudent = (req, res) => {
 
                         if (result.value) {
                             console.log(`INF: Estudante Atualizado`);
-                            res.status(200).send(`Estudante Atualizado`);
+                            res.status(201).send(`Estudante Atualizado`);
                         } else {
                             console.log('Estudante não Encontrado.');
                             res.status(404).send('Estudante não Encontrado.');
@@ -121,6 +121,9 @@ exports.putStudent = (req, res) => {
             }
 
         })();
+    }
+    else {
+        res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
     }
 };
 

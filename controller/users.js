@@ -2,20 +2,20 @@ const userModel = require('../models/user');
 
 var id=0;
 
-// exports.getAllUsers = function (req, res) {
-//     const query = { status: 1 };
-//     const projection = { _id: 0, id: 1, name: 1, lastname: 1, profile: 1 };
-//
-//     userModel.findAll(query, projection)
-//         .then(users => {
-//             res.send(users);
-//         })
-//
-//         .catch(err => {
-//             console.error("Erro ao conectar a collection user");
-//             res.status(500).send("Erro ao conectar a collection user");
-//         });
-// };
+exports.getAllUsers = function (req, res) {
+    const query = { status: 1 };
+    const projection = { _id: 0, id: 1, name: 1, lastname: 1, profile: 1 };
+
+    userModel.findAll(query, projection)
+        .then(users => {
+            res.send(users);
+        })
+
+        .catch(err => {
+            console.error("Erro ao conectar a collection user");
+            res.status(500).send("Erro ao conectar a collection user");
+        });
+};
 
 
 
