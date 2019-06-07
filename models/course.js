@@ -1,3 +1,24 @@
+//MONGOOSE AND SCHEMA
+// var mongoose = require("mongoose");
+// var schema = mongoose.Schema;
+//
+//
+// var courseSchema = new schema(
+//     {
+//       id: {type: Number, require:true, unique:true},
+//       name: {type: String, require:true},
+//       period: {type: String, require:true},
+//       teacher: {type: Array, require:true},
+//       city: {type: String, require:true},
+//       status: {type: Number, require:true}
+//     }
+// );
+//
+// var Course = mongoose.model('Course', courseSchema);
+
+//MONGOOSE AND SCHEMA
+
+
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -76,6 +97,14 @@ exports.deleteProf = (id) => {
 exports.getAllTeachers =  () => {
   return courseCollection.find({"status": 1}).toArray();
 }
+
+
+
+
+
+
+
+
 
 
 

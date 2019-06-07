@@ -1,20 +1,20 @@
-//MONGOOSE
-var mongoose = require("mongoose");
-var schema = mongoose.Schema;
+//MONGOOSE AND SCHEMA
+// var mongoose = require("mongoose");
+// var schema = mongoose.Schema;
+//
+// var userSchema = new schema(
+//     {
+//         id: {type: Number, require:true, unique: true},
+//         name: {type: String, require:true},
+//         lastname: {type: String, require:true},
+//         profile: {type: String, require:true},
+//         status: {type: Number, require:true}
+//     }
+// );
+//
+// var User = mongoose.model('User', userSchema);
 
-var userSchema = new schema(
-    {
-        id: {type: number},
-        name: {type:string},
-        lastname: string,
-        profile: string,
-        status: {type: number}
-    }
-);
-
-var User = mongoose.model('User', userSchema);
-
-//MONGOOSE
+//MONGOOSE AND SCHEMA
 
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
@@ -46,25 +46,6 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 exports.findAll = function (query, projection) {
     return userCollection.find(query,{projection}).toArray();
 };
-
-
-//FAZENDO NOVA REGRA DE NEGOCIO NO MODEL
-//  getAllUsers = function (req, res) {
-//     const query = { status: 1 };
-//     const projection = { _id: 0, id: 1, name: 1, lastname: 1, profile: 1 };
-//
-//     userModel.findAll(query, projection)
-//         .then(users => {
-//             res.send(users);
-//         })
-//
-//         .catch(err => {
-//             console.error("Erro ao conectar a collection user");
-//             res.status(500).send("Erro ao conectar a collection user");
-//         });
-// };
-
-
 
 
 exports.findOne = function (query, projection) {

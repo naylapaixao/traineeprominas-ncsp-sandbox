@@ -1,3 +1,22 @@
+//MONGOOSE AND SCHEMA
+// var mongoose = require("mongoose");
+// var schema = mongoose.Schema;
+//
+// var teacherSchema = new schema(
+//     {
+//       id: {type: Number, require:true, unique:true},
+//       name: {type: String, require:true},
+//       lastname: {type: String, require:true},
+//       phd: {type: Boolean, require:true},
+//       status: {type: Number, require:true}
+//     }
+// );
+//
+// var Teacher = mongoose.model('Teacher', teacherSchema);
+
+//MONGOOSE AND SCHEMA
+
+
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;

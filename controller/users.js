@@ -1,4 +1,7 @@
 const userModel = require('../models/user');
+const mongoose = require("mongoose");
+
+mongoose.model(User, userSchema);
 
 var id=0;
 
@@ -38,7 +41,18 @@ exports.getOneUser = function (req, res) {
 };
 
 exports.postUser =  (req,res) => {
-    if (req.body.name && req.body.lastname && (req.body.profile == 'admin' || req.body.profile == 'guess')){  //(req.body.profile == true)
+    let user = new User({id: ++id, name: req.body.name, lastname: req.body.lastname, status: 1, profile:req.body.profile == 'admin' || req.body.profile == 'guess'})
+
+    userModel.insertOne(user)
+        .then(user => {
+            res.status(201).send("Usuário Cadastrado com Sucesso.");
+        })
+        .catch(err => {
+            console.error("Erro ao Criar Um Novo Usuário", err);
+            res.status(500).send("Erro ao Criar Um Novo Usuário");
+        });
+
+    /*if (req.body.name && req.body.lastname && (req.body.profile == 'admin' || req.body.profile == 'guess')){  //(req.body.profile == true)
         let  newuser = req.body;
         newuser.id = 0;
         newuser.name =req.body.name;
@@ -56,7 +70,7 @@ exports.postUser =  (req,res) => {
             });
     }else {
         res.status(401).send("Não foi possível cadastrar usuário profile invalido");
-    }
+    } */
 };
 
 exports.putUser = (req, res) => {
