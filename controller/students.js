@@ -1,6 +1,10 @@
 const studentModel = require('../models/student');
 const courseModel = require('../models/course');
 
+const mongoose = require("mongoose");
+const studentSchema = require('../schema').studentSchema;
+const Student = mongoose.model('Student', studentSchema);
+
 var id=0;
 
 exports.getAll = (req, res) => {
@@ -35,7 +39,54 @@ exports.getOneStudent = function (req, res) {
 };
 
 exports.postStudent =  (req,res) => {
-    if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)){
+    //let student = new Student ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
+
+
+    (async function () {
+        //let courseId = await getCourse(parseInt(req.body.course));
+
+        for (let i = 0; i < req.body.course.length; i++) {
+            //let course = await getCourse(newstudent.course[i]);
+            let course = await courseModel.getCourse(req.body.course[i]);
+            //newstudent.course[i] = course;
+
+            if(course == false){
+                return res.status(401).send("Curso Inválido!");
+            }else{
+                req.body.course[i] = course[0];
+            }
+        }
+
+
+        let student = new Student ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
+        student.validate(error => {
+            //console.log(error);
+            if(!error){
+                return studentModel.insertOne(student)
+                    .then(result => {
+                        // if(result != false){
+
+                            res.status(201).send('Estudante cadastrado com sucesso!');
+                        // }else{
+                        //     res.status(401).send('Não foi possível cadastrar o estudante curso ou idade invalido');
+                        // }
+                    })
+
+                    .catch(err => {
+                        console.error("Erro ao conectar a collection student: ", err);
+                        res.status(500);
+                    });
+            }else{
+                res.status(401).send('Não foi possível cadastrar o Estudante');
+            }
+        });
+
+
+    })();
+
+
+
+    /*if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)){
         let newstudent = req.body;
         newstudent.id = 0;
         newstudent.status = 1;
@@ -73,11 +124,53 @@ exports.postStudent =  (req,res) => {
 
     }else {
         res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
-    }
+    } */
 };
 
 exports.putStudent = (req, res) => {
-    if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)) {
+    let student = ({id: parseInt(req.params.id), name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
+    let where = { id: parseInt(req.params.id), status: 1 };
+
+    (async function () {
+        //let courseId = await getCourse(parseInt(req.body.course));
+
+        for (let i = 0; i < req.body.course.length; i++) {
+            //let course = await getCourse(newstudent.course[i]);
+            let course = await courseModel.getCourse(req.body.course[i]);
+            //newstudent.course[i] = course;
+
+            if(course == false){
+                return res.status(401).send("Curso Inválido!");
+            }else{
+                req.body.course[i] = course[0];
+            }
+        }
+
+
+        let alterStudent = new Student(student);
+        alterStudent.validate(error => {
+            if(!error){
+                return studentModel.update(where,student)
+                    .then(result => {
+                        // if(result != false){
+                            res.status(201).send('Estudante editado com sucesso!');
+                        // }else{
+                        //     res.status(401).send('Não foi possível editar o estudante curso ou idade invalido');
+                        // }
+                    })
+
+                    .catch(err => {
+                        console.error("Erro ao conectar a collection student: ", err);
+                        res.status(500);
+                    });
+            }else{
+                res.status(401).send('Não foi possível cadastrar o Estudante');
+            }
+        });
+
+    })();
+
+    /*if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)) {
         let id = parseInt(req.params.id);
         let alterStudent = req.body;
         alterStudent.id = parseInt(req.params.id);
@@ -124,7 +217,7 @@ exports.putStudent = (req, res) => {
     }
     else {
         res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
-    }
+    } */
 };
 
 exports.deleteStudent = (req, res) => {

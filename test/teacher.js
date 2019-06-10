@@ -91,7 +91,7 @@ let app = require('../index');
     });
 
     describe("DELETE for teacher", function () {
-        xit('should  delete the user (status 1 to 0)', function () {
+        it('should  delete the user (status 1 to 0)', function () {
             return request(app)
                 .delete('/api/v1/teacher/16')
                 .then(function (res) {

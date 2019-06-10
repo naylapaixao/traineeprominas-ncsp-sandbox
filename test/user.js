@@ -92,7 +92,7 @@ let app = require('../index');
     });
 
     describe('DELETE for User', function () {
-        xit('should delete the user (status 1 to 0)', function () {
+        it('should delete the user (status 1 to 0)', function () {
             return request(app)
                 .delete('/api/v1/user/7')
                 .then(function (res) {

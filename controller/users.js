@@ -87,8 +87,8 @@ exports.putUser = (req, res) => {
     let where = { id: parseInt(req.params.id), status: 1 };
     let alteruser = new User(user);
 
-    console.log(alteruser);
-    console.log(user);
+    // console.log(alteruser);
+    // console.log(user);
 
     alteruser.validate(error => {
         if(!error){

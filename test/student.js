@@ -9,7 +9,7 @@ describe('POST for Student', function () {
     it("should register an student with age >=17 and has a valid course ", function () {
         return request(app)
             .post('/api/v1/student')
-            .send({name: "Test1 student", lastName:"surname", age:17, course:[4]})
+            .send({name: "Test1 student", lastName:"surname", age:17, course:[41]})
             .then(function (res) {
                 assert.equal(res.status, 201);
             });
@@ -74,7 +74,7 @@ describe('POST for Student', function () {
         it('should register an student with age >=17 and has a valid course', function () {
             return request(app)
                 .put('/api/v1/student/6')
-                .send({name: "Update student", lastName:"surname", age:17, course:[4]})
+                .send({name: "Update student", lastName:"surname", age:17, course:[41]})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });
@@ -83,7 +83,7 @@ describe('POST for Student', function () {
         it("should not register an student with age >=17 and has no valid course ", function () {
             return request(app)
                 .put('/api/v1/student/7')
-                .send({name: "Update2 student", lastName:"surname", age:18, course:'invalid'})
+                .send({name: "Update2 student", lastName:"surname", age:18, course:[0]})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -101,7 +101,7 @@ describe('POST for Student', function () {
         it("should not register an student with age < 17 and has no valid course ", function () {
             return request(app)
                 .put('/api/v1/student/22')
-                .send({name: "Update4 student", lastName:"surname", age:16, course:'invalid'})
+                .send({name: "Update4 student", lastName:"surname", age:16, course:[0]})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -110,7 +110,7 @@ describe('POST for Student', function () {
     });
 
     describe("DELETE for student", function () {
-        xit('should delete the user (status 1 to 0)', function () {
+        it('should delete the user (status 1 to 0)', function () {
             return request(app)
                 .delete('/api/v1/student/12')
                 .then(function (res) {

@@ -85,8 +85,6 @@ exports.postCourse = (req, res) => {
 
 
 
-
-
     /* if (req.body.name && req.body.city){
         let newcourse = req.body;
         newcourse.period = parseInt(req.body.period) || 8;
@@ -138,7 +136,53 @@ exports.postCourse = (req, res) => {
 };
 
 exports.putCourse = (req, res) =>{
-    if (req.body.name && req.body.city){
+    let course = ({id: parseInt(req.params.id), name: req.body.name, period: req.body.period || 8, status: 1, teacher:req.body.teacher, city: req.body.city});
+    let where = { id: parseInt(req.params.id), status: 1 };
+    //let alterCourse = new Course(course);
+
+    (async function() {
+
+        let validos = [];
+        let invalidos = [];
+
+        //IF INFORM TEACHER, GET TEACHER ID
+        if(req.body.teacher){
+            for (let i = 0; i <req.body.teacher.length; i++) {
+                //let teacher = await teacherModel.getTeacher(newcourse.teacher);
+                let teacherId = parseInt(req.body.teacher[i]);
+                let teacher = await teacherModel.findOne({ id: teacherId });
+
+                if (teacher) {
+                    validos.push(teacher);
+                }
+                else {
+                    invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
+                }
+            }
+            course.teacher = validos; //retorna corpo de professores validos
+            let alterCourse = new Course(course);
+            alterCourse.validate(error => {
+                // console.log(error);
+                // console.log('?>>>>>>>',course.teacher);
+                if(!error){
+                    return courseModel.update(where,{$set: course})
+                        .then(result => {
+                            res.status(200).send('Curso cadastrado com sucesso!');
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection course: ", err);
+                            res.status(500);
+                        });
+                }else{
+                    res.status(401).send('Não foi possível cadastrar o Curso');
+                }
+            });
+        }
+
+    })();
+
+
+    /* if (req.body.name && req.body.city){
         let id = parseInt(req.params.id);
         let alterCourse = req.body;
         alterCourse.id = parseInt(req.params.id);
@@ -198,7 +242,7 @@ exports.putCourse = (req, res) =>{
                             // .catch(err => {
                                 // console.error(err);
                             // });
-//
+
                     //} else {
                     //     console.log('Curso não Encontrado.');
                     //     res.status(404).send('Curso não Encontrado.');
@@ -211,7 +255,7 @@ exports.putCourse = (req, res) =>{
                 });
 
         })();
-    }
+    } */
 };
 
 exports.deleteCourse = (req, res) => {

@@ -53,7 +53,8 @@ exports.findOne = function(where, projection) {
 // };
 
 exports.update = (query, set) => {
-  return courseCollection.findOneAndUpdate(query, {$set: {...set}}, { returnOriginal: false });
+  //return courseCollection.findOneAndUpdate(query, {$set: {...set}}, { returnOriginal: false });
+  return courseCollection.findOneAndUpdate(query, set, { returnOriginal: false });
 };
 
 exports.delete = (id) => {
