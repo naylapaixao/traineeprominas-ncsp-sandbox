@@ -8,7 +8,7 @@ let app = require('../index');
         it("should not register an user if it is guess or admin ", function () {
             return request(app)
                 .post('/api/v1/user')
-                .send({name: "Test User", lastname:"Test Lastname", profile:"unauthorized"})
+                .send({name: "Test User", lastName:"Test Lastname", profile:"unauthorized"})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -17,7 +17,7 @@ let app = require('../index');
         it('should register an user if it is guess', function () {
             return request(app)
                 .post('/api/v1/user')
-                .send({name:"Test2 User", lastname:"Test lasname", profile:"guess"})
+                .send({name:"Test2 User", lastName:"Test lastName", profile:"guess"})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 })
@@ -26,7 +26,7 @@ let app = require('../index');
         it('should register an user if it is admin', function () {
             return request(app)
                 .post('/api/v1/user')
-                .send({name:"Test3 User", lastname:"Test lasname", profile:"admin"})
+                .send({name:"Test3 User", lastName:"Test lastName", profile:"admin"})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 })
@@ -65,7 +65,7 @@ let app = require('../index');
         it("should NOT update an user from guess or admin ", function () {
             return request(app)
                 .put('/api/v1/user/1')
-                .send({name: "Update User", lastname:"Test Lastname", profile:"unauthorized"})
+                .send({name: "Update User", lastName:"Test Lastname", profile:"unauthorized"})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -74,7 +74,7 @@ let app = require('../index');
         it("should update an user from guess or admin ", function () {
             return request(app)
                 .put('/api/v1/user/1')
-                .send({name: "Update2 User", lastname:"Test Lastname", profile:"guess"})
+                .send({name: "Update2 User", lastName:"Test Lastname", profile:"guess"})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });
@@ -83,7 +83,7 @@ let app = require('../index');
         it("should update an user from guess or admin ", function () {
             return request(app)
                 .put('/api/v1/user/1')
-                .send({name: "Update3 User", lastname:"Test Lastname", profile:"admin"})
+                .send({name: "Update3 User", lastName:"Test Lastname", profile:"admin"})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });

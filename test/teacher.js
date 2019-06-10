@@ -9,7 +9,7 @@ let app = require('../index');
         it("should not register an user if phd = false ", function () {
             return request(app)
                 .post('/api/v1/teacher')
-                .send({name: "Test1 Teacher", lastname:"Test Lastname", phd:false})
+                .send({name: "Test1 Teacher", lastName:"Test Lastname", phd:false})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -18,7 +18,7 @@ let app = require('../index');
         it("should register a teacher if phd = true ", function () {
             return request(app)
                 .post('/api/v1/teacher')
-                .send({name: "Test2 Teacher", lastname:"Test Lastname", phd:true})
+                .send({name: "Test2 Teacher", lastName:"Test Lastname", phd:true})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });
@@ -27,7 +27,7 @@ let app = require('../index');
         it("should register a teacher if phd = true ", function () {
             return request(app)
                 .post('/api/v1/teacher')
-                .send({name: "Test3 Teacher", lastname:"Test Lastname", phd:true})
+                .send({name: "Test3 Teacher", lastName:"Test Lastname", phd:true})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });
@@ -65,7 +65,7 @@ let app = require('../index');
         it('should NOT update an user if phd = false ', function () {
             return request(app)
                 .put('/api/v1/teacher/1')
-                .send({name: "Update Teacher", lastname:"Test Lastname", phd:false})
+                .send({name: "Update Teacher", lastName:"Test Lastname", phd:false})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -74,7 +74,7 @@ let app = require('../index');
         it("should register a teacher if phd = true ", function () {
             return request(app)
                 .put('/api/v1/teacher/5')
-                .send({name: "Update2 Teacher", lastname:"Test Lastname", phd:true})
+                .send({name: "Update2 Teacher", lastName:"Test Lastname", phd:true})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });
@@ -83,7 +83,7 @@ let app = require('../index');
         it("should register a teacher if phd = true ", function () {
             return request(app)
                 .put('/api/v1/teacher/6')
-                .send({name: "Update3 Teacher", lastname:"Test Lastname", phd:true})
+                .send({name: "Update3 Teacher", lastName:"Test Lastname", phd:true})
                 .then(function (res) {
                     assert.equal(res.status, 201);
                 });

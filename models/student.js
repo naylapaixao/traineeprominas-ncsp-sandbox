@@ -6,7 +6,7 @@
 //     {
 //       id: {type: Number, require:true, unique:true},
 //       name: {type: String, require:true},
-//       lastname: {type: String, require:true},
+//       lastName: {type: String, require:true},
 //       age: {type: Number, require:true},
 //       course:{type: Array},
 //       status: {type: Number, require:true}

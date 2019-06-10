@@ -45,18 +45,18 @@ router.get('/', function (req, res) {
 // UPDATE USER
 router.put('/:id', function (req, res) {
 
-    if (req.body.name && req.body.lastname && req.body.profile){
+    if (req.body.name && req.body.lastName && req.body.profile){
         let userAlter = req.body;
         let id = parseInt(req.params.id);
         userAlter.id = id;
         userAlter.name = req.body.name;
-        userAlter.lastname = req.body.lastname;
+        userAlter.lastName = req.body.lastName;
         userAlter.profile = req.body.profile;
         userAlter.status =1;
 
         console.log(userAlter);
 
-        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:{name:userAlter.name, lastname: userAlter.lastname, profile: userAlter.profile}}, function (err, result) {
+        db.collection('user').findOneAndUpdate({"id":id, "status":1}, {$set:{name:userAlter.name, lastName: userAlter.lastName, profile: userAlter.profile}}, function (err, result) {
             console.log(result.value);
             if (result.value == null){
                 res.status(404);
@@ -86,7 +86,7 @@ router.put('/:id', function (req, res) {
 
 // CREATE USER
 router.post('/', function (req, res) {
-    if (req.body.name && req.body.lastname && req.body.profile){
+    if (req.body.name && req.body.lastName && req.body.profile){
         let  newuser = req.body;
         console.log(newuser);
         newuser.id = ++id;
@@ -106,7 +106,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastname:1, profile:1}}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastName:1, profile:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);

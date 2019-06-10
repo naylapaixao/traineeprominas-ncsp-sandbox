@@ -5,7 +5,7 @@ var id=0;
 
 exports.getAll = (req, res) => {
     let where = {'status':1};
-    let projection = { _id: 0, id: 1, name: 1, lastname: 1, age: 1, course:1 };
+    let projection = { _id: 0, id: 1, name: 1, lastName: 1, age: 1, course:1 };
     studentModel.findAll(where,projection)
         .then(students => {
             res.send(students);
@@ -18,7 +18,7 @@ exports.getAll = (req, res) => {
 
 exports.getOneStudent = function (req, res) {
     let where = { id: parseInt(req.params.id), status: 1 };
-    let projection = { _id: 0, id: 1, name: 1, lastname: 1, age: 1, course:1 };
+    let projection = { _id: 0, id: 1, name: 1, lastName: 1, age: 1, course:1 };
 
     studentModel.findOne(where, projection)
         .then(student => {
@@ -35,7 +35,7 @@ exports.getOneStudent = function (req, res) {
 };
 
 exports.postStudent =  (req,res) => {
-    if (req.body.name && req.body.lastname && req.body.course && (req.body.age >= 17)){
+    if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)){
         let newstudent = req.body;
         newstudent.id = 0;
         newstudent.status = 1;
@@ -77,12 +77,12 @@ exports.postStudent =  (req,res) => {
 };
 
 exports.putStudent = (req, res) => {
-    if (req.body.name && req.body.lastname && req.body.course && (req.body.age >= 17)) {
+    if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)) {
         let id = parseInt(req.params.id);
         let alterStudent = req.body;
         alterStudent.id = parseInt(req.params.id);
         alterStudent.name = req.body.name;
-        alterStudent.lastname = req.body.lastname;
+        alterStudent.lastName = req.body.lastName;
         alterStudent.age = req.body.age;
         alterStudent.course = req.body.course;
         alterStudent.status = 1;

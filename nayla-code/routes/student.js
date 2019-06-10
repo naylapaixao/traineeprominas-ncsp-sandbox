@@ -30,7 +30,7 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
 // GET ALL STUDENTS
 router.get('/', function (req, res) {
     //res.send(students);
-    collection.find({}, {projection: {_id:0, id:1, name:1, lastname:1, age:1, course:1}}).toArray((err, users) =>{
+    collection.find({}, {projection: {_id:0, id:1, name:1, lastName:1, age:1, course:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
 
 // CREATE NEW STUDENT
 router.post('/', function (req, res) {
-    if (req.body.name && req.body.lastname && req.body.age && req.body.course) {
+    if (req.body.name && req.body.lastName && req.body.age && req.body.course) {
 
         let newstudent = req.body;
         newstudent.id = ++id;
@@ -126,12 +126,12 @@ const getCourse = function(id) {
 
 // UPDATE STUDENT
 router.put('/:id', function (req, res) {
-    if (req.body.name && req.body.lastname && req.body.age && req.body.course){
+    if (req.body.name && req.body.lastName && req.body.age && req.body.course){
         let id = parseInt(req.params.id);
         let alterStudent = req.body;
         alterStudent.id = parseInt(req.params.id);
         alterStudent.name = req.body.name;
-        alterStudent.lastname = req.body.lastname;
+        alterStudent.lastName = req.body.lastName;
         alterStudent.age = req.body.age;
         alterStudent.course = req.body.course;
         alterStudent.status = 1;
@@ -192,7 +192,7 @@ router.put('/:id', function (req, res) {
 router.get('/:id', function (req, res) {
     let id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastname:1, age:1, course:1}}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1, lastName:1, age:1, course:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao Student');
             res.status(500);

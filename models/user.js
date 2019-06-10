@@ -1,29 +1,15 @@
-//MONGOOSE AND SCHEMA
-// var mongoose = require("mongoose");
-// var schema = mongoose.Schema;
-//
-// var userSchema = new schema(
-//     {
-//         id: {type: Number, require:true, unique: true},
-//         name: {type: String, require:true},
-//         lastname: {type: String, require:true},
-//         profile: {type: String, require:true},
-//         status: {type: Number, require:true}
-//     }
-// );
-//
-// var User = mongoose.model('User', userSchema);
-
-//MONGOOSE AND SCHEMA
-
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+//const database = require('../schema');
+// const mongoose = require("mongoose");
+// const User = require('../schema');
 
 let db;
 let userCollection;
-let counterCollection;
+
+//mongoose.connect(mdbURL);
 
 var id=0;
 mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
@@ -37,7 +23,7 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
         db = database.db("trainee-prominas");
         userCollection = db.collection('user');
-        counterCollection = db.collection('counter');
+        //counterCollection = db.collection('counter');
         userCollection.find({}).toArray((err, user) => {id = user.length});
     }
 });
@@ -47,13 +33,16 @@ exports.findAll = function (query, projection) {
     return userCollection.find(query,{projection}).toArray();
 };
 
-
 exports.findOne = function (query, projection) {
     return userCollection.findOne(query, {projection});
 }
 
 exports.insertOne = (user) =>{
-    if (user.profile == 'admin' || user.profile == 'guess') {
+    user.id = ++id;
+    //User.create(user);
+    return userCollection.insertOne(user);
+
+   /* if (user.profile == 'admin' || user.profile == 'guess') {
         user.id = ++id;
         return userCollection.insertOne(user);
     }
@@ -61,12 +50,13 @@ exports.insertOne = (user) =>{
         return new Promise((resolve, reject) => {
             resolve(false);
         });
-    }
+    } */
 
-}
+};
 
 exports.update = (id, document) =>{
-    return userCollection.updateOne({'id':id, 'status':1}, {$set:document});
+    //return userCollection.updateOne({'id':id, 'status':1}, {$set:document});
+    return userCollection.findOneAndUpdate(id, document);
 }
 
 exports.delete = (id) => {

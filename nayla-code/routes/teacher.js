@@ -37,12 +37,12 @@ router.get('/', function (req, res) {
 
 // UPDATE ONE PROFESSOR
 router.put('/:id', function (req, res) {
-    if (req.body.name && req.body.lastname) {
+    if (req.body.name && req.body.lastName) {
 
         let alterTeacher = req.body;
         let id = parseInt(req.params.id);
         alterTeacher.name = req.body.name;
-        alterTeacher.lastname = req.body.lastname;
+        alterTeacher.lastName = req.body.lastName;
         alterTeacher.id = id;
         alterTeacher.status = 1;
 
@@ -114,7 +114,7 @@ router.put('/:id', function (req, res) {
 
 // CREATE NEW TEACHER
 router.post('/', function (req, res) {
-    if (req.body.name && req.body.lastname){
+    if (req.body.name && req.body.lastName){
 
         let newteacher = req.body;
         console.log(newteacher);
@@ -142,7 +142,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
     var id = parseInt(req.params.id); //o parametro name tem que ser exatamente o mesmo que na rota
 
-    collection.find({'id':id}, {projection: {_id:0, id:1, name:1,lastname:1, phd:1}}).toArray((err, user) =>{
+    collection.find({'id':id}, {projection: {_id:0, id:1, name:1,lastName:1, phd:1}}).toArray((err, user) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao Teacher');
             res.status(500);

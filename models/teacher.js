@@ -1,22 +1,3 @@
-//MONGOOSE AND SCHEMA
-// var mongoose = require("mongoose");
-// var schema = mongoose.Schema;
-//
-// var teacherSchema = new schema(
-//     {
-//       id: {type: Number, require:true, unique:true},
-//       name: {type: String, require:true},
-//       lastname: {type: String, require:true},
-//       phd: {type: Boolean, require:true},
-//       status: {type: Number, require:true}
-//     }
-// );
-//
-// var Teacher = mongoose.model('Teacher', teacherSchema);
-
-//MONGOOSE AND SCHEMA
-
-
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
@@ -55,7 +36,10 @@ exports.findOne = async function (query, projection) {
 };
 
 exports.insertOne = (teacher) =>{
-  if (teacher.phd == true) {
+  teacher.id = ++id;
+  return teacherCollection.insertOne(teacher);
+
+  /*if (teacher.phd == true) {
     teacher.id = ++id;
     return teacherCollection.insertOne(teacher);
   }
@@ -63,13 +47,14 @@ exports.insertOne = (teacher) =>{
     return new Promise((resolve, reject) => {
       resolve(false);
     });
-  }
+  } */
 
 }
 
-exports.update = (teacher, where) =>{
-  return teacherCollection.findOneAndUpdate(where, { $set: { ...teacher } }, { returnOriginal: false });
-}
+exports.update = (where, teacher) =>{
+  //return teacherCollection.findOneAndUpdate(where, { $set: { ...teacher } }, { returnOriginal: false });
+  return teacherCollection.findOneAndUpdate(where, teacher, { returnOriginal: false });
+};
 
 exports.delete = (id) => {
   return teacherCollection.findOneAndUpdate(id, {$set: {status: 0}});
@@ -78,6 +63,23 @@ exports.delete = (id) => {
 exports.getTeacher = (id) => {
   return teacherCollection.find({'id':id, 'status':1}).toArray();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*let teachers = [
   { "id": 1, "name": "Teacher", "lastName": "01", "phd": false },
