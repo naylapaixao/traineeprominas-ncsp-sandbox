@@ -5,6 +5,17 @@ const mongoose = require("mongoose");
 const studentSchema = require('../schema').studentSchema;
 const Student = mongoose.model('Student', studentSchema);
 
+const Joi = require('joi');
+const validator = require('express-joi-validation')({});
+
+const schemaStudent = Joi.object().keys({
+    name: Joi.string().required(),
+    lastName: Joi.string().required(),
+    age: Joi.number().required(),
+    course: Joi.array().required()
+});
+
+
 var id=0;
 
 exports.getAll = (req, res) => {

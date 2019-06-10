@@ -6,6 +6,15 @@ const mongoose = require("mongoose");
 const teacherSchema = require('../schema').teacherSchema;
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
+const Joi = require('joi');
+const validator = require('express-joi-validation')({});
+
+const schemaTeacher = Joi.object().keys({
+    name: Joi.string().required(),
+    lastName: Joi.string().required(),
+    phd: Joi.boolean().required()
+});
+
 var id=0;
 
 

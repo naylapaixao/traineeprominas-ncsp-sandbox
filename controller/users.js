@@ -2,6 +2,16 @@ const userModel = require('../models/user');
 const mongoose = require("mongoose");
 const userSchema = require('../schema').userSchema;
 const User = mongoose.model('User', userSchema);
+const Joi = require('joi');
+const validator = require('express-joi-validation')({});
+
+const schemaUser = Joi.object().keys({
+    name: Joi.string().required(),
+    lastName: Joi.string().required(),
+    profile: Joi.string().required()
+});
+
+Joi.validate({ name: 'abc', lastName: 'abc' }, schema, function (err, value) { });
 
 //const User = mongoose.model('User', userSchema);
 

@@ -110,7 +110,7 @@ describe('POST for Student', function () {
     });
 
     describe("DELETE for student", function () {
-        it('should delete the user (status 1 to 0)', function () {
+        xit('should delete the user (status 1 to 0)', function () {
             return request(app)
                 .delete('/api/v1/student/12')
                 .then(function (res) {

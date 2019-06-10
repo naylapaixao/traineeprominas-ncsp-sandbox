@@ -74,7 +74,7 @@ describe('POST for Course', function () {
     });
 
     describe("DELETE for course", function () {
-        it('should delete the user (status 1 to 0)', function () {
+        xit('should delete the user (status 1 to 0)', function () {
             return request(app)
                 .delete('/api/v1/course/10')
                 .then(function (res) {
