@@ -1,4 +1,4 @@
-//import * as Schema from "mongoose";
+//Schema and Business Rule for the Project
 
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
@@ -46,7 +46,7 @@ const schema = mongoose.Schema;
             name: {type: String, require:true},
             lastName: {type: String, require:true},
             age: {type: Number, require:true, min:[17, ' A idade minimia para o estudante é 17']},
-            course:{type: [courseSchema]},
+            course:{type: [courseSchema], validate: [val => {return val.length === 1}, 'É necessário ter um curso válido']},
             status: {type: Number, require:true, default:1}
     }
 );

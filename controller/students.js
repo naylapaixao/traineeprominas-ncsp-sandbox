@@ -9,7 +9,6 @@ const Student = mongoose.model('Student', studentSchema);
 
 //------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
-const validator = require('express-joi-validation')({});
 
 const schemaStudent = Joi.object().keys({
     name: Joi.string().required(),
@@ -88,6 +87,7 @@ exports.postStudent =  (req,res) => {
                     age: req.body.age,
                     course: req.body.course
                 });
+
                 //Validades student if corrects create a new one in model
                 student.validate(error => {
                     //console.log(error);

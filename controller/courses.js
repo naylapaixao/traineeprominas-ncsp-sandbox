@@ -23,8 +23,9 @@ var id=0;
 
 //------METHOD GET FOR ALL COURSES-----
 exports.getAll = (req, res) => {
+    //Get only courses where status is 1
     let where = {'status':1};
-    let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
+    let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}//1 to show the information 0 to hide
     courseModel.findAll(where,projection)
         .then(courses => {
             res.send(courses);
@@ -59,8 +60,10 @@ exports.getOneCourse = function (req, res) {
 
 //------METHOD POST FOR COURSE-----CREATES NEW COURSE
 exports.postCourse = (req, res) => {
+    //Variable that will receive all the information about the course and validade on schema
     let course = new Course({id: ++id, name: req.body.name, period: req.body.period || 8, status: 1, teacher:req.body.teacher, city: req.body.city});
 
+    //Start Validade the Values
     Joi.validate(req.body, schemaCourse, (err, result) => {
         if(!err) {
 
@@ -76,6 +79,7 @@ exports.postCourse = (req, res) => {
                         let teacherId = parseInt(req.body.teacher[i]);
                         let teacher = await teacherModel.findOne({id: teacherId});
 
+                        //Checks if Id Teacher is valid or not
                         if (teacher) {
                             validos.push(teacher);
                         } else {
@@ -85,6 +89,7 @@ exports.postCourse = (req, res) => {
                     course.teacher = validos; //retorna corpo de professores validos
                 }
 
+                //Validades all the requiments of course
                 course.validate(error => {
                     if (!error) {
                         return courseModel.insertOne(course)
@@ -164,6 +169,7 @@ exports.putCourse = (req, res) =>{
     let where = { id: parseInt(req.params.id), status: 1 };
     //let alterCourse = new Course(course);
 
+    //Start Validade the Values
     Joi.validate(req.body, schemaCourse, (err, result) => {
         if(!err) {
             (async function () {

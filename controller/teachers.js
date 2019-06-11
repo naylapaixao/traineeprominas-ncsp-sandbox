@@ -2,22 +2,25 @@ const teacherModel = require('../models/teacher');
 const studentModel = require('../models/student');
 const courseModel = require('../models/course');
 
+//------MONGOOSE SCHEMA------
 const mongoose = require("mongoose");
 const teacherSchema = require('../schema').teacherSchema;
 const Teacher = mongoose.model('Teacher', teacherSchema);
+//------MONGOOSE SCHEMA------
 
+//------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
-const validator = require('express-joi-validation')({});
 
 const schemaTeacher = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
     phd: Joi.boolean().required(),
 });
+//------JOI VALIDATION------
 
 var id=0;
 
-
+//------METHOD GET FOR ALL TEACHERS-----
 exports.getAll = (req, res) => {
     let where = {'status':1};
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, phd: 1 };
@@ -30,6 +33,7 @@ exports.getAll = (req, res) => {
         res.status(500).send('Ocorreu um erro');
     });
 };
+//------METHOD GET FOR ALL TEACHERS-----
 
 /* exports.getAllTeachers = function (req, res) {
     const query = { id: parseInt(req.params.id), status: 1 };
@@ -47,6 +51,7 @@ exports.getAll = (req, res) => {
         });
 }; */
 
+//------METHOD GET FOR ONE TEACHER-----
 exports.getOneTeacher = function (req, res) {
     let query = { id: parseInt(req.params.id), status: 1 };
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, phd: 1 };
@@ -64,7 +69,9 @@ exports.getOneTeacher = function (req, res) {
             res.status(500).send("Erro ao conectar a collection teacher");
         });
 };
+//------METHOD GET FOR ONE TEACHER-----
 
+//------METHOD POST FOR TEACHER-----CREATES NEW TEACHER
 exports.postTeacher =  (req,res) => {
     Joi.validate(req.body, schemaTeacher, (err, result) => {
         if(!err){
@@ -114,7 +121,9 @@ exports.postTeacher =  (req,res) => {
         res.status(401).send("Campo Inválido");
     } */
 };
+//------METHOD POST FOR TEACHER-----CREATES NEW TEACHER
 
+//------METHOD PUT FOR TEACHER-----UPDATES NEW TEACHER
 exports.putTeacher = (req, res) => {
     let teacher = ({id: parseInt(req.params.id), name: req.body.name, lastName: req.body.lastName, status: 1, phd:req.body.phd});
     let where = { id: parseInt(req.params.id), status: 1 };
@@ -225,7 +234,9 @@ exports.putTeacher = (req, res) => {
     //     res.status(401).send("Campo Inválido");
     // }
 };
+//------METHOD PUT FOR TEACHER-----UPDATES NEW TEACHER
 
+//------METHOD DELETE FOR TEACHER-----CHANGE THE STATUS 1 TO 0
 exports.deleteTeacher = (req, res) =>{
     let where = {'id': parseInt(req.params.id), 'status':1};
     let set = {$set: {status:0}};
@@ -255,3 +266,4 @@ exports.deleteTeacher = (req, res) =>{
             res.status(500);
         })
 };
+//------METHOD DELETE FOR TEACHER-----CHANGE THE STATUS 1 TO 0
