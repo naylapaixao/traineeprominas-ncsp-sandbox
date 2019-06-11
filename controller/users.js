@@ -1,7 +1,12 @@
 const userModel = require('../models/user');
+
+//------MONGOOSE SCHEMA
 const mongoose = require("mongoose");
 const userSchema = require('../schema').userSchema;
 const User = mongoose.model('User', userSchema);
+//------MONGOOSE SCHEMA
+
+//------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
 const validator = require('express-joi-validation')({});
 
@@ -10,12 +15,13 @@ const schemaUser = Joi.object().keys({
     lastName: Joi.string().required(),
     profile: Joi.string().required()
 });
-
+//------JOI VALIDATION
 
 //const User = mongoose.model('User', userSchema);
 
 var id=0;
 
+//------METHOD GET FOR ALL USERS-----
 exports.getAllUsers = function (req, res) {
     const query = { status: 1 };
     const projection = { _id: 0, id: 1, name: 1, lastName: 1, profile: 1 };
@@ -30,8 +36,9 @@ exports.getAllUsers = function (req, res) {
             res.status(500).send("Erro ao conectar a collection user");
         });
 };
+//------METHOD GET FOR ALL USERS-----
 
-
+//------METHOD GET FOR ONE USER-----
 exports.getOneUser = function (req, res) {
     const query = { id: parseInt(req.params.id), status: 1 };
     const projection = { _id: 0, id: 1, name: 1, lastName: 1, profile: 1 };
@@ -49,7 +56,9 @@ exports.getOneUser = function (req, res) {
             res.status(500).send("Erro ao conectar a collection user");
         });
 };
+//------METHOD GET FOR ONE USER-----
 
+//------METHOD POST FOR USER-----CREATES NEW USER
 exports.postUser =  (req,res) => {
     Joi.validate(req.body, schemaUser, (err, result) =>{
         if(!err){
@@ -70,7 +79,7 @@ exports.postUser =  (req,res) => {
                 }
             });
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
     });
 
@@ -95,7 +104,9 @@ exports.postUser =  (req,res) => {
         res.status(401).send("Não foi possível cadastrar usuário profile invalido");
     } */
 };
+//------METHOD POST FOR USER-----CREATES NEW USER
 
+//------METHOD PUT FOR USER-----UPDATE NEW USER
 exports.putUser = (req, res) => {
 
     let user = ({id: parseInt(req.params.id), name: req.body.name, lastName: req.body.lastName, status: 1, profile:req.body.profile});
@@ -124,7 +135,7 @@ exports.putUser = (req, res) => {
                 }
             })
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
     });
 
@@ -149,7 +160,9 @@ exports.putUser = (req, res) => {
         res.status(401).send("Campo Inválido");
     } */
 };
+//------METHOD PUT FOR USER-----UPDATE NEW USER
 
+//------METHOD DELETE FOR USER-----CHANGE THE STATUS 1 TO 0
 exports.deleteUser = (req, res) =>{
     let id = parseInt(req.params.id)
 
@@ -166,4 +179,5 @@ exports.deleteUser = (req, res) =>{
             console.error("Ocorreu um erro ao deletar os usuarios");
             res.status(500);
         })
-}
+};
+//------METHOD DELETE FOR USER-----CHANGE THE STATUS 1 TO 0

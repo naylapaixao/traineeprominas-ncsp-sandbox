@@ -1,10 +1,13 @@
 const studentModel = require('../models/student');
 const courseModel = require('../models/course');
 
+//------MONGOOSE SCHEMA
 const mongoose = require("mongoose");
 const studentSchema = require('../schema').studentSchema;
 const Student = mongoose.model('Student', studentSchema);
+//------MONGOOSE SCHEMA
 
+//------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
 const validator = require('express-joi-validation')({});
 
@@ -14,10 +17,11 @@ const schemaStudent = Joi.object().keys({
     age: Joi.number().required(),
     course: Joi.array().required(),
 });
-
+//------JOI VALIDATION
 
 var id=0;
 
+//------METHOD GET FOR ALL STUDENTS-----
 exports.getAll = (req, res) => {
     let where = {'status':1};
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, age: 1, course:1 };
@@ -30,7 +34,9 @@ exports.getAll = (req, res) => {
         res.status(500).send('Ocorreu um erro');
     });
 };
+//------METHOD GET FOR ALL STUDENTS-----
 
+//------METHOD GET FOR ONE STUDENT-----
 exports.getOneStudent = function (req, res) {
     let where = { id: parseInt(req.params.id), status: 1 };
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, age: 1, course:1 };
@@ -48,7 +54,9 @@ exports.getOneStudent = function (req, res) {
             res.status(500).send("Erro ao conectar a collection student");
         });
 };
+//------METHOD GET FOR ONE STUDENT-----
 
+//------METHOD POST FOR STUDENT-----CREATES NEW STUDENT
 exports.postStudent =  (req,res) => {
     //let student = new Student ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
 
@@ -96,14 +104,14 @@ exports.postStudent =  (req,res) => {
                                 res.status(500);
                             });
                     } else {
-                        res.status(401).send('Não foi possível cadastrar o Estudante');
+                        res.status(401).send('Não foi possível cadastrar o Estudante (idade deverá ser superior a 17)');
                     }
                 });
 
             })();
 
         }else {
-            res.status(401).send('Campos obrigatorios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
 
     });
@@ -148,7 +156,9 @@ exports.postStudent =  (req,res) => {
         res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
     } */
 };
+//------METHOD POST FOR STUDENT-----CREATES NEW STUDENT
 
+//------METHOD PUT FOR STUDENT-----UPDATES NEW STUDENT
 exports.putStudent = (req, res) => {
     let student = ({id: parseInt(req.params.id), name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
     let where = { id: parseInt(req.params.id), status: 1 };
@@ -188,13 +198,13 @@ exports.putStudent = (req, res) => {
                                 res.status(500);
                             });
                     } else {
-                        res.status(401).send('Não foi possível cadastrar o Estudante');
+                        res.status(401).send('Não foi possível editar o Estudante (idade deverá ser superior a 17)');
                     }
                 });
 
             })();
         }else {
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
         /*if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)) {
             let id = parseInt(req.params.id);
@@ -247,13 +257,13 @@ exports.putStudent = (req, res) => {
 
     });
 };
+//------METHOD PUT FOR STUDENT-----UPDATES NEW STUDENT
 
+//------METHOD DELETE FOR STUDENT-----CHANGE THE STATUS 1 TO 0
 exports.deleteStudent = (req, res) => {
 
     let where = {'id': parseInt(req.params.id), 'status':1};
     let set = {$set: {status:0}};
-
-
 
     // Don't actually remove just change user status
     studentModel.delete(where, set)
@@ -271,5 +281,5 @@ exports.deleteStudent = (req, res) => {
             console.error("Erro ao remover o Estudante", err);
             res.status(500).send("Erro ao remover o Estudante");
         });
-
 };
+//------METHOD DELETE FOR STUDENT-----CHANGE THE STATUS 1 TO 0

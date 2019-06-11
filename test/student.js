@@ -112,7 +112,7 @@ describe('POST for Student', function () {
     describe("DELETE for student", function () {
         xit('should delete the user (status 1 to 0)', function () {
             return request(app)
-                .delete('/api/v1/student/12')
+                .delete('/api/v1/student/17')
                 .then(function (res) {
                     assert.equal(res.status, 200);
                 });

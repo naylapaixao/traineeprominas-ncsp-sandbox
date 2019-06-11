@@ -93,7 +93,7 @@ let app = require('../index');
     describe("DELETE for teacher", function () {
         xit('should  delete the user (status 1 to 0)', function () {
             return request(app)
-                .delete('/api/v1/teacher/16')
+                .delete('/api/v1/teacher/21')
                 .then(function (res) {
                     assert.equal(res.status, 200);
                 });
