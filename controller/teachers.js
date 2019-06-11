@@ -85,7 +85,7 @@ exports.postTeacher =  (req,res) => {
                 }
             });
         }else{
-            res.status(401).send('Campos obrigatorios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
         }
     });
 
@@ -159,7 +159,7 @@ exports.putTeacher = (req, res) => {
             });
 
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
         }
     });
 

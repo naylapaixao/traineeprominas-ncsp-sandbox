@@ -2,10 +2,13 @@ const courseModel = require('../models/course');
 const studentModel = require('../models/student');
 const teacherModel = require('../models/teacher');
 
+//------MONGOOSE SCHEMA------
 const mongoose = require("mongoose");
 const courseSchema = require('../schema').courseSchema;
 const Course = mongoose.model('Course', courseSchema);
+//------MONGOOSE SCHEMA------
 
+//------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
 
 const schemaCourse = Joi.object().keys({
@@ -14,9 +17,11 @@ const schemaCourse = Joi.object().keys({
     city: Joi.string().required(),
     teacher: Joi.array().required(),
 });
+//------JOI VALIDATION-----
 
 var id=0;
 
+//------METHOD GET FOR ALL COURSES-----
 exports.getAll = (req, res) => {
     let where = {'status':1};
     let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
@@ -29,7 +34,9 @@ exports.getAll = (req, res) => {
         res.status(500).send('Ocorreu um erro');
     });
 };
+//------METHOD GET FOR ALL COURSES-----
 
+//------METHOD GET FOR ONE COURSE-----
 exports.getOneCourse = function (req, res) {
 
     let where = { id: parseInt(req.params.id), status: 1 };
@@ -48,7 +55,9 @@ exports.getOneCourse = function (req, res) {
             res.status(500).send("Erro ao conectar a collection course");
         });
 };
+//------METHOD GET FOR ONE COURSE-----
 
+//------METHOD POST FOR COURSE-----CREATES NEW COURSE
 exports.postCourse = (req, res) => {
     let course = new Course({id: ++id, name: req.body.name, period: req.body.period || 8, status: 1, teacher:req.body.teacher, city: req.body.city});
 
@@ -94,7 +103,7 @@ exports.postCourse = (req, res) => {
             })();
 
         } else{
-            res.status(401).send('Campos obrigatorios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
 
     });
@@ -147,7 +156,9 @@ exports.postCourse = (req, res) => {
         })();
     } */
 };
+//------METHOD POST FOR COURSE-----CREATES NEW COURSE
 
+//------METHOD PUT FOR COURSE-----UPDATES NEW COURSE
 exports.putCourse = (req, res) =>{
     let course = ({id: parseInt(req.params.id), name: req.body.name, period: req.body.period || 8, status: 1, teacher:req.body.teacher, city: req.body.city});
     let where = { id: parseInt(req.params.id), status: 1 };
@@ -196,7 +207,7 @@ exports.putCourse = (req, res) =>{
             })();
 
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
 
     });
@@ -276,7 +287,9 @@ exports.putCourse = (req, res) =>{
         })();
     } */
 };
+//------METHOD PUT FOR COURSE-----UPDATES NEW COURSE
 
+//------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
 exports.deleteCourse = (req, res) => {
     let where = {'id': parseInt(req.params.id),'status':1};
     let set = {status:0};
@@ -297,5 +310,6 @@ exports.deleteCourse = (req, res) => {
             res.status(500);
         });
 };
+//------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
 
 

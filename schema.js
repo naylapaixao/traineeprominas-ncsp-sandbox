@@ -45,7 +45,7 @@ const schema = mongoose.Schema;
             id: {type: Number, require:true, unique:true},
             name: {type: String, require:true},
             lastName: {type: String, require:true},
-            age: {type: Number, require:true, min: 17},
+            age: {type: Number, require:true, min:[17, ' A idade minimia para o estudante é 17']},
             course:{type: [courseSchema]},
             status: {type: Number, require:true, default:1}
     }

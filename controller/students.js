@@ -1,11 +1,11 @@
 const studentModel = require('../models/student');
 const courseModel = require('../models/course');
 
-//------MONGOOSE SCHEMA
+//------MONGOOSE SCHEMA------
 const mongoose = require("mongoose");
 const studentSchema = require('../schema').studentSchema;
 const Student = mongoose.model('Student', studentSchema);
-//------MONGOOSE SCHEMA
+//------MONGOOSE SCHEMA------
 
 //------JOI VALIDATION --validades all the requiments are corrects
 const Joi = require('joi');
@@ -17,7 +17,7 @@ const schemaStudent = Joi.object().keys({
     age: Joi.number().required(),
     course: Joi.array().required(),
 });
-//------JOI VALIDATION
+//------JOI VALIDATION-----
 
 var id=0;
 
@@ -60,11 +60,13 @@ exports.getOneStudent = function (req, res) {
 exports.postStudent =  (req,res) => {
     //let student = new Student ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
 
+    //Start Validade the Values
     Joi.validate(req.body, schemaStudent, (err, result) => {
         if(!err) {
             (async function () {
                 //let courseId = await getCourse(parseInt(req.body.course));
 
+                //Check if course exist and return a value and in case false return invalid course
                 for (let i = 0; i < req.body.course.length; i++) {
                     //let course = await getCourse(newstudent.course[i]);
                     let course = await courseModel.getCourse(req.body.course[i]);
@@ -77,7 +79,7 @@ exports.postStudent =  (req,res) => {
                     }
                 }
 
-
+                //Checks students information and creates new student in model
                 let student = new Student({
                     id: ++id,
                     name: req.body.name,
@@ -86,6 +88,7 @@ exports.postStudent =  (req,res) => {
                     age: req.body.age,
                     course: req.body.course
                 });
+                //Validades student if corrects create a new one in model
                 student.validate(error => {
                     //console.log(error);
                     if (!error) {
@@ -113,7 +116,6 @@ exports.postStudent =  (req,res) => {
         }else {
             res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
-
     });
 
     /*if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)){
@@ -163,11 +165,13 @@ exports.putStudent = (req, res) => {
     let student = ({id: parseInt(req.params.id), name: req.body.name, lastName: req.body.lastName, status: 1, age:req.body.age, course: req.body.course});
     let where = { id: parseInt(req.params.id), status: 1 };
 
+    //Start Validade the Values
     Joi.validate(req.body, schemaStudent, (err, result) => {
         if(!err) {
             (async function () {
                 //let courseId = await getCourse(parseInt(req.body.course));
 
+                //Check if course exist and return a value and in case false return invalid course
                 for (let i = 0; i < req.body.course.length; i++) {
                     //let course = await getCourse(newstudent.course[i]);
                     let course = await courseModel.getCourse(req.body.course[i]);
@@ -180,7 +184,7 @@ exports.putStudent = (req, res) => {
                     }
                 }
 
-
+                //Checks students information and updates the model
                 let alterStudent = new Student(student);
                 alterStudent.validate(error => {
                     if (!error) {
