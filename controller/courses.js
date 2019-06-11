@@ -6,6 +6,15 @@ const mongoose = require("mongoose");
 const courseSchema = require('../schema').courseSchema;
 const Course = mongoose.model('Course', courseSchema);
 
+const Joi = require('joi');
+
+const schemaCourse = Joi.object().keys({
+    name: Joi.string().required(),
+    period: Joi.number(),
+    city: Joi.string().required(),
+    teacher: Joi.array().required(),
+});
+
 var id=0;
 
 exports.getAll = (req, res) => {
@@ -43,48 +52,52 @@ exports.getOneCourse = function (req, res) {
 exports.postCourse = (req, res) => {
     let course = new Course({id: ++id, name: req.body.name, period: req.body.period || 8, status: 1, teacher:req.body.teacher, city: req.body.city});
 
+    Joi.validate(req.body, schemaCourse, (err, result) => {
+        if(!err) {
 
-    (async function() {
+            (async function () {
 
-        let validos = [];
-        let invalidos = [];
+                let validos = [];
+                let invalidos = [];
 
-        //IF INFORM TEACHER, GET TEACHER ID
-        if(req.body.teacher){
-            for (let i = 0; i <req.body.teacher.length; i++) {
-                //let teacher = await teacherModel.getTeacher(newcourse.teacher);
-                let teacherId = parseInt(req.body.teacher[i]);
-                let teacher = await teacherModel.findOne({ id: teacherId });
+                //IF INFORM TEACHER, GET TEACHER ID
+                if (req.body.teacher) {
+                    for (let i = 0; i < req.body.teacher.length; i++) {
+                        //let teacher = await teacherModel.getTeacher(newcourse.teacher);
+                        let teacherId = parseInt(req.body.teacher[i]);
+                        let teacher = await teacherModel.findOne({id: teacherId});
 
-                if (teacher) {
-                    validos.push(teacher);
+                        if (teacher) {
+                            validos.push(teacher);
+                        } else {
+                            invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
+                        }
+                    }
+                    course.teacher = validos; //retorna corpo de professores validos
                 }
-                else {
-                    invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
-                }
-            }
-            course.teacher = validos; //retorna corpo de professores validos
+
+                course.validate(error => {
+                    if (!error) {
+                        return courseModel.insertOne(course)
+                            .then(result => {
+                                res.status(201).send('Curso cadastrado com sucesso!');
+                            })
+                            .catch(err => {
+                                console.error("Erro ao conectar a collection course: ", err);
+                                res.status(500);
+                            });
+                    } else {
+                        res.status(401).send('Não foi possível cadastrar o Curso');
+                    }
+                });
+
+            })();
+
+        } else{
+            res.status(401).send('Campos obrigatorios não preenchidos.');
         }
 
-        course.validate(error => {
-            if(!error){
-                return courseModel.insertOne(course)
-                    .then(result => {
-                        res.status(201).send('Curso cadastrado com sucesso!');
-                    })
-                    .catch(err => {
-                        console.error("Erro ao conectar a collection course: ", err);
-                        res.status(500);
-                    });
-            }else{
-                res.status(401).send('Não foi possível cadastrar o Curso');
-            }
-        });
-
-    })();
-
-
-
+    });
     /* if (req.body.name && req.body.city){
         let newcourse = req.body;
         newcourse.period = parseInt(req.body.period) || 8;
@@ -140,47 +153,53 @@ exports.putCourse = (req, res) =>{
     let where = { id: parseInt(req.params.id), status: 1 };
     //let alterCourse = new Course(course);
 
-    (async function() {
+    Joi.validate(req.body, schemaCourse, (err, result) => {
+        if(!err) {
+            (async function () {
 
-        let validos = [];
-        let invalidos = [];
+                let validos = [];
+                let invalidos = [];
 
-        //IF INFORM TEACHER, GET TEACHER ID
-        if(req.body.teacher){
-            for (let i = 0; i <req.body.teacher.length; i++) {
-                //let teacher = await teacherModel.getTeacher(newcourse.teacher);
-                let teacherId = parseInt(req.body.teacher[i]);
-                let teacher = await teacherModel.findOne({ id: teacherId });
+                //IF INFORM TEACHER, GET TEACHER ID
+                if (req.body.teacher) {
+                    for (let i = 0; i < req.body.teacher.length; i++) {
+                        //let teacher = await teacherModel.getTeacher(newcourse.teacher);
+                        let teacherId = parseInt(req.body.teacher[i]);
+                        let teacher = await teacherModel.findOne({id: teacherId});
 
-                if (teacher) {
-                    validos.push(teacher);
+                        if (teacher) {
+                            validos.push(teacher);
+                        } else {
+                            invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
+                        }
+                    }
+                    course.teacher = validos; //retorna corpo de professores validos
+                    let alterCourse = new Course(course);
+                    alterCourse.validate(error => {
+                        // console.log(error);
+                        // console.log('?>>>>>>>',course.teacher);
+                        if (!error) {
+                            return courseModel.update(where, {$set: course})
+                                .then(result => {
+                                    res.status(200).send('Curso cadastrado com sucesso!');
+                                })
+                                .catch(err => {
+                                    console.error("Erro ao conectar a collection course: ", err);
+                                    res.status(500);
+                                });
+                        } else {
+                            res.status(401).send('Não foi possível cadastrar o Curso');
+                        }
+                    });
                 }
-                else {
-                    invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
-                }
-            }
-            course.teacher = validos; //retorna corpo de professores validos
-            let alterCourse = new Course(course);
-            alterCourse.validate(error => {
-                // console.log(error);
-                // console.log('?>>>>>>>',course.teacher);
-                if(!error){
-                    return courseModel.update(where,{$set: course})
-                        .then(result => {
-                            res.status(200).send('Curso cadastrado com sucesso!');
-                        })
-                        .catch(err => {
-                            console.error("Erro ao conectar a collection course: ", err);
-                            res.status(500);
-                        });
-                }else{
-                    res.status(401).send('Não foi possível cadastrar o Curso');
-                }
-            });
+
+            })();
+
+        }else{
+            res.status(401).send('Campos obrigatórios não preenchidos.');
         }
 
-    })();
-
+    });
 
     /* if (req.body.name && req.body.city){
         let id = parseInt(req.params.id);

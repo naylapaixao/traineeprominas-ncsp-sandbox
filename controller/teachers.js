@@ -12,7 +12,7 @@ const validator = require('express-joi-validation')({});
 const schemaTeacher = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
-    phd: Joi.boolean().required()
+    phd: Joi.boolean().required(),
 });
 
 var id=0;
@@ -66,20 +66,26 @@ exports.getOneTeacher = function (req, res) {
 };
 
 exports.postTeacher =  (req,res) => {
-    let teacher = new Teacher ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, phd:req.body.phd});
+    Joi.validate(req.body, schemaTeacher, (err, result) => {
+        if(!err){
+            let teacher = new Teacher ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, phd:req.body.phd});
 
-    teacher.validate(error => {
-        if(!error){
-            return teacherModel.insertOne(teacher)
-                .then(result => {
-                    res.status(201).send('Professor cadastrado com sucesso!');
-                })
-                .catch(err => {
-                    console.error("Erro ao conectar a collection teacher: ", err);
-                    res.status(500);
-                });
+            teacher.validate(error => {
+                if(!error){
+                    return teacherModel.insertOne(teacher)
+                        .then(result => {
+                            res.status(201).send('Professor cadastrado com sucesso!');
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection teacher: ", err);
+                            res.status(500);
+                        });
+                }else{
+                    res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+                }
+            });
         }else{
-            res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+            res.status(401).send('Campos obrigatorios não preenchidos.');
         }
     });
 
@@ -114,39 +120,46 @@ exports.putTeacher = (req, res) => {
     let where = { id: parseInt(req.params.id), status: 1 };
     let alterTeacher = new Teacher(teacher);
 
-    alterTeacher.validate(error => {
-        if(!error){
-            return teacherModel.update(where, {$set: teacher})
-                .then(result => {
+    Joi.validate(req.body, schemaTeacher, (err, result) => {
+        if(!err){
+            alterTeacher.validate(error => {
+                if(!error){
+                    return teacherModel.update(where, {$set: teacher})
+                        .then(result => {
 
-                    let updatedTeacher = result.value;
+                            let updatedTeacher = result.value;
 
-                    (async () => {
+                            (async () => {
 
-                        try {
-                            // // Updates the teacher from all courses that he is associated
-                            await courseModel.updateMany(
-                                { "status": 1, "teachers._id": updatedTeacher._id },
-                                { "teachers.$":  updatedTeacher });
+                                try {
+                                    // // Updates the teacher from all courses that he is associated
+                                    await courseModel.updateMany(
+                                        { "status": 1, "teachers._id": updatedTeacher._id },
+                                        { "teachers.$":  updatedTeacher });
 
-                            // Updates the teacher from all student.course that he is associated
-                            await studentModel.updateMany(
-                                { "status": 1, "course.teachers._id": updatedTeacher._id },
-                                { "course.teachers.$":  updatedTeacher } );
+                                    // Updates the teacher from all student.course that he is associated
+                                    await studentModel.updateMany(
+                                        { "status": 1, "course.teachers._id": updatedTeacher._id },
+                                        { "course.teachers.$":  updatedTeacher } );
 
-                        } catch(err) {
-                            console.error(err);
-                        }
+                                } catch(err) {
+                                    console.error(err);
+                                }
 
-                        //console.log(`INF: Professor Atualizado`);
-                        res.status(201).send(`Professor Atualizado`);
+                                //console.log(`INF: Professor Atualizado`);
+                                res.status(201).send(`Professor Atualizado`);
 
-                    })();
+                            })();
 
-                })
+                        })
+
+                }else{
+                    res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+                }
+            });
 
         }else{
-            res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+            res.status(401).send('Campos obrigatórios não preenchidos.');
         }
     });
 
@@ -211,7 +224,7 @@ exports.putTeacher = (req, res) => {
     // }else {
     //     res.status(401).send("Campo Inválido");
     // }
-}
+};
 
 exports.deleteTeacher = (req, res) =>{
     let where = {'id': parseInt(req.params.id), 'status':1};

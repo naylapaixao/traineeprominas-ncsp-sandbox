@@ -11,7 +11,6 @@ const schemaUser = Joi.object().keys({
     profile: Joi.string().required()
 });
 
-Joi.validate({ name: 'abc', lastName: 'abc' }, schema, function (err, value) { });
 
 //const User = mongoose.model('User', userSchema);
 
@@ -52,20 +51,26 @@ exports.getOneUser = function (req, res) {
 };
 
 exports.postUser =  (req,res) => {
-    let user = new User ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, profile:req.body.profile});
+    Joi.validate(req.body, schemaUser, (err, result) =>{
+        if(!err){
+            let user = new User ({id: ++id, name: req.body.name, lastName: req.body.lastName, status: 1, profile:req.body.profile});
 
-    user.validate(error => {
-        if(!error){
-            return userModel.insertOne(user)
-                .then(result => {
-                    res.status(201).send('Usuário cadastrado com sucesso!');
-                })
-                .catch(err => {
-                    console.error("Erro ao conectar a collection user: ", err);
-                    res.status(500);
-                });
+            user.validate(error => {
+                if(!error){
+                    return userModel.insertOne(user)
+                        .then(result => {
+                            res.status(201).send('Usuário cadastrado com sucesso!');
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection user: ", err);
+                            res.status(500);
+                        });
+                }else{
+                    res.status(401).send('Não foi possível cadastrar usuário profile invalido');
+                }
+            });
         }else{
-            res.status(401).send('Não foi possível cadastrar usuário profile invalido');
+            res.status(401).send('Campos obrigatórios não preenchidos.');
         }
     });
 
@@ -97,25 +102,29 @@ exports.putUser = (req, res) => {
     let where = { id: parseInt(req.params.id), status: 1 };
     let alteruser = new User(user);
 
-    // console.log(alteruser);
-    // console.log(user);
 
-    alteruser.validate(error => {
-        if(!error){
-            return userModel.update(where, {$set: user})
-                .then(result => {
-                    if(result.value){
-                        res.status(201).send('Usuário editado com sucesso!');
-                    }else{
-                        res.status(401).send('Usuário não encontrado');
-                    }
-                })
-                .catch(err => {
-                    console.error("Erro ao conectar a collection user: ", err);
-                    res.status(500);
-                });
+    Joi.validate(req.body, schemaUser, (err, result) =>{
+        if(!err){
+            alteruser.validate(error => {
+                if(!error){
+                    return userModel.update(where, {$set: user})
+                        .then(result => {
+                            if(result.value){
+                                res.status(201).send('Usuário editado com sucesso!');
+                            }else{
+                                res.status(401).send('Usuário não encontrado');
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection user: ", err);
+                            res.status(500);
+                        });
+                }else{
+                    res.status(401).send('Não foi possível editar o usuário (profile inválido)');
+                }
+            })
         }else{
-            res.status(401).send('Não foi possível editar o usuário (profile inválido)');
+            res.status(401).send('Campos obrigatórios não preenchidos.');
         }
     });
 
