@@ -5,7 +5,7 @@ const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/trainee-
 //const database = require('../schema');
 const mongoose = require("mongoose");
 const userSchema = require('../schema').userSchema;
-const User = mongoose.model('User', userSchema, 'user')
+const User = mongoose.model('User', userSchema, 'user');
 
 let db;
 let userCollection;

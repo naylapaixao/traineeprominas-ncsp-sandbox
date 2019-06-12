@@ -10,7 +10,8 @@ const schema = mongoose.Schema;
             lastName: {type: String, require:true},
             profile: {type: String, require:true, enum:['guess', 'admin']},
             status: {type: Number, require:true}
-    }
+
+    },{versionKey: false}
 );
 
 //var User = mongoose.model('User', userSchema);
@@ -22,7 +23,8 @@ const schema = mongoose.Schema;
             lastName: {type: String, require:true},
             phd: {type: Boolean, require:true, validate: [val => {return val === true}, 'O professor deve obrigatoriamente possuir PHD']},
             status: {type: Number, require:true, default: 1}
-    }
+
+    },{versionKey: false}
 );
 
 //var Teacher = mongoose.model('User', teacherSchema);
@@ -35,7 +37,8 @@ const schema = mongoose.Schema;
             teacher: {type: [teacherSchema], validate: [val => {return val.length >= 2}, 'São necessários pelo menos 2 professores válidos']},
             city: {type: String, require:true},
             status: {type: Number, require:true, default: 1}
-    }
+
+    },{versionKey: false}
 );
 
 //var Course = mongoose.model('Course', courseSchema);
@@ -48,7 +51,8 @@ const schema = mongoose.Schema;
             age: {type: Number, require:true, min:[17, ' A idade minimia para o estudante é 17']},
             course:{type: [courseSchema], validate: [val => {return val.length === 1}, 'É necessário ter um curso válido']},
             status: {type: Number, require:true, default:1}
-    }
+
+    },{versionKey: false}
 );
 
 //var Student = mongoose.model('Student', studentSchema);

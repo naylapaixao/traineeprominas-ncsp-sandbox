@@ -2,6 +2,9 @@
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+const mongoose = require("mongoose");
+const teacherSchema = require('../schema').teacherSchema;
+const Teacher = mongoose.model('Teacher', teacherSchema, 'teacher');
 
 let db;
 let teacherCollection;
@@ -28,16 +31,16 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 // MONGODB CONNECTION
 
 exports.findAll = function (where, projection) {
-  return teacherCollection.find(where,{projection}).toArray();
+  return Teacher.find(where,projection);
 };
 
 exports.findOne = async function (query, projection) {
-  return teacherCollection.findOne(query, {projection});
+  return Teacher.findOne(query, projection);
 };
 
 exports.insertOne = (teacher) =>{
   teacher.id = ++id;
-  return teacherCollection.insertOne(teacher);
+  return Teacher.create(teacher);
 
   /*if (teacher.phd == true) {
     teacher.id = ++id;
@@ -53,15 +56,15 @@ exports.insertOne = (teacher) =>{
 
 exports.update = (where, teacher) =>{
   //return teacherCollection.findOneAndUpdate(where, { $set: { ...teacher } }, { returnOriginal: false });
-  return teacherCollection.findOneAndUpdate(where, teacher, { returnOriginal: false });
+  return Teacher.findOneAndUpdate(where, teacher, { returnOriginal: false });
 };
 
 exports.delete = (id) => {
-  return teacherCollection.findOneAndUpdate(id, {$set: {status: 0}});
+  return Teacher.findOneAndUpdate(id, {$set: {status: 0}});
 };
 
 exports.getTeacher = (id) => {
-  return teacherCollection.find({'id':id, 'status':1}).toArray();
+  return Teacher.find({'id':id, 'status':1}).toArray();
 };
 
 

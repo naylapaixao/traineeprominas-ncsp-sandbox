@@ -23,7 +23,7 @@ module.exports =function(){
     process.on('SIGINT', function(){
         mongoose.connection.close(function(){
             //   console.log(termination("Mongoose default connection is disconnected due to application termination"));
-            console.log('batata');
+            //console.log('batata');
             process.exit(0)
         });
     });

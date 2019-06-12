@@ -136,7 +136,7 @@ exports.putTeacher = (req, res) => {
                     return teacherModel.update(where, {$set: teacher})
                         .then(result => {
 
-                            let updatedTeacher = result.value;
+                            let updatedTeacher = result;
 
                             (async () => {
 
@@ -253,7 +253,7 @@ exports.deleteTeacher = (req, res) =>{
 
             });
 
-            if (results.value == null){
+            if (results == null){
                 res.status(204).send("Não foi possivel encontrar professor");
             }
             else {

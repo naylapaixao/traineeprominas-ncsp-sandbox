@@ -120,7 +120,7 @@ exports.putUser = (req, res) => {
                 if(!error){
                     return userModel.update(where, {$set: user})
                         .then(result => {
-                            if(result.value){
+                            if(result){
                                 res.status(201).send('Usuário editado com sucesso!');
                             }else{
                                 res.status(401).send('Usuário não encontrado');
@@ -168,7 +168,7 @@ exports.deleteUser = (req, res) =>{
 
     userModel.delete(id)
         .then(results => {
-            if (results.value == null){
+            if (results == null){
                 res.status(204).send("Não foi possivel encontrar usuário");
             }
             else {
