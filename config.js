@@ -1,8 +1,8 @@
 
-/*var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 //---------------DATABASE CONNECTION ------------------------//
-const dbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+const dbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/trainee-prominas?retryWrites=true";
 
 module.exports =function(){
 
@@ -27,4 +27,4 @@ module.exports =function(){
             process.exit(0)
         });
     });
-} */
+}

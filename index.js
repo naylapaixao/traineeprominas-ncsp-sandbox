@@ -8,6 +8,10 @@ const studentRouter = require('./routes/students');
 
 const app = express();
 
+const conn = require('./config');
+
+conn();
+
 const baseApi = "/api/v1";
 
 app.use(bodyParser.json());

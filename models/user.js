@@ -1,10 +1,11 @@
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
-const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/trainee-prominas?retryWrites=true";
 //const database = require('../schema');
-// const mongoose = require("mongoose");
-// const User = require('../schema');
+const mongoose = require("mongoose");
+const userSchema = require('../schema').userSchema;
+const User = mongoose.model('User', userSchema, 'user')
 
 let db;
 let userCollection;
@@ -30,17 +31,17 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 // MONGODB CONNECTION
 
 exports.findAll = function (query, projection) {
-    return userCollection.find(query,{projection}).toArray();
+    return User.find(query,projection);
 };
 
 exports.findOne = function (query, projection) {
-    return userCollection.findOne(query, {projection});
+    return User.findOne(query, projection);
 }
 
 exports.insertOne = (user) =>{
     user.id = ++id;
     //User.create(user);
-    return userCollection.insertOne(user);
+    return User.create(user);
 
    /* if (user.profile == 'admin' || user.profile == 'guess') {
         user.id = ++id;
@@ -56,11 +57,11 @@ exports.insertOne = (user) =>{
 
 exports.update = (id, document) =>{
     //return userCollection.updateOne({'id':id, 'status':1}, {$set:document});
-    return userCollection.findOneAndUpdate(id, document);
+    return User.findOneAndUpdate(id, document);
 }
 
 exports.delete = (id) => {
-    return userCollection.findOneAndUpdate({'id':id, 'status':1}, {$set: {status: 0}});
+    return User.findOneAndUpdate({'id':id, 'status':1}, {$set: {status: 0}});
 }
 
 
