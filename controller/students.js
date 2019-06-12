@@ -187,6 +187,7 @@ exports.putStudent = (req, res) => {
                 //Checks students information and updates the model
                 let alterStudent = new Student(student);
                 alterStudent.validate(error => {
+                    console.log(student);
                     if (!error) {
                         return studentModel.update(where, student)
                             .then(result => {
@@ -273,7 +274,7 @@ exports.deleteStudent = (req, res) => {
     studentModel.delete(where, set)
         .then(result => {
 
-            if (result.value) {
+            if (result) {
                 //console.log(`INF: Estudante Removido`);
                 res.status(200).send(`Estudante Removido`);
             } else {

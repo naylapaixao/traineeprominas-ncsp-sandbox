@@ -1,28 +1,12 @@
-//MONGOOSE AND SCHEMA
-// var mongoose = require("mongoose");
-// var schema = mongoose.Schema;
-//
-// var studentSchema = new schema(
-//     {
-//       id: {type: Number, require:true, unique:true},
-//       name: {type: String, require:true},
-//       lastName: {type: String, require:true},
-//       age: {type: Number, require:true},
-//       course:{type: Array},
-//       status: {type: Number, require:true}
-//     }
-// );
-//
-// var Student = mongoose.model('Student', studentSchema);
-
-//MONGOOSE AND SCHEMA
-
-
 
 // MONGODB CONNECTION
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+
+const mongoose = require("mongoose");
+const studentSchema = require('../schema').studentSchema;
+const Student = mongoose.model('Student', studentSchema, 'student');
 
 let db;
 let studentCollection;
@@ -50,41 +34,41 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 // MONGODB CONNECTION
 
 exports.findAll = function (where, projection) {
-  return studentCollection.find(where,{projection}).toArray();
+  return Student.find(where,projection);
 };
 
 exports.insertOne = (student) =>{
   student.id = ++id;
-  return studentCollection.insertOne(student);
+  return Student.create(student);
 };
 
 exports.findOne = function (where, projection) {
-  return studentCollection.findOne(where, {projection});
+  return Student.findOne(where, projection);
 };
 
-exports.update = (student, where) =>{
-  return studentCollection.findOneAndUpdate(where, { $set: { ...student } }, { returnOriginal: false });
+exports.update = (where, student) =>{
+  return Student.findOneAndUpdate(where, { $set: { ...student } }, { returnOriginal: false });
 };
 
 exports.delete = (id) => {
-  return studentCollection.findOneAndUpdate(id, {$set: {status: 0}});
+  return Student.findOneAndUpdate(id, {$set: {status: 0}});
 };
 
 exports.updateCourse = (id, set) => {
-  return studentCollection.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}});
 };
 
 exports.deleteCourse = (id, set) => {
-  return studentCollection.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {status:0}});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {status:0}});
 };
 
 exports.updateMany = function(where, setDoc) {
 
-  return studentCollection.updateMany(where, { $set: setDoc });
+  return Student.updateMany(where, { $set: setDoc });
 };
 
 exports.updateTeacher = (course) => {
-  return studentCollection.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}});
+  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}});
 };
 
 
