@@ -94,7 +94,7 @@ let app = require('../index');
     describe('DELETE for User', function () {
         xit('should delete the user (status 1 to 0)', function () {
             return request(app)
-                .delete('/api/v1/user/18')
+                .delete('/api/v1/user/20')
                 .then(function (res) {
                     assert.equal(res.status, 200);
                 });

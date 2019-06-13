@@ -201,7 +201,7 @@ exports.putCourse = (req, res) =>{
                         if (!error) {
                             return courseModel.update(where, {$set: course})
                                 .then(result => {
-                                    console.log(result)
+                                    //console.log(result)
                                     res.status(200).send('Curso ediatdo com sucesso!');
                                 })
                                 .catch(err => {

@@ -103,7 +103,7 @@ exports.postStudent =  (req,res) => {
 
                 //Validades student if corrects create a new one in model
                 student.validate(error => {
-                    console.log(error);
+                    //console.log(error);
                     if (!error) {
                         return studentModel.insertOne(student)
                             .then(result => {
@@ -209,7 +209,7 @@ exports.putStudent = (req, res) => {
                 //Checks students information and updates the model
                 let alterStudent = new Student(student);
                 alterStudent.validate(error => {
-                    console.log(student);
+                    //console.log(student);
                     if (!error) {
                         return studentModel.update(where, student)
                             .then(result => {
