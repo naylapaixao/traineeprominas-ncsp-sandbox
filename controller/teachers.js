@@ -18,7 +18,10 @@ const schemaTeacher = Joi.object().keys({
 });
 //------JOI VALIDATION------
 
-var id=0;
+var id;
+Teacher.countDocuments({}, (err, count) => {
+    id = count;
+});
 
 //------METHOD GET FOR ALL TEACHERS-----
 exports.getAll = (req, res) => {
@@ -139,17 +142,22 @@ exports.putTeacher = (req, res) => {
                             let updatedTeacher = result;
 
                             (async () => {
-
+                                //console.log(updatedTeacher);
                                 try {
                                     // // Updates the teacher from all courses that he is associated
                                     await courseModel.updateMany(
-                                        { "status": 1, "teachers._id": updatedTeacher._id },
-                                        { "teachers.$":  updatedTeacher });
+                                        // { "status": 1, "teacher.id": updatedTeacher.id },
+                                        { "status": 1, "teacher": { $elemMatch: { "id": updatedTeacher.id } } },
+                                        { "teacher.$":  updatedTeacher });
+
 
                                     // Updates the teacher from all student.course that he is associated
-                                    await studentModel.updateMany(
-                                        { "status": 1, "course.teachers._id": updatedTeacher._id },
-                                        { "course.teachers.$":  updatedTeacher } );
+                                    let propCurso = await studentModel.updateMany(
+                                        { "status": 1, "course.teacher.id": updatedTeacher.id },
+                                        { "course.teacher.$":  updatedTeacher }
+                                        );
+
+                                    //console.log('PROFESSOR NO ESTUDANTE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', propCurso);
 
                                 } catch(err) {
                                     console.error(err);
@@ -244,21 +252,26 @@ exports.deleteTeacher = (req, res) =>{
 
     teacherModel.delete(where, set)
         .then(async (results) => {
+
             courseModel.deleteProf(parseInt(req.params.id)).then(() => {
+
+                if (results == null){
+                    return res.status(204).send("Não foi possivel encontrar professor");
+                }
 
             courseModel.getAllTeachers().then(courses =>{
                 for(var i = 0; i<courses.length; i++){
                     studentModel.updateTeacher(courses[i]);
                 }
 
-            });
+                if (results == null){
+                    res.status(204).send("Não foi possivel encontrar professor");
+                }
+                else {
+                    res.send("Professor excluido com sucesso");
+                }
 
-            if (results == null){
-                res.status(204).send("Não foi possivel encontrar professor");
-            }
-            else {
-                res.send("Professor excluido com sucesso");
-            }
+            });
         })
         })
         .catch(err =>{

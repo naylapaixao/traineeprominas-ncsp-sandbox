@@ -14,11 +14,14 @@ const schemaStudent = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
     age: Joi.number().required(),
-    course: Joi.array().required(),
+    course: Joi.required(),
 });
 //------JOI VALIDATION-----
 
-var id=0;
+var id;
+Student.countDocuments({}, (err, count) => {
+    id = count;
+});
 
 //------METHOD GET FOR ALL STUDENTS-----
 exports.getAll = (req, res) => {
@@ -66,16 +69,24 @@ exports.postStudent =  (req,res) => {
                 //let courseId = await getCourse(parseInt(req.body.course));
 
                 //Check if course exist and return a value and in case false return invalid course
-                for (let i = 0; i < req.body.course.length; i++) {
-                    //let course = await getCourse(newstudent.course[i]);
-                    let course = await courseModel.getCourse(req.body.course[i]);
-                    //newstudent.course[i] = course;
+                // for (let i = 0; i < req.body.course.length; i++) {
+                //     //let course = await getCourse(newstudent.course[i]);
+                //     let course = await courseModel.getCourse(req.body.course[i]);
+                //     //newstudent.course[i] = course;
+                //
+                //     if (course === false) {
+                //         return res.status(401).send("Curso Inválido!");
+                //     } else {
+                //         req.body.course[i] = course[0];
+                //     }
+                // }
 
-                    if (course == false) {
-                        return res.status(401).send("Curso Inválido!");
-                    } else {
-                        req.body.course[i] = course[0];
-                    }
+                let course = await courseModel.getCourse(req.body.course);
+
+                if (course === false || course.length === 0) {
+                    return res.status(401).send("Curso Inválido!");
+                } else {
+                    req.body.course = course[0];
                 }
 
                 //Checks students information and creates new student in model
@@ -88,14 +99,15 @@ exports.postStudent =  (req,res) => {
                     course: req.body.course
                 });
 
+                //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', student);
+
                 //Validades student if corrects create a new one in model
                 student.validate(error => {
-                    //console.log(error);
+                    console.log(error);
                     if (!error) {
                         return studentModel.insertOne(student)
                             .then(result => {
                                 // if(result != false){
-
                                 res.status(201).send('Estudante cadastrado com sucesso!');
                                 // }else{
                                 //     res.status(401).send('Não foi possível cadastrar o estudante curso ou idade invalido');
@@ -171,17 +183,27 @@ exports.putStudent = (req, res) => {
             (async function () {
                 //let courseId = await getCourse(parseInt(req.body.course));
 
-                //Check if course exist and return a value and in case false return invalid course
-                for (let i = 0; i < req.body.course.length; i++) {
-                    //let course = await getCourse(newstudent.course[i]);
-                    let course = await courseModel.getCourse(req.body.course[i]);
-                    //newstudent.course[i] = course;
+                // //Check if course exist and return a value and in case false return invalid course
+                // for (let i = 0; i < req.body.course.length; i++) {
+                //     //let course = await getCourse(newstudent.course[i]);
+                //     let course = await courseModel.getCourse(req.body.course[i]);
+                //     //newstudent.course[i] = course;
+                //
+                //     if (course == false) {
+                //         return res.status(401).send("Curso Inválido!");
+                //     } else {
+                //         req.body.course[i] = course[0];
+                //     }
+                // }
 
-                    if (course == false) {
-                        return res.status(401).send("Curso Inválido!");
-                    } else {
-                        req.body.course[i] = course[0];
-                    }
+                let course = await courseModel.getCourse(req.body.course);
+
+                // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', course);
+
+                if (course === false || course.length === 0) {
+                    return res.status(401).send("Curso Inválido!");
+                } else {
+                    student.course = course[0];
                 }
 
                 //Checks students information and updates the model

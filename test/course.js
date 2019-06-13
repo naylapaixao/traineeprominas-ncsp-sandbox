@@ -9,7 +9,7 @@ describe('POST for Course', function () {
     it("should not register aa course if has less than 2 teachers valid ", function () {
         return request(app)
             .post('/api/v1/course')
-            .send({name: "Test1 course", period:"1", teacher:[4, 'invalid'], city:"new york"})
+            .send({name: "Test1 course", period:"1", teacher:[4, 0], city:"new york"})
             .then(function (res) {
                 assert.equal(res.status, 401);
             });
@@ -18,7 +18,7 @@ describe('POST for Course', function () {
     it("should register aa course if has at least 2 teachers valid", function () {
         return request(app)
             .post('/api/v1/course')
-            .send({name: "Test2 course", period:"1", teacher:[4, 8], city:"new york"})
+            .send({name: "Test2 course", period:"1", teacher:[1, 2], city:"new york"})
             .then(function (res) {
                 assert.equal(res.status, 201);
             });
@@ -56,7 +56,7 @@ describe('POST for Course', function () {
         it('should NOT update a course if has less than 2 teachers valid ', function () {
             return request(app)
                 .put('/api/v1/course/6')
-                .send({name: "Update course", period:"1", teacher:[1, 'invalid'], city:"new york"})
+                .send({name: "Update course", period:"1", teacher:[1, 0], city:"new york"})
                 .then(function (res) {
                     assert.equal(res.status, 401);
                 });
@@ -65,7 +65,7 @@ describe('POST for Course', function () {
         it('should register a course if has at least 2 teachers valid', function () {
             return request(app)
                 .put('/api/v1/course/7')
-                .send({name: "Update2 course", period:"1", teacher:[4, 12], city:"new york"})
+                .send({name: "Update2 course", period:"1", teacher:[1, 2], city:"new york"})
                 .then(function (res) {
                     assert.equal(res.status, 200);
                 });

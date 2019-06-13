@@ -5,7 +5,7 @@ const schema = mongoose.Schema;
 
  userSchema = new schema(
     {
-            id: {type: Number, require:true, unique: true},
+            id: {type: Number, require:true},
             name: {type: String, require:true},
             lastName: {type: String, require:true},
             profile: {type: String, require:true, enum:['guess', 'admin']},
@@ -18,7 +18,7 @@ const schema = mongoose.Schema;
 
  teacherSchema = new schema(
     {
-            id: {type: Number, require:true, unique:true},
+            id: {type: Number, require:true},
             name: {type: String, require:true},
             lastName: {type: String, require:true},
             phd: {type: Boolean, require:true, validate: [val => {return val === true}, 'O professor deve obrigatoriamente possuir PHD']},
@@ -31,7 +31,7 @@ const schema = mongoose.Schema;
 
  courseSchema = new schema(
     {
-            id: {type: Number, require:true, unique:true},
+            id: {type: Number, require:true},
             name: {type: String, require:true},
             period: {type: Number, require:true, default: 8},
             teacher: {type: [teacherSchema], validate: [val => {return val.length >= 2}, 'São necessários pelo menos 2 professores válidos']},
@@ -45,11 +45,11 @@ const schema = mongoose.Schema;
 
  studentSchema = new schema(
     {
-            id: {type: Number, require:true, unique:true},
+            id: {type: Number, require:true},
             name: {type: String, require:true},
             lastName: {type: String, require:true},
             age: {type: Number, require:true, min:[17, ' A idade minimia para o estudante é 17']},
-            course:{type: [courseSchema], validate: [val => {return val.length === 1}, 'É necessário ter um curso válido']},
+            course:{type: courseSchema, require: true},
             status: {type: Number, require:true, default:1}
 
     },{versionKey: false}

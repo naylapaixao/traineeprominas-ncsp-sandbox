@@ -1,34 +1,8 @@
-// MONGODB CONNECTION
-const mongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
 const mongoose = require("mongoose");
 const teacherSchema = require('../schema').teacherSchema;
 const Teacher = mongoose.model('Teacher', teacherSchema, 'teacher');
 
-let db;
-let teacherCollection;
-let counterCollection;
 
-var id=0;
-
-mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
-
-  if (err) {
-    console.error('Ocorreu um erro ao conectar ao mongoDB', err);
-    // send.status(500);
-  }
-  else {
-    console.log('Teacher CONECTOU!');
-
-    db = database.db("trainee-prominas");
-    teacherCollection = db.collection('teacher');
-    counterCollection = db.collection('counter');
-    teacherCollection.find({}).toArray((err, teacher) => {id = teacher.length});
-
-  }
-});
-// MONGODB CONNECTION
 
 exports.findAll = function (where, projection) {
   return Teacher.find(where,projection);
@@ -39,7 +13,6 @@ exports.findOne = async function (query, projection) {
 };
 
 exports.insertOne = (teacher) =>{
-  teacher.id = ++id;
   return Teacher.create(teacher);
 
   /*if (teacher.phd == true) {
@@ -56,7 +29,7 @@ exports.insertOne = (teacher) =>{
 
 exports.update = (where, teacher) =>{
   //return teacherCollection.findOneAndUpdate(where, { $set: { ...teacher } }, { returnOriginal: false });
-  return Teacher.findOneAndUpdate(where, teacher, { returnOriginal: false });
+  return Teacher.findOneAndUpdate(where, teacher, { new:true });
 };
 
 exports.delete = (id) => {

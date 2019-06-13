@@ -1,47 +1,19 @@
-// MONGODB CONNECTION
-const mongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
-const mdbURL = "mongodb+srv://nayla:scoat123@cluster0-lrlqp.mongodb.net/test?retryWrites=true";
+const mongoose = require("mongoose");
+const courseSchema = require('../schema').courseSchema;
+const Course = mongoose.model('Course', courseSchema, 'course');
 
-let db;
-let courseCollection;
-let teacherCollection;
-let studentCollection;
 
-//let counterCollection;
-
-var id =0;
-
-mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
-
-  if (err) {
-    console.error('Ocorreu um erro ao conectar ao mongoDB', err);
-    // send.status(500);
-  }
-  else {
-    console.log('Course CONECTOU!');
-
-    db = database.db("trainee-prominas");
-    courseCollection = db.collection('course');
-    teacherCollection = db.collection('teacher');
-    studentCollection = db.collection('student');
-    //counterCollection = db.collection('counter');
-    courseCollection.find({}).toArray((err, course) => {id = course.length});
-  }
-});
-// MONGODB CONNECTION
 
 exports.findAll = function (where, projection) {
-  return courseCollection.find(where, projection).toArray();
+  return Course.find(where, projection);
 };
 
 exports.insertOne = (course) =>{
-  course.id = ++id;
-  return courseCollection.insertOne(course);
+  return Course.create(course);
 };
 
 exports.findOne = function(where, projection) {
-  return courseCollection.findOne(where, {projection });
+  return Course.findOne(where, projection);
 };
 
 /*exports.update = (course, where) => {
@@ -54,28 +26,31 @@ exports.findOne = function(where, projection) {
 
 exports.update = (query, set) => {
   //return courseCollection.findOneAndUpdate(query, {$set: {...set}}, { returnOriginal: false });
-  return courseCollection.findOneAndUpdate(query, set, { returnOriginal: false });
+  return Course.findOneAndUpdate(query, set, { new:true });
 };
 
 exports.delete = (id) => {
-  return courseCollection.findOneAndUpdate(id, {$set: {status: 0}});
+  return Course.findOneAndUpdate(id, {$set: {status: 0}});
 };
 
 exports.getCourse = (id) => {
-  return courseCollection.find({'id':id, 'status':1}).toArray();
+  return Course.find({'id':id, 'status':1});
 };
 
-exports.updateMany = function(where, setDoc) {
+exports.updateMany = async function(where, setDoc) {
 
-  return courseCollection.updateMany(where, { $set: setDoc });
+  // console.log('>>>>>>>>>>>>>>>>>', where, await Course.find({ "status": 1, "teacher": { $elemMatch: { "id": 8 } } }).exec());
+  // console.log('>>>>>>>>>>>>>>>>>', where, await Course.find(where).exec());
+
+  return Course.updateMany(where, { $set: setDoc });
 };
 
 exports.deleteProf = (id) => {
-  return courseCollection.findOneAndUpdate({'status':1, 'teacher.id':id}, {$pull: {"teacher": {'id': id}}});
+  return Course.findOneAndUpdate({'status':1, 'teacher.id':id}, {$pull: {"teacher": {'id': id}}});
 };
 
 exports.getAllTeachers =  () => {
-  return courseCollection.find({"status": 1}).toArray();
+  return Course.find({"status": 1}).toArray();
 }
 
 

@@ -19,13 +19,16 @@ const schemaCourse = Joi.object().keys({
 });
 //------JOI VALIDATION-----
 
-var id=0;
+var id;
+Course.countDocuments({}, (err, count) => {
+    id = count;
+});
 
 //------METHOD GET FOR ALL COURSES-----
 exports.getAll = (req, res) => {
     //Get only courses where status is 1
     let where = {'status':1};
-    let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}//1 to show the information 0 to hide
+    let projection = {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}//1 to show the information 0 to hide
     courseModel.findAll(where,projection)
         .then(courses => {
             res.send(courses);
@@ -198,14 +201,15 @@ exports.putCourse = (req, res) =>{
                         if (!error) {
                             return courseModel.update(where, {$set: course})
                                 .then(result => {
-                                    res.status(200).send('Curso cadastrado com sucesso!');
+                                    console.log(result)
+                                    res.status(200).send('Curso ediatdo com sucesso!');
                                 })
                                 .catch(err => {
                                     console.error("Erro ao conectar a collection course: ", err);
                                     res.status(500);
                                 });
                         } else {
-                            res.status(401).send('Não foi possível cadastrar o Curso');
+                            res.status(401).send('Não foi possível editar o Curso');
                         }
                     });
                 }
@@ -301,9 +305,11 @@ exports.deleteCourse = (req, res) => {
     let set = {status:0};
 
     courseModel.delete(where, set)
-        .then(result => {
-            studentModel.deleteCourse(parseInt(req.params.id));
-            if(result.value){
+        .then(async (result) => {
+            let result2 = await studentModel.deleteCourse(parseInt(req.params.id))
+
+            //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
+            if(result){
                 //console.log('O curso foi removido');
                 res.status(200).send('O curso foi removido com sucesso');
             }else{
