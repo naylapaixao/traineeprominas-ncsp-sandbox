@@ -51,7 +51,19 @@ exports.deleteProf = (id) => {
 
 exports.getAllTeachers =  () => {
   return Course.find({"status": 1}).toArray();
-}
+};
+
+exports.get_loopUp = (where, projection) =>  {
+  return Course.aggregate([{$match: where}, {$lookup: {from: 'teacher', localField: 'teacher.id', foreignField: "id", as: "Professors"}}]);
+};
+
+
+
+
+
+
+
+
 
 
 

@@ -249,6 +249,19 @@ exports.deleteTeacher = (req, res) =>{
     let where = {'id': parseInt(req.params.id), 'status':1};
     let set = {$set: {status:0}};
 
+    // const session = await mongoose.startSession();
+    // session.startTransaction();
+    //
+    // try {
+    //
+    //     return courseModel.deleteProf(parseInt(req.params.id));
+    //
+    // } catch (error) {
+    //     await session.abortTransaction();
+    //     session.endSession();
+    //     throw error;
+    // }
+
 
     teacherModel.delete(where, set)
         .then(async (results) => {

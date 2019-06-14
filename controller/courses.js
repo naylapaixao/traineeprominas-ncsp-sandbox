@@ -30,6 +30,7 @@ exports.getAll = (req, res) => {
     let where = {'status':1};
     let projection = {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}//1 to show the information 0 to hide
     courseModel.findAll(where,projection)
+    courseModel.get_loopUp(where,projection)
         .then(courses => {
             res.send(courses);
         }).catch(err => {
@@ -83,7 +84,7 @@ exports.postCourse = (req, res) => {
                         let teacher = await teacherModel.findOne({id: teacherId});
 
                         //Checks if Id Teacher is valid or not
-                        if (teacher) {
+                        if (teacher ) {
                             validos.push(teacher);
                         } else {
                             invalidos.push(req.body.teacher[i]); //retorna id de professor inválido
@@ -300,27 +301,41 @@ exports.putCourse = (req, res) =>{
 //------METHOD PUT FOR COURSE-----UPDATES NEW COURSE
 
 //------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
-exports.deleteCourse = (req, res) => {
+exports.deleteCourse = async (req, res) => {
     let where = {'id': parseInt(req.params.id),'status':1};
     let set = {status:0};
 
-    courseModel.delete(where, set)
-        .then(async (result) => {
-            let result2 = await studentModel.deleteCourse(parseInt(req.params.id))
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-            //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
-            if(result){
-                //console.log('O curso foi removido');
-                res.status(200).send('O curso foi removido com sucesso');
-            }else{
-                //console.log('Nenhum curso foi removido');
-                res.status(204).send('Nenhum curso foi removido');
-            }
-        })
-        .catch(err => {
-            console.error('Erro ao conectar a collection course:', err);
-            res.status(500);
-        });
+    try {
+
+        return courseModel.delete(where, set);
+
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+
+
+    // courseModel.delete(where, set)
+    //     .then(async (result) => {
+    //         let result2 = await studentModel.deleteCourse(parseInt(req.params.id))
+    //
+    //         //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
+    //         if(result){
+    //             //console.log('O curso foi removido');
+    //             res.status(200).send('O curso foi removido com sucesso');
+    //         }else{
+    //             //console.log('Nenhum curso foi removido');
+    //             res.status(204).send('Nenhum curso foi removido');
+    //         }
+    //     })
+    //     .catch(err => {
+    //         console.error('Erro ao conectar a collection course:', err);
+    //         res.status(500);
+    //     });
 };
 //------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
 
