@@ -33,6 +33,7 @@ exports.update = (where, teacher) =>{
 };
 
 exports.delete = (id) => {
+
   return Teacher.findOneAndUpdate(id, {$set: {status: 0}});
 };
 

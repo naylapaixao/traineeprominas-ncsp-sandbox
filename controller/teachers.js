@@ -245,23 +245,97 @@ exports.putTeacher = (req, res) => {
 //------METHOD PUT FOR TEACHER-----UPDATES NEW TEACHER
 
 //------METHOD DELETE FOR TEACHER-----CHANGE THE STATUS 1 TO 0
-exports.deleteTeacher = (req, res) =>{
-    let where = {'id': parseInt(req.params.id), 'status':1};
-    let set = {$set: {status:0}};
+exports.deleteTeacher =  (req, res) => {
+    //  define query and set for search and delete
 
-    // const session = await mongoose.startSession();
+    //TRANSACTION
+    // let session = await mongoose.startSession();
     // session.startTransaction();
+    // try{
     //
-    // try {
+    //     //const opts={session,new: true};
     //
-    //     return courseModel.deleteProf(parseInt(req.params.id));
+    //     console.log(1);
+    //     let where = {'id': parseInt(req.params.id), 'status':1};
+    //     let set = {status:0};
+    //     // send to model
+    //     await teacherModel.delete(where, set).session(session);
+    //     //  updates the course that contains that teacher
+    //     await courseModel.deleteProf(parseInt(req.params.id)).session(session);
     //
-    // } catch (error) {
+    //     console.log(2);
+    //     // receives the updated teacher and updates the student that contains this teacher
+    //     await courseModel.getAllTeachers().session(session).then((async courses => {
+    //         for(var i = 0; i<courses.length; i++){
+    //             await studentModel.updateTeacher(courses[i]).session(session);
+    //         }
+    //     }));
+    //
+    //     if(set){ // if professor exists
+    //         // console.log('O professor foi removido');
+    //         res.status(200).send('O professor foi removido com sucesso');
+    //
+    //     }else{
+    //         // console.log('Nenhum professor foi removido');
+    //         res.status(204).send('Nenhum professor foi removido');
+    //     }
+    //     // .catch(err => {
+    //     //     console.error("Erro ao conectar a collection teacher: ");
+    //     //     res.status(500).send("Erro ao conectar ao banco de dados.");
+    //     // });
+    //     await session.commitTransaction();
+    //     session.endSession();
+    //
+    // }catch (error) {
+    //     console.error("Erro ao conectar a collection teacher: ");
+    //     res.status(500).send("Erro ao conectar ao banco de dados.");
+    //     await session.abortTransaction();
+    //     session.endSession();
+    //     console.error(error);
+    // }
+
+
+    // let where = {'id': parseInt(req.params.id), 'status': 1};
+    // let set = {$set: {status: 0}};
+    //
+    // const session = await mongoose.startSession()
+    // session.startTransaction()
+    //
+    // return teacherModel.delete(where, set).session(session)
+    //     .then(async (results) => {
+    //
+    //         console.log(results);
+    //         await courseModel.deleteProf(parseInt(req.params.id)).session(session);
+    //
+    //         await courseModel.getAllTeachers().session(session).then(async courses => {
+    //             for (var i = 0; i < courses.length; i++) {
+    //                 await studentModel.updateTeacher(courses[i]).session(session);
+    //             }
+    //         });
+    //
+    //         if (results == null) {
+    //             res.status(204).send("Não foi possivel encontrar professor");
+    //
+    //         } else {
+    //             res.send("Professor excluido com sucesso");
+    //         }
+    //
+    //         await session.commitTransaction();
+    //         session.endSession();
+    //
+    //     })
+    //
+    //     .catch (async error => {
+    //     console.error("Ocorreu um erro ao deletar os professor");
+    //     res.status(500).send('Ocorreu um erro ao deletar professor');
     //     await session.abortTransaction();
     //     session.endSession();
     //     throw error;
-    // }
+    // })
 
+
+    let where = {'id': parseInt(req.params.id), 'status':1};
+    let set = {$set: {status:0}};
 
     teacherModel.delete(where, set)
         .then(async (results) => {

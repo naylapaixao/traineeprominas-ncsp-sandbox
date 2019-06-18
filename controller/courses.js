@@ -301,41 +301,51 @@ exports.putCourse = (req, res) =>{
 //------METHOD PUT FOR COURSE-----UPDATES NEW COURSE
 
 //------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
-exports.deleteCourse = async (req, res) => {
+exports.deleteCourse =  (req, res) => {
     let where = {'id': parseInt(req.params.id),'status':1};
     let set = {status:0};
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
-    try {
-
-        return courseModel.delete(where, set);
-
-    } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        throw error;
-    }
-
-
-    // courseModel.delete(where, set)
-    //     .then(async (result) => {
-    //         let result2 = await studentModel.deleteCourse(parseInt(req.params.id))
+    // const session = await mongoose.startSession();
+    // session.startTransaction();
     //
-    //         //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
-    //         if(result){
-    //             //console.log('O curso foi removido');
-    //             res.status(200).send('O curso foi removido com sucesso');
-    //         }else{
-    //             //console.log('Nenhum curso foi removido');
-    //             res.status(204).send('Nenhum curso foi removido');
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.error('Erro ao conectar a collection course:', err);
-    //         res.status(500);
-    //     });
+    // try {
+    //
+    //     let result = await courseModel.delete(where, set);
+    //
+    //     if (result) {
+    //         await studentModel.deleteCourse(parseInt(req.params.id));
+    //         res.status(200).send('O curso foi removido com sucesso');
+    //     } else {
+    //         res.status(204).send('Nenhum curso foi removido');
+    //     }
+    //
+    //
+    // } catch (error) {
+    //     console.error('Erro ao conectar a collection course:', error);
+    //     res.status(500);
+    //     await session.abortTransaction();
+    //     session.endSession();
+    //     throw error;
+    // }
+
+
+    courseModel.delete(where, set)
+        .then(async (result) => {
+            let result2 = await studentModel.deleteCourse(parseInt(req.params.id))
+
+            //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
+            if(result){
+                //console.log('O curso foi removido');
+                res.status(200).send('O curso foi removido com sucesso');
+            }else{
+                //console.log('Nenhum curso foi removido');
+                res.status(204).send('Nenhum curso foi removido');
+            }
+        })
+        .catch(err => {
+            console.error('Erro ao conectar a collection course:', err);
+            res.status(500);
+        });
 };
 //------METHOD DELETE FOR COURSE-----CHANGE THE STATUS 1 TO 0
 

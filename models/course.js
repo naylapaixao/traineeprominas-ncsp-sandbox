@@ -50,7 +50,7 @@ exports.deleteProf = (id) => {
 };
 
 exports.getAllTeachers =  () => {
-  return Course.find({"status": 1}).toArray();
+  return Course.find({"status": 1});
 };
 
 exports.get_loopUp = (where, projection) =>  {

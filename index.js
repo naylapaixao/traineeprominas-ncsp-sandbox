@@ -9,11 +9,14 @@ const studentRouter = require('./routes/students');
 const app = express();
 
 const conn = require('./config');
+const cors = require('cors');
 
 conn();
 
 const baseApi = "/api/v1";
 
+app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 
 app.get(baseApi, function (req, res) {

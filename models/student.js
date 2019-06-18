@@ -37,8 +37,8 @@ exports.updateMany = function(where, setDoc) {
   return Student.updateMany(where, { $set: setDoc });
 };
 
-exports.updateTeacher = (course) => {
-  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}}).then(result=>{});
+exports.updateTeacher = (course, session) => {
+  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}})/*.session(session)*/;
 };
 
 
