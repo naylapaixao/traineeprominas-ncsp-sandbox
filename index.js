@@ -13,6 +13,7 @@ const cors = require('cors');
 
 conn();
 
+//teste
 const baseApi = "/api/v1";
 
 app.use(cors());
