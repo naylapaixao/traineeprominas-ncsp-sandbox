@@ -29,11 +29,11 @@ exports.getAll = (req, res) => {
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, age: 1, course:1 };
     studentModel.findAll(where,projection)
         .then(students => {
-            res.send(students);
+            res.json(students);
         }).catch(err => {
         console.log(err);
         console.error("Ocorreu um erro ao enviar os usuários");
-        res.status(500).send('Ocorreu um erro');
+        res.status(500).json('Ocorreu um erro');
     });
 };
 //------METHOD GET FOR ALL STUDENTS-----
@@ -46,14 +46,14 @@ exports.getOneStudent = function (req, res) {
     studentModel.findOne(where, projection)
         .then(student => {
             if (student) {
-                return res.send(student);
+                return res.json(student);
             }else {
-                return res.status(404).send("Estudante não Encontrado.");
+                return res.status(404).json("Estudante não Encontrado.");
             }
         })
         .catch(err =>{
             console.error("Erro ao conectar a collection student");
-            res.status(500).send("Erro ao conectar a collection student");
+            res.status(500).json("Erro ao conectar a collection student");
         });
 };
 //------METHOD GET FOR ONE STUDENT-----
@@ -75,7 +75,7 @@ exports.postStudent =  (req,res) => {
                 //     //newstudent.course[i] = course;
                 //
                 //     if (course === false) {
-                //         return res.status(401).send("Curso Inválido!");
+                //         return res.status(401).json("Curso Inválido!");
                 //     } else {
                 //         req.body.course[i] = course[0];
                 //     }
@@ -84,7 +84,7 @@ exports.postStudent =  (req,res) => {
                 let course = await courseModel.getCourse(req.body.course);
 
                 if (course === false || course.length === 0) {
-                    return res.status(401).send("Curso Inválido!");
+                    return res.status(401).json("Curso Inválido!");
                 } else {
                     req.body.course = course[0];
                 }
@@ -108,9 +108,9 @@ exports.postStudent =  (req,res) => {
                         return studentModel.insertOne(student)
                             .then(result => {
                                 // if(result != false){
-                                res.status(201).send('Estudante cadastrado com sucesso!');
+                                res.status(201).json('Estudante cadastrado com sucesso!');
                                 // }else{
-                                //     res.status(401).send('Não foi possível cadastrar o estudante curso ou idade invalido');
+                                //     res.status(401).json('Não foi possível cadastrar o estudante curso ou idade invalido');
                                 // }
                             })
 
@@ -119,14 +119,14 @@ exports.postStudent =  (req,res) => {
                                 res.status(500);
                             });
                     } else {
-                        res.status(401).send('Não foi possível cadastrar o Estudante (idade deverá ser superior a 17)');
+                        res.status(401).json('Não foi possível cadastrar o Estudante (idade deverá ser superior a 17)');
                     }
                 });
 
             })();
 
         }else {
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
     });
 
@@ -136,7 +136,7 @@ exports.postStudent =  (req,res) => {
         newstudent.status = 1;
 
         // if (req.body.age < 17)
-        //     return res.status(401).send("A idade mínima para cadastro de aluno é 17");
+        //     return res.status(401).json("A idade mínima para cadastro de aluno é 17");
 
         (async function () {
             //let courseId = await getCourse(parseInt(req.body.course));
@@ -147,7 +147,7 @@ exports.postStudent =  (req,res) => {
                 //newstudent.course[i] = course;
 
                 if(course == false){
-                    return res.status(401).send("Curso Inválido!");
+                    return res.status(401).json("Curso Inválido!");
                 }else{
                     newstudent.course[i] = course[0];
                 }
@@ -156,18 +156,18 @@ exports.postStudent =  (req,res) => {
             if (newstudent.course.length > 0){
                 studentModel.insertOne(newstudent)
                     .then(user => {
-                        res.status(201).send("Estudante Cadastrado com Sucesso.");
+                        res.status(201).json("Estudante Cadastrado com Sucesso.");
                     })
                     .catch(err => {
                         console.error("Erro ao Criar Um Novo Estudante", err);
-                        res.status(500).send("Erro ao Criar Um Novo Estudante");
+                        res.status(500).json("Erro ao Criar Um Novo Estudante");
                     });
             }
 
         })();
 
     }else {
-        res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
+        res.status(401).json("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
     } */
 };
 //------METHOD POST FOR STUDENT-----CREATES NEW STUDENT
@@ -190,7 +190,7 @@ exports.putStudent = (req, res) => {
                 //     //newstudent.course[i] = course;
                 //
                 //     if (course == false) {
-                //         return res.status(401).send("Curso Inválido!");
+                //         return res.status(401).json("Curso Inválido!");
                 //     } else {
                 //         req.body.course[i] = course[0];
                 //     }
@@ -201,7 +201,7 @@ exports.putStudent = (req, res) => {
                 // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', course);
 
                 if (course === false || course.length === 0) {
-                    return res.status(401).send("Curso Inválido!");
+                    return res.status(401).json("Curso Inválido!");
                 } else {
                     student.course = course[0];
                 }
@@ -214,9 +214,9 @@ exports.putStudent = (req, res) => {
                         return studentModel.update(where, student)
                             .then(result => {
                                 // if(result != false){
-                                res.status(201).send('Estudante editado com sucesso!');
+                                res.status(201).json('Estudante editado com sucesso!');
                                 // }else{
-                                //     res.status(401).send('Não foi possível editar o estudante curso ou idade invalido');
+                                //     res.status(401).json('Não foi possível editar o estudante curso ou idade invalido');
                                 // }
                             })
 
@@ -225,13 +225,13 @@ exports.putStudent = (req, res) => {
                                 res.status(500);
                             });
                     } else {
-                        res.status(401).send('Não foi possível editar o Estudante (idade deverá ser superior a 17)');
+                        res.status(401).json('Não foi possível editar o Estudante (idade deverá ser superior a 17)');
                     }
                 });
 
             })();
         }else {
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
         /*if (req.body.name && req.body.lastName && req.body.course && (req.body.age >= 17)) {
             let id = parseInt(req.params.id);
@@ -252,7 +252,7 @@ exports.putStudent = (req, res) => {
                     //newstudent.course[i] = course;
 
                     if(course == false){  //!course
-                        return res.status(401).send("Curso Inválido!");
+                        return res.status(401).json("Curso Inválido!");
                     }else{
                         alterStudent.course[i] = course[0];
                     }
@@ -264,22 +264,22 @@ exports.putStudent = (req, res) => {
 
                             if (result.value) {
                                 console.log(`INF: Estudante Atualizado`);
-                                res.status(201).send(`Estudante Atualizado`);
+                                res.status(201).json(`Estudante Atualizado`);
                             } else {
                                 console.log('Estudante não Encontrado.');
-                                res.status(404).send('Estudante não Encontrado.');
+                                res.status(404).json('Estudante não Encontrado.');
                             }
                         })
                         .catch(err => {
                             console.error("Erro ao conectar a collection 'student'", err);
-                            res.status(500).send("Erro ao conectar a collection 'student'");
+                            res.status(500).json("Erro ao conectar a collection 'student'");
                         });
                 }
 
             })();
         }
         else {
-            res.status(401).send("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
+            res.status(401).json("Insira todos os campos obrigatorios e maioridade a partir de 17 anos");
         } */
 
     });
@@ -298,15 +298,15 @@ exports.deleteStudent = (req, res) => {
 
             if (result) {
                 //console.log(`INF: Estudante Removido`);
-                res.status(200).send(`Estudante Removido`);
+                res.status(200).json(`Estudante Removido`);
             } else {
                 //console.log('Nenhum Estudante Removido');
-                res.status(204).send('Nenhum Estudante Removido');
+                res.status(204).json('Nenhum Estudante Removido');
             }
         })
         .catch(err => {
             console.error("Erro ao remover o Estudante", err);
-            res.status(500).send("Erro ao remover o Estudante");
+            res.status(500).json("Erro ao remover o Estudante");
         });
 };
 //------METHOD DELETE FOR STUDENT-----CHANGE THE STATUS 1 TO 0

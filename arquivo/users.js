@@ -35,9 +35,9 @@ router.get('/', function(req, res) {
     .toArray((err, users) => {
       if (err) {
         console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
+        res.status(500).json("Erro ao conectar a collection 'user'");
       } else {
-        res.send(users);
+        res.json(users);
       }
     });
 });
@@ -46,7 +46,7 @@ router.post('/', function(req, res) {
   
   // validation
   if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
-    return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName e profile são obrigatórios.');
 
   // if valid creates the user object
   let user = {
@@ -66,9 +66,9 @@ router.post('/', function(req, res) {
 
       if (err) {
         console.error("Erro ao Criar Um Novo Usuário", err);
-        res.status(500).send("Erro ao Criar Um Novo Usuário");
+        res.status(500).json("Erro ao Criar Um Novo Usuário");
       } else {
-        res.status(201).send("Usuário Cadastrado com Sucesso.");
+        res.status(201).json("Usuário Cadastrado com Sucesso.");
       }
     });
 
@@ -85,15 +85,15 @@ router.delete('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao remover o usuário", err);
-      res.status(500).send("Erro ao remover o usuário");
+      res.status(500).json("Erro ao remover o usuário");
     } else {
 
       if (result.value) {
         console.log(`INF: Usuário Removido`);
-        res.status(200).send(`Usuário Removido`);
+        res.status(200).json(`Usuário Removido`);
       } else {
         console.log('Nenhum Usuário Removido');
-        res.status(204).send('Nenhum Usuário Removido');
+        res.status(204).json('Nenhum Usuário Removido');
       }
     }
 
@@ -111,13 +111,13 @@ router.get('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'user'", err);
-      res.status(500).send("Erro ao conectar a collection 'user'");
+      res.status(500).json("Erro ao conectar a collection 'user'");
     } else {
 
       if (user)
-        res.send(user);
+        res.json(user);
       else
-        res.status(404).send("Usuário não Encontrado.");
+        res.status(404).json("Usuário não Encontrado.");
     }
   });
 
@@ -127,7 +127,7 @@ router.put('/:id', function(req, res) {
 
   // validation
   if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
-    return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName e profile são obrigatórios.');
 
   // if valid creates the user object
   let user = {
@@ -144,15 +144,15 @@ router.put('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'user'", err);
-      res.status(500).send("Erro ao conectar a collection 'user'");
+      res.status(500).json("Erro ao conectar a collection 'user'");
     } else {
 
       if (result.value) {
         console.log(`INF: Usuário Atualizado`);
-        res.status(200).send(`Usuário Atualizado`);
+        res.status(200).json(`Usuário Atualizado`);
       } else {
         console.log('Usuário não Encontrado.');
-        res.status(404).send('Usuário não Encontrado.');
+        res.status(404).json('Usuário não Encontrado.');
       }
     }
 

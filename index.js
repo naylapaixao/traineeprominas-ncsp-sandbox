@@ -21,7 +21,7 @@ app.options('*', cors());
 app.use(bodyParser.json());
 
 app.get(baseApi, function (req, res) {
-  res.send('NodeJs Trainee!');
+  res.json('NodeJs Trainee!');
 });
 
 // Rotas da Tarefa 02

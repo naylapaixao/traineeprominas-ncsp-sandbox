@@ -29,14 +29,14 @@ mongoClient.connect(mdbURL, {native_parser:true},(err,database) => {
 
 // GET ALL STUDENTS
 router.get('/', function (req, res) {
-    //res.send(students);
+    //res.json(students);
     collection.find({}, {projection: {_id:0, id:1, name:1, lastName:1, age:1, course:1}}).toArray((err, users) =>{
         if(err) {
             console.error('Ocorreu um erro ao conectar ao User');
             res.status(500);
         }
         else {
-            res.send(users);
+            res.json(users);
         }
     });
 });
@@ -56,7 +56,7 @@ router.post('/', function (req, res) {
                newstudent.course[i] = course;
 
                if(!course){
-                   return res.status(401).send("Curso Inválido!");
+                   return res.status(401).json("Curso Inválido!");
                }
            }
 
@@ -64,9 +64,9 @@ router.post('/', function (req, res) {
 
                 if (err) {
                     console.error("Erro ao Criar Um Novo Estudante", err);
-                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                    res.status(500).json("Erro ao Criar Um Novo Estudante");
                 } else {
-                    res.status(201).send("Estudante Cadastrado com Sucesso.");
+                    res.status(201).json("Estudante Cadastrado com Sucesso.");
                 }
             });
 
@@ -74,7 +74,7 @@ router.post('/', function (req, res) {
     }
     else {
         res.status(401);
-        res.send('Insira todos os campos obrigatorios');
+        res.json('Insira todos os campos obrigatorios');
     }
 
     /*let newstudent = req.body;
@@ -90,9 +90,9 @@ router.post('/', function (req, res) {
 
             if (err) {
                 console.error("Erro ao Criar Um Novo Estudante", err);
-                res.status(500).send("Erro ao Criar Um Novo Estudante");
+                res.status(500).json("Erro ao Criar Um Novo Estudante");
             } else {
-                res.status(201).send("Estudante Cadastrado com Sucesso.");
+                res.status(201).json("Estudante Cadastrado com Sucesso.");
             }
         });
 
@@ -104,7 +104,7 @@ router.post('/', function (req, res) {
     newstudent.course = courseConsult.getCourse(courseId);
     //}
     db.collection('student').insert(newstudent);
-    res.send('Usuario Cadastrado com sucesso'); */
+    res.json('Usuario Cadastrado com sucesso'); */
 });
 
 // FUNCTION TO GET IDCOURSE AND INFORMATIONS ABOUT IT
@@ -147,9 +147,9 @@ router.put('/:id', function (req, res) {
 
                 if (err) {
                     console.error("Erro ao Criar Um Novo Estudante", err);
-                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                    res.status(500).json("Erro ao Criar Um Novo Estudante");
                 } else {
-                    res.status(201).send("Estudante Editado com Sucesso.");
+                    res.status(201).json("Estudante Editado com Sucesso.");
                 }
             });
 
@@ -157,13 +157,13 @@ router.put('/:id', function (req, res) {
     }
     else{
         res.status(401);
-        res.send('Insira todos os campos obrigatorios');
+        res.json('Insira todos os campos obrigatorios');
     }
 
 
     /* if(bodyuser == {}){
         res.status('400');
-        res.send('Solicitação não autorizada')
+        res.json('Solicitação não autorizada')
     }
     else {
 
@@ -178,9 +178,9 @@ router.put('/:id', function (req, res) {
 
                 if (err) {
                     console.error("Erro ao Criar Um Novo Estudante", err);
-                    res.status(500).send("Erro ao Criar Um Novo Estudante");
+                    res.status(500).json("Erro ao Criar Um Novo Estudante");
                 } else {
-                    res.status(201).send("Estudante Editado com Sucesso.");
+                    res.status(201).json("Estudante Editado com Sucesso.");
                 }
             });
 
@@ -200,10 +200,10 @@ router.get('/:id', function (req, res) {
         else {
             if (user == []){
                 res.status(404);
-                res.send('Estudante não encontrado');
+                res.json('Estudante não encontrado');
             }
             else {
-                res.send(user);
+                res.json(user);
             }
         }
     });
@@ -211,10 +211,10 @@ router.get('/:id', function (req, res) {
     /* var id = req.params.id; //o parametro name tem que ser exatamente o mesmo que na rota
     var filterestStudents = students.filter((s) => {return (s.id == id); });
     if (filterestStudents.length >= 1)
-        res.send(filterestStudents[0]);
+        res.json(filterestStudents[0]);
     else
         res.status(404);
-        res.send('Usuário não encontrado '); */
+        res.json('Usuário não encontrado '); */
 });
 
 //DELETE ALL
@@ -230,10 +230,10 @@ router.get('/:id', function (req, res) {
             if (numRemoved > 0){
                 console.log("INF: Todos os estudantes (" + numRemoved + ") foram removidos");
                 res.status(204);
-                res.send('Todos os estudantes removidos com sucesso');
+                res.json('Todos os estudantes removidos com sucesso');
             }
             else {
-                res.send('Nenhum estudante foi removido');
+                res.json('Nenhum estudante foi removido');
                 res.status(404);
             }
         }
@@ -255,10 +255,10 @@ router.delete('/:id', function (req, res) {
             if (info.value != null){
                 console.log("INF: Estudante foram removidos");
                 res.status(200);
-                res.send(' Estudante removido com sucesso');
+                res.json(' Estudante removido com sucesso');
             }
             else {
-                res.send('Nenhum estudante foi removido');
+                res.json('Nenhum estudante foi removido');
                 res.status(404);
             }
         }
@@ -270,12 +270,12 @@ router.delete('/:id', function (req, res) {
         for(var i=0;i<students.length;i++){
             if (students[i].id == id){
                 students.splice(i,1);
-                res.send('Deletado com sucesso ');
+                res.json('Deletado com sucesso ');
             }
         }
     }
     else
-        res.send('Estudante não encontrado '); */
+        res.json('Estudante não encontrado '); */
 });
 
 module.exports = router;

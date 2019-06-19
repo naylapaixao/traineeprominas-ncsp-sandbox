@@ -29,11 +29,11 @@ exports.getAll = (req, res) => {
     let projection = { _id: 0, id: 1, name: 1, lastName: 1, phd: 1 };
     teacherModel.findAll(where,projection)
         .then(teachers => {
-            res.send(teachers);
+            res.json(teachers);
         }).catch(err => {
         console.log(err);
         console.error("Ocorreu um erro ao enviar os usuários");
-        res.status(500).send('Ocorreu um erro');
+        res.status(500).json('Ocorreu um erro');
     });
 };
 //------METHOD GET FOR ALL TEACHERS-----
@@ -45,12 +45,12 @@ exports.getAll = (req, res) => {
     teacherModel.findAll(query, projection)
         .then(users => {
             console.log(users)
-            res.send(users);
+            res.json(users);
         })
 
         .catch(err => {
             console.error("Erro ao conectar a collection user");
-            res.status(500).send("Erro ao conectar a collection user");
+            res.status(500).json("Erro ao conectar a collection user");
         });
 }; */
 
@@ -62,14 +62,14 @@ exports.getOneTeacher = function (req, res) {
     teacherModel.findOne(query, projection)
         .then(teacher => {
             if (teacher) {
-                return res.send(teacher);
+                return res.json(teacher);
             }else {
-                return res.status(404).send("Professor não Encontrado.");
+                return res.status(404).json("Professor não Encontrado.");
             }
         })
         .catch(err =>{
             console.error("Erro ao conectar a collection teacher");
-            res.status(500).send("Erro ao conectar a collection teacher");
+            res.status(500).json("Erro ao conectar a collection teacher");
         });
 };
 //------METHOD GET FOR ONE TEACHER-----
@@ -84,18 +84,18 @@ exports.postTeacher =  (req,res) => {
                 if(!error){
                     return teacherModel.insertOne(teacher)
                         .then(result => {
-                            res.status(201).send('Professor cadastrado com sucesso!');
+                            res.status(201).json('Professor cadastrado com sucesso!');
                         })
                         .catch(err => {
                             console.error("Erro ao conectar a collection teacher: ", err);
                             res.status(500);
                         });
                 }else{
-                    res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+                    res.status(401).json('Não foi possível cadastrar o Professor phd inválido');
                 }
             });
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
         }
     });
 
@@ -114,14 +114,14 @@ exports.postTeacher =  (req,res) => {
 
         teacherModel.insertOne(newteacher)
             .then(user => {
-                res.status(201).send("Professor Cadastrado com Sucesso.");
+                res.status(201).json("Professor Cadastrado com Sucesso.");
             })
             .catch(err => {
                 console.error("Erro ao Criar Um Novo Professor", err);
-                res.status(500).send("Erro ao Criar Um Novo Professor");
+                res.status(500).json("Erro ao Criar Um Novo Professor");
             });
     }else {
-        res.status(401).send("Campo Inválido");
+        res.status(401).json("Campo Inválido");
     } */
 };
 //------METHOD POST FOR TEACHER-----CREATES NEW TEACHER
@@ -164,19 +164,19 @@ exports.putTeacher = (req, res) => {
                                 }
 
                                 //console.log(`INF: Professor Atualizado`);
-                                res.status(201).send(`Professor Atualizado`);
+                                res.status(201).json(`Professor Atualizado`);
 
                             })();
 
                         })
 
                 }else{
-                    res.status(401).send('Não foi possível cadastrar o Professor phd inválido');
+                    res.status(401).json('Não foi possível cadastrar o Professor phd inválido');
                 }
             });
 
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta.');
         }
     });
 
@@ -219,27 +219,27 @@ exports.putTeacher = (req, res) => {
     //                 }
     //
     //                 //console.log(`INF: Professor Atualizado`);
-    //                 res.status(201).send(`Professor Atualizado`);
+    //                 res.status(201).json(`Professor Atualizado`);
     //
     //             })();
     //
     //         })
     //         .catch(err => {
     //             console.error("Erro ao conectar a collection 'teacher'", err);
-    //             res.status(500).send("Erro ao conectar a collection 'teacher'");
+    //             res.status(500).json("Erro ao conectar a collection 'teacher'");
     //         });
     //
     //
     //     /*teacherModel.update(id, teacherAlter)
     //         .then(user => {
-    //             res.status(201).send("Usuário Cadastrado com Sucesso.");
+    //             res.status(201).json("Usuário Cadastrado com Sucesso.");
     //         })
     //         .catch(err => {
     //             console.error("Erro ao Criar Um Novo Usuário", err);
-    //             res.status(500).send("Erro ao Criar Um Novo Usuário");
+    //             res.status(500).json("Erro ao Criar Um Novo Usuário");
     //         }); */
     // }else {
-    //     res.status(401).send("Campo Inválido");
+    //     res.status(401).json("Campo Inválido");
     // }
 };
 //------METHOD PUT FOR TEACHER-----UPDATES NEW TEACHER
@@ -273,22 +273,22 @@ exports.deleteTeacher =  (req, res) => {
     //
     //     if(set){ // if professor exists
     //         // console.log('O professor foi removido');
-    //         res.status(200).send('O professor foi removido com sucesso');
+    //         res.status(200).json('O professor foi removido com sucesso');
     //
     //     }else{
     //         // console.log('Nenhum professor foi removido');
-    //         res.status(204).send('Nenhum professor foi removido');
+    //         res.status(204).json('Nenhum professor foi removido');
     //     }
     //     // .catch(err => {
     //     //     console.error("Erro ao conectar a collection teacher: ");
-    //     //     res.status(500).send("Erro ao conectar ao banco de dados.");
+    //     //     res.status(500).json("Erro ao conectar ao banco de dados.");
     //     // });
     //     await session.commitTransaction();
     //     session.endSession();
     //
     // }catch (error) {
     //     console.error("Erro ao conectar a collection teacher: ");
-    //     res.status(500).send("Erro ao conectar ao banco de dados.");
+    //     res.status(500).json("Erro ao conectar ao banco de dados.");
     //     await session.abortTransaction();
     //     session.endSession();
     //     console.error(error);
@@ -314,10 +314,10 @@ exports.deleteTeacher =  (req, res) => {
     //         });
     //
     //         if (results == null) {
-    //             res.status(204).send("Não foi possivel encontrar professor");
+    //             res.status(204).json("Não foi possivel encontrar professor");
     //
     //         } else {
-    //             res.send("Professor excluido com sucesso");
+    //             res.json("Professor excluido com sucesso");
     //         }
     //
     //         await session.commitTransaction();
@@ -327,7 +327,7 @@ exports.deleteTeacher =  (req, res) => {
     //
     //     .catch (async error => {
     //     console.error("Ocorreu um erro ao deletar os professor");
-    //     res.status(500).send('Ocorreu um erro ao deletar professor');
+    //     res.status(500).json('Ocorreu um erro ao deletar professor');
     //     await session.abortTransaction();
     //     session.endSession();
     //     throw error;
@@ -343,7 +343,7 @@ exports.deleteTeacher =  (req, res) => {
             courseModel.deleteProf(parseInt(req.params.id)).then(() => {
 
                 if (results == null){
-                    return res.status(204).send("Não foi possivel encontrar professor");
+                    return res.status(204).json("Não foi possivel encontrar professor");
                 }
 
             courseModel.getAllTeachers().then(courses =>{
@@ -352,10 +352,10 @@ exports.deleteTeacher =  (req, res) => {
                 }
 
                 if (results == null){
-                    res.status(204).send("Não foi possivel encontrar professor");
+                    res.status(204).json("Não foi possivel encontrar professor");
                 }
                 else {
-                    res.send("Professor excluido com sucesso");
+                    res.json("Professor excluido com sucesso");
                 }
 
             });

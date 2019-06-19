@@ -28,12 +28,12 @@ exports.getAllUsers = function (req, res) {
 
     userModel.findAll(query, projection)
         .then(users => {
-            res.send(users);
+            res.json(users);
         })
 
         .catch(err => {
             console.error("Erro ao conectar a collection user");
-            res.status(500).send("Erro ao conectar a collection user");
+            res.status(500).json("Erro ao conectar a collection user");
         });
 };
 //------METHOD GET FOR ALL USERS-----
@@ -46,14 +46,14 @@ exports.getOneUser = function (req, res) {
     userModel.findOne(query, projection)
         .then(user => {
             if (user) {
-                return res.send(user);
+                return res.json(user);
             }else {
-                return res.status(404).send("Usuário não Encontrado.");
+                return res.status(404).json("Usuário não Encontrado.");
             }
         })
         .catch(err =>{
             console.error("Erro ao conectar a collection user");
-            res.status(500).send("Erro ao conectar a collection user");
+            res.status(500).json("Erro ao conectar a collection user");
         });
 };
 //------METHOD GET FOR ONE USER-----
@@ -68,18 +68,18 @@ exports.postUser =  (req,res) => {
                 if(!error){
                     return userModel.insertOne(user)
                         .then(result => {
-                            res.status(201).send('Usuário cadastrado com sucesso!');
+                            res.status(201).json('Usuário cadastrado com sucesso!');
                         })
                         .catch(err => {
                             console.error("Erro ao conectar a collection user: ", err);
                             res.status(500);
                         });
                 }else{
-                    res.status(401).send('Não foi possível cadastrar usuário profile invalido');
+                    res.status(401).json('Não foi possível cadastrar usuário profile invalido');
                 }
             });
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
     });
 
@@ -94,14 +94,14 @@ exports.postUser =  (req,res) => {
 
         userModel.insertOne(newuser)
             .then(user => {
-                res.status(201).send("Usuário Cadastrado com Sucesso.");
+                res.status(201).json("Usuário Cadastrado com Sucesso.");
             })
             .catch(err => {
                 console.error("Erro ao Criar Um Novo Usuário", err);
-                res.status(500).send("Erro ao Criar Um Novo Usuário");
+                res.status(500).json("Erro ao Criar Um Novo Usuário");
             });
     }else {
-        res.status(401).send("Não foi possível cadastrar usuário profile invalido");
+        res.status(401).json("Não foi possível cadastrar usuário profile invalido");
     } */
 };
 //------METHOD POST FOR USER-----CREATES NEW USER
@@ -121,9 +121,9 @@ exports.putUser = (req, res) => {
                     return userModel.update(where, {$set: user})
                         .then(result => {
                             if(result){
-                                res.status(201).send('Usuário editado com sucesso!');
+                                res.status(201).json('Usuário editado com sucesso!');
                             }else{
-                                res.status(401).send('Usuário não encontrado');
+                                res.status(401).json('Usuário não encontrado');
                             }
                         })
                         .catch(err => {
@@ -131,11 +131,11 @@ exports.putUser = (req, res) => {
                             res.status(500);
                         });
                 }else{
-                    res.status(401).send('Não foi possível editar o usuário (profile inválido)');
+                    res.status(401).json('Não foi possível editar o usuário (profile inválido)');
                 }
             })
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
     });
 
@@ -150,14 +150,14 @@ exports.putUser = (req, res) => {
 
         userModel.update(id, userAlter)
             .then(user => {
-                res.status(201).send("Usuário Cadastrado com Sucesso.");
+                res.status(201).json("Usuário Cadastrado com Sucesso.");
             })
             .catch(err => {
                 console.error("Erro ao Criar Um Novo Usuário", err);
-                res.status(500).send("Erro ao Criar Um Novo Usuário");
+                res.status(500).json("Erro ao Criar Um Novo Usuário");
             });
     }else {
-        res.status(401).send("Campo Inválido");
+        res.status(401).json("Campo Inválido");
     } */
 };
 //------METHOD PUT FOR USER-----UPDATE NEW USER
@@ -169,10 +169,10 @@ exports.deleteUser = (req, res) =>{
     userModel.delete(id)
         .then(results => {
             if (results == null){
-                res.status(204).send("Não foi possivel encontrar usuário");
+                res.status(204).json("Não foi possivel encontrar usuário");
             }
             else {
-                res.status(200).send("Usuario excluido com sucesso");
+                res.status(200).json("Usuario excluido com sucesso");
             }
         })
         .catch(err =>{

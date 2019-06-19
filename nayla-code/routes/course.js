@@ -31,7 +31,7 @@ router.get('/', function (req, res) {
             res.status(500);
         }
         else {
-            res.send(users);
+            res.json(users);
         }
     });
 });
@@ -71,16 +71,16 @@ router.post('/', function (req, res) {
            db.collection('course').insertOne(newcourse, (err, result) => {
                if (err) {
                    console.error("Erro ao Criar Um Novo Curso", err);
-                   res.status(500).send("Erro ao Criar Um Novo Curso");
+                   res.status(500).json("Erro ao Criar Um Novo Curso");
                } else {
 
                    if(invalidos.length == 0){
-                       return res.status(201).send("Curso Cadastrado com sucesso");
+                       return res.status(201).json("Curso Cadastrado com sucesso");
                    }
                    else {
-                       return res.status(201).send("Id de professor inexistente curso cadastrado");
+                       return res.status(201).json("Id de professor inexistente curso cadastrado");
                    }
-                   res.status(201).send("Curso Cadastrado com Sucesso.");
+                   res.status(201).json("Curso Cadastrado com Sucesso.");
                }
            });
 
@@ -88,7 +88,7 @@ router.post('/', function (req, res) {
    }
    else{
        res.status(401);
-       res.send('Insira todos os campos obrigatorios');
+       res.json('Insira todos os campos obrigatorios');
    }
     /*let newcourse = req.body;
    newcourse.id = ++id;
@@ -104,9 +104,9 @@ router.post('/', function (req, res) {
 
             if (err) {
                 console.error("Erro ao Criar Um Novo Curso", err);
-                res.status(500).send("Erro ao Criar Um Novo Curso");
+                res.status(500).json("Erro ao Criar Um Novo Curso");
             } else {
-                res.status(201).send("Curso Cadastrado com Sucesso.");
+                res.status(201).json("Curso Cadastrado com Sucesso.");
             }
         });
 
@@ -156,21 +156,21 @@ router.put('/:id', function (req, res) {
             db.collection('course').updateOne({"id": ide}, { $set: alterCourse }, (err, result) => {
                 if (err) {
                     console.error("Erro ao Criar Um Novo Curso", err);
-                    res.status(201).send("Erro ao Criar Um Novo Curso");
+                    res.status(201).json("Erro ao Criar Um Novo Curso");
                 } else {
                     console.log('-------------------',alterCourse);
                     db.collection('student').updateMany({ "course.id": alterCourse.id }, { $set: { "course.$": alterCourse } }, function(err_course, results){
                             if(err_course){
-                                res.send("Erro na inserção do curso");
+                                res.json("Erro na inserção do curso");
                             }
                             else if(results.matchedCount >= 0){
-                                res.send("curso modificado com sucesso");
+                                res.json("curso modificado com sucesso");
                             }
                             else{
-                                res.send('Erro na modificação');
+                                res.json('Erro na modificação');
                             }
                         })
-                    //res.status(201).send("Curso modificado com Sucesso.");
+                    //res.status(201).json("Curso modificado com Sucesso.");
                 }
             });
 
@@ -178,20 +178,20 @@ router.put('/:id', function (req, res) {
             /*db.collection('course').findOneAndUpdate({"id":id, "status":1}, {$set:{...alterCourse}}, function (err, result) {
                 if (err) {
                     console.error("Erro ao Editar Um Novo Curso", err);
-                    res.status(500).send("Erro ao Editar Um Novo Curso");
+                    res.status(500).json("Erro ao Editar Um Novo Curso");
                 } else {
-                    res.status(201).send("Curso Cadastrado com Sucesso.");
+                    res.status(201).json("Curso Cadastrado com Sucesso.");
                 }
             }); */
 
         })();
     } else {
-        res.status(403).send('Todos os dados devem ser preenchidos')
+        res.status(403).json('Todos os dados devem ser preenchidos')
     }
 
     /* if(bodyuser == {}){
         res.status('400');
-        res.send('Solicitação não autorizada')
+        res.json('Solicitação não autorizada')
     }
     else {
         (async function() {
@@ -205,9 +205,9 @@ router.put('/:id', function (req, res) {
 
                 if (err) {
                     console.error("Erro ao editar Um Novo Curso", err);
-                    res.status(500).send("Erro ao Criar Um Novo Curso");
+                    res.status(500).json("Erro ao Criar Um Novo Curso");
                 } else {
-                    res.status(201).send("Curso Editado com Sucesso.");
+                    res.status(201).json("Curso Editado com Sucesso.");
                 }
             });
 
@@ -225,7 +225,7 @@ router.put('/:id', function (req, res) {
             return teacherConsult.getTeacher(item);
         });
     }
-    res.send('Editado com sucesso'); */
+    res.json('Editado com sucesso'); */
 
 });
 
@@ -241,10 +241,10 @@ router.get('/:id', function (req, res) {
         else {
             if (user == []){
                 res.status(404);
-                res.send('Professor não encontrado');
+                res.json('Professor não encontrado');
             }
             else {
-                res.send(user);
+                res.json(user);
             }
         }
     });
@@ -252,10 +252,10 @@ router.get('/:id', function (req, res) {
     /* var id = req.params.id; //o parametro name tem que ser exatamente o mesmo que na rota
     var filterestCourses = courses.filter((s) => {return (s.id == id); });
     if (filterestCourses.length >= 1)
-        res.send(filterestCourses[0]);
+        res.json(filterestCourses[0]);
     else
         res.status(404);
-        res.send('Curso não encontrado '); */
+        res.json('Curso não encontrado '); */
 });
 
 //DELETE ALL DESUSO
@@ -271,17 +271,17 @@ router.get('/:id', function (req, res) {
             if (numRemoved > 0){
                 console.log("INF: Todos os curso (" + numRemoved + ") foram removidos");
                 res.status(204);
-                res.send('Todos os cursos removidos com sucesso');
+                res.json('Todos os cursos removidos com sucesso');
             }
             else {
-                res.send('Nenhum curso foi removido');
+                res.json('Nenhum curso foi removido');
                 res.status(404);
             }
         }
     });
 
     //courses = [];
-    //res.send('Cursos removidos com sucesso ');
+    //res.json('Cursos removidos com sucesso ');
 }); */
 
 //DELETE COURSE (CHANGE THE STATUS 1 TO 0)
@@ -300,10 +300,10 @@ router.delete('/:id', function (req, res){ //DELETE FILTERED
         }else{
             if(info.value != null){
                 console.log('O curso foi removido com sucesso');
-                res.status(200).send('Curso removido com sucesso');
+                res.status(200).json('Curso removido com sucesso');
             }else{
                 console.log('Nenhum curso foi removido');
-                res.status(204).send('Nenhum cursos foi removido');
+                res.status(204).json('Nenhum cursos foi removido');
             }
         }
     });
@@ -324,10 +324,10 @@ router.delete('/:id', function (req, res){ //DELETE FILTERED
             if (info.value != null){
                 console.log("INF: Curso foram removidos");
                 res.status(200);
-                res.send(' Curso removido com sucesso');
+                res.json(' Curso removido com sucesso');
             }
             else {
-                res.send('Nenhum curso foi removido');
+                res.json('Nenhum curso foi removido');
                 res.status(404);
             }
         }
@@ -339,13 +339,13 @@ router.delete('/:id', function (req, res){ //DELETE FILTERED
         for(var i=0;i<courses.length;i++){
             if (courses[i].id == id){
                 courses.splice(i,1);
-                res.send('Deletado com sucesso ');
+                res.json('Deletado com sucesso ');
             }
         }
 
     }
     else
-        res.send('Curso não encontrado '); */
+        res.json('Curso não encontrado '); */
 
 /* function getCourse(courseId){
     courseId = parseInt(courseId);

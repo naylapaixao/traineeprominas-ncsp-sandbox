@@ -40,9 +40,9 @@ router.get('/', function(req, res) {
     .toArray((err, courses) => {
       if (err) {
         console.error("Erro ao conectar a collection 'courses'", err);
-        res.status(500).send("Erro ao conectar a collection 'courses'");
+        res.status(500).json("Erro ao conectar a collection 'courses'");
       } else {
-        res.send(courses);
+        res.json(courses);
       }
     });
 });
@@ -51,7 +51,7 @@ router.post('/', function(req, res) {
   
   // validation - Required Fields
   if (!req.body.hasOwnProperty('name') ||  !req.body.hasOwnProperty('city'))
-    return res.status(401).send('Os campos name, city e teachers são obrigatórios.');
+    return res.status(401).json('Os campos name, city e teachers são obrigatórios.');
 
   // if valid creates the course object
   let course = {
@@ -89,14 +89,14 @@ router.post('/', function(req, res) {
 
       if (err) {
         console.error("Erro ao Criar Um Novo Curso", err);
-        res.status(500).send("Erro ao Criar Um Novo Curso");
+        res.status(500).json("Erro ao Criar Um Novo Curso");
       } else {
 
         // If some invalid teacher id was informed
         if (invalidTeachers.length > 0)
-          return res.status(201).send(`Curso Cadastrado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
+          return res.status(201).json(`Curso Cadastrado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
 
-        res.status(201).send("Curso Cadastrado com Sucesso.");
+        res.status(201).json("Curso Cadastrado com Sucesso.");
       }
     });
 
@@ -114,22 +114,22 @@ router.delete('/:id', function(req, res) {
 
     // Don't "remove" a course if there are registered students on it
     if (numRegisteredStudents > 0)
-      return res.status(401).send('O Curso Informado Não Pôde ser Removido Porque Possui Estudantes Matriculados.');
+      return res.status(401).json('O Curso Informado Não Pôde ser Removido Porque Possui Estudantes Matriculados.');
 
     // Don't actually remove just change user status
     courseCollection.findOneAndUpdate({ id: id, status: 1 }, { $set: { status: 0 } }, (err, result) => {
 
       if (err) {
         console.error("Erro ao remover o Curso", err);
-        res.status(500).send("Erro ao remover o Curso");
+        res.status(500).json("Erro ao remover o Curso");
       } else {
 
         if (result.value) {
           console.log(`INF: Curso Removido`);
-          res.status(200).send(`Curso Removido`);
+          res.status(200).json(`Curso Removido`);
         } else {
           console.log('Nenhum Curso Removido');
-          res.status(204).send('Nenhum Curso Removido');
+          res.status(204).json('Nenhum Curso Removido');
         }
       }
 
@@ -149,13 +149,13 @@ router.get('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'course'", err);
-      res.status(500).send("Erro ao conectar a collection 'course'");
+      res.status(500).json("Erro ao conectar a collection 'course'");
     } else {
 
       if (course)
-        res.send(course);
+        res.json(course);
       else
-        res.status(404).send("Curso não Encontrado.");
+        res.status(404).json("Curso não Encontrado.");
     }
   });
 
@@ -165,7 +165,7 @@ router.put('/:id', function(req, res) {
   
   // validation - Required Fields
   if (!req.body.hasOwnProperty('name') ||  !req.body.hasOwnProperty('city'))
-    return res.status(401).send('Os campos name, city e teachers são obrigatórios.');
+    return res.status(401).json('Os campos name, city e teachers são obrigatórios.');
 
   // if valid creates the course object
   let course = {
@@ -204,7 +204,7 @@ router.put('/:id', function(req, res) {
 
       if (err) {
         console.error("Erro ao conectar a collection 'course'", err);
-        res.status(500).send("Erro ao conectar a collection 'course'");
+        res.status(500).json("Erro ao conectar a collection 'course'");
       } else {
 
         if (result.value) {
@@ -216,17 +216,17 @@ router.put('/:id', function(req, res) {
 
             // If some invalid teacher id was informed
             if (invalidTeachers.length > 0)
-              return res.status(201).send(`Curso Atualizado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
+              return res.status(201).json(`Curso Atualizado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
 
             console.log(`INF: Curso Atualizado`);
-            res.status(200).send(`Curso Atualizado`);
+            res.status(200).json(`Curso Atualizado`);
           
           });
 
           
         } else {
           console.log('Curso não Encontrado.');
-          res.status(404).send('Curso não Encontrado.');
+          res.status(404).json('Curso não Encontrado.');
         }
       }
 

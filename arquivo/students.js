@@ -48,9 +48,9 @@ router.get('/', function(req, res) {
     .toArray((err, students) => {
       if (err) {
         console.error("Erro ao conectar a collection 'student'", err);
-        res.status(500).send("Erro ao conectar a collection 'student'");
+        res.status(500).json("Erro ao conectar a collection 'student'");
       } else {
-        res.send(students);
+        res.json(students);
       }
     });
 });
@@ -63,7 +63,7 @@ router.post('/', function(req, res) {
       !req.body.hasOwnProperty('lastName') || 
       !req.body.hasOwnProperty('age') || 
       !req.body.hasOwnProperty('course'))
-    return res.status(401).send('Os campos name, lastName, age e course são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName, age e course são obrigatórios.');
 
   // if valid creates the student object
   let student = {
@@ -80,7 +80,7 @@ router.post('/', function(req, res) {
 
     // if course id is invalid abort the creation of the student
     if (!course)
-      return res.status(401).send('O Curso Informado Não Existe.');
+      return res.status(401).json('O Curso Informado Não Existe.');
 
     // If course is valid continues
     student.course = course;
@@ -93,9 +93,9 @@ router.post('/', function(req, res) {
 
       if (err) {
         console.error("Erro ao Criar Um Novo Estudante", err);
-        res.status(500).send("Erro ao Criar Um Novo Estudante");
+        res.status(500).json("Erro ao Criar Um Novo Estudante");
       } else {
-        res.status(201).send("Estudante Cadastrado com Sucesso.");
+        res.status(201).json("Estudante Cadastrado com Sucesso.");
       }
     });
 
@@ -112,15 +112,15 @@ router.delete('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao remover o Estudante", err);
-      res.status(500).send("Erro ao remover o Estudante");
+      res.status(500).json("Erro ao remover o Estudante");
     } else {
 
       if (result.value) {
         console.log(`INF: Estudante Removido`);
-        res.status(200).send(`Estudante Removido`);
+        res.status(200).json(`Estudante Removido`);
       } else {
         console.log('Nenhum Estudante Removido');
-        res.status(204).send('Nenhum Estudante Removido');
+        res.status(204).json('Nenhum Estudante Removido');
       }
     }
 
@@ -145,13 +145,13 @@ router.get('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'student'", err);
-      res.status(500).send("Erro ao conectar a collection 'student'");
+      res.status(500).json("Erro ao conectar a collection 'student'");
     } else {
 
       if (student)
-        res.send(student);
+        res.json(student);
       else
-        res.status(404).send("Estudante não Encontrado.");
+        res.status(404).json("Estudante não Encontrado.");
     }
   });
 
@@ -165,7 +165,7 @@ router.put('/:id', function(req, res) {
       !req.body.hasOwnProperty('lastName') || 
       !req.body.hasOwnProperty('age') || 
       !req.body.hasOwnProperty('course'))
-    return res.status(401).send('Os campos name, lastName, age e course são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName, age e course são obrigatórios.');
 
   // if valid creates the student object
   let student = {
@@ -184,7 +184,7 @@ router.put('/:id', function(req, res) {
 
     // if course id is invalid abort the creation of the student
     if (!course)
-      return res.status(401).send('O Curso Informado Não Existe.');
+      return res.status(401).json('O Curso Informado Não Existe.');
 
     // If course is valid continues
     student.course = course;
@@ -194,15 +194,15 @@ router.put('/:id', function(req, res) {
 
       if (err) {
         console.error("Erro ao conectar a collection 'student'", err);
-        res.status(500).send("Erro ao conectar a collection 'student'");
+        res.status(500).json("Erro ao conectar a collection 'student'");
       } else {
 
         if (result.value) {
           console.log(`INF: Estudante Atualizado`);
-          res.status(200).send(`Estudante Atualizado`);
+          res.status(200).json(`Estudante Atualizado`);
         } else {
           console.log('Estudante não Encontrado.');
-          res.status(404).send('Estudante não Encontrado.');
+          res.status(404).json('Estudante não Encontrado.');
         }
       }
 

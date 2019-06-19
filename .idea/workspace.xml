@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="13df07cc-5d60-4482-8882-ce7049fff2df" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,12 +18,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/teachers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1747">
+            <state relative-caret-position="4200">
               <caret line="339" column="29" selection-start-line="339" selection-start-column="24" selection-end-line="339" selection-end-column="29" />
               <folding>
                 <element signature="e#6803#6873#0" />
-                <element signature="e#9485#9498#0" />
-                <element signature="e#11179#11239#0" />
               </folding>
             </state>
           </provider>
@@ -33,8 +30,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
+            <state relative-caret-position="225">
               <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/schema.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="825">
+              <caret line="55" column="2" lean-forward="true" selection-start-line="55" selection-start-column="2" selection-end-line="55" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -42,7 +48,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
+            <state relative-caret-position="405">
               <caret line="35" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="e#437#633#0" />
@@ -121,6 +127,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -132,7 +139,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -197,12 +203,14 @@
       <workItem from="1560424002091" duration="21523000" />
       <workItem from="1560511470545" duration="24087000" />
       <workItem from="1560769727676" duration="5650000" />
-      <workItem from="1560862320156" duration="2684000" />
+      <workItem from="1560862320156" duration="3792000" />
+      <workItem from="1560890650341" duration="446000" />
+      <workItem from="1560943006894" duration="923000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="368600000" />
+    <option name="totallyTimeSpent" value="371077000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -215,13 +223,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1299" height="743" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="npm" order="1" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.14576803" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.14576803" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="0" sideWeight="0.4992163" visible="true" weight="0.32736155" />
+      <window_info anchor="bottom" id="Terminal" order="0" sideWeight="0.4992163" weight="0.32736155" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5007837" side_tool="true" weight="0.32736155" />
       <window_info anchor="bottom" id="Version Control" order="2" weight="0.32899022" />
       <window_info anchor="bottom" id="Docker" order="3" show_stripe_button="false" />
@@ -404,16 +411,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/schema.js">
+    <entry file="file://$PROJECT_DIR$/controller/teachers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="55" column="2" lean-forward="true" selection-start-line="55" selection-start-column="2" selection-end-line="55" selection-end-column="2" />
+        <state relative-caret-position="4200">
+          <caret line="339" column="29" selection-start-line="339" selection-start-column="24" selection-end-line="339" selection-end-column="29" />
+          <folding>
+            <element signature="e#6803#6873#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models/teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
+        <state relative-caret-position="405">
           <caret line="35" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="e#437#633#0" />
@@ -421,21 +431,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/teachers.js">
+    <entry file="file://$PROJECT_DIR$/schema.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1747">
-          <caret line="339" column="29" selection-start-line="339" selection-start-column="24" selection-end-line="339" selection-end-column="29" />
-          <folding>
-            <element signature="e#6803#6873#0" />
-            <element signature="e#9485#9498#0" />
-            <element signature="e#11179#11239#0" />
-          </folding>
+        <state relative-caret-position="825">
+          <caret line="55" column="2" lean-forward="true" selection-start-line="55" selection-start-column="2" selection-end-line="55" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
+        <state relative-caret-position="225">
           <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
         </state>
       </provider>

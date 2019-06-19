@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
             res.status(500);
         }
         else {
-            res.send(users);
+            res.json(users);
         }
     });
 });
@@ -73,12 +73,12 @@ router.put('/:id', function (req, res) {
             })();
             if(err){
                 console.log(err);
-                res.status(401).send('Não é possível editar professor inexistente');
+                res.status(401).json('Não é possível editar professor inexistente');
             }else{
-                res.status(200).send('Professor editado com sucesso!');
+                res.status(200).json('Professor editado com sucesso!');
             }});
     }else{
-        res.status(401).send('Não foi possível editar o professor');
+        res.status(401).json('Não foi possível editar o professor');
     }
 })
 
@@ -86,16 +86,16 @@ router.put('/:id', function (req, res) {
             console.log(alterTeacher);
             if (result.value == null){
                 res.status(404);
-                res.send("Nenhum Campo atualizado");
+                res.json("Nenhum Campo atualizado");
             }
             else {
-                res.send("Editado com sucesso");
+                res.json("Editado com sucesso");
             }
         }) */
    /* }
     else {
         es.status(403);
-        res.send("Solicitação não autorizada");
+        res.json("Solicitação não autorizada");
     } */
 
     /*var id = parseInt(req.params.id);
@@ -104,11 +104,11 @@ router.put('/:id', function (req, res) {
 
     if(bodyuser == {}){
         res.status('400');
-        res.send('Solicitação não autorizada')
+        res.json('Solicitação não autorizada')
     }
     else {
         collection.update({'id':id}, bodyuser);
-        res.send('Professor editado com sucesso');
+        res.json('Professor editado com sucesso');
     } */
 // });
 
@@ -127,15 +127,15 @@ router.post('/', function (req, res) {
 
         res.status(201);
         db.collection('teacher').insert(newteacher);
-        res.send('Professor Cadastrado com sucesso');
+        res.json('Professor Cadastrado com sucesso');
     }
     else {
         res.status(401);
-        res.send('Insira todos os campos obrigatorios')
+        res.json('Insira todos os campos obrigatorios')
     }
     /* newteacher.id = ++id;
     db.collection('teacher').insert(newteacher);
-    res.send('Professor Cadastrado com sucesso'); */
+    res.json('Professor Cadastrado com sucesso'); */
 });
 
 // GET ONE TEACHER
@@ -150,10 +150,10 @@ router.get('/:id', function (req, res) {
         else {
             if (user == []){
                 res.status(404);
-                res.send('Professor não encontrado');
+                res.json('Professor não encontrado');
             }
             else {
-                res.send(user);
+                res.json(user);
             }
         }
     });
@@ -172,10 +172,10 @@ router.get('/:id', function (req, res) {
             if (numRemoved > 0){
                 console.log("INF: Todos os professores (" + numRemoved + ") foram removidos");
                 res.status(204);
-                res.send('Todos os professores foram removidos com sucesso');
+                res.json('Todos os professores foram removidos com sucesso');
             }
             else {
-                res.send('Nenhum professor foi removido');
+                res.json('Nenhum professor foi removido');
                 res.status(404);
             }
         }
@@ -199,10 +199,10 @@ router.delete('/:id', function (req, res) {
                 db.collection('course').updateMany({}, {$pull: {teacher: {"id": id}}});
                 db.collection('student').updateMany({}, {$pull: {'course.teacher': {"id": id}}});
                 res.status(200);
-                res.send('Professor removido com sucesso');
+                res.json('Professor removido com sucesso');
             }
             else {
-                res.send('Nenhum usuário foi removido');
+                res.json('Nenhum usuário foi removido');
                 res.status(204);
             }
         }

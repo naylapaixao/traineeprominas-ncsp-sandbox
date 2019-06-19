@@ -32,11 +32,11 @@ exports.getAll = (req, res) => {
     courseModel.findAll(where,projection)
     courseModel.get_loopUp(where,projection)
         .then(courses => {
-            res.send(courses);
+            res.json(courses);
         }).catch(err => {
         console.log(err);
         console.error("Ocorreu um erro ao enviar os cursos");
-        res.status(500).send('Ocorreu um erro');
+        res.status(500).json('Ocorreu um erro');
     });
 };
 //------METHOD GET FOR ALL COURSES-----
@@ -50,14 +50,14 @@ exports.getOneCourse = function (req, res) {
     courseModel.findOne(where, projection)
         .then(course => {
             if (course) {
-                return res.send(course);
+                return res.json(course);
             }else {
-                return res.status(404).send("Curso não Encontrado.");
+                return res.status(404).json("Curso não Encontrado.");
             }
         })
         .catch(err =>{
             console.error("Erro ao conectar a collection course");
-            res.status(500).send("Erro ao conectar a collection course");
+            res.status(500).json("Erro ao conectar a collection course");
         });
 };
 //------METHOD GET FOR ONE COURSE-----
@@ -98,21 +98,21 @@ exports.postCourse = (req, res) => {
                     if (!error) {
                         return courseModel.insertOne(course)
                             .then(result => {
-                                res.status(201).send('Curso cadastrado com sucesso!');
+                                res.status(201).json('Curso cadastrado com sucesso!');
                             })
                             .catch(err => {
                                 console.error("Erro ao conectar a collection course: ", err);
                                 res.status(500);
                             });
                     } else {
-                        res.status(401).send('Não foi possível cadastrar o Curso');
+                        res.status(401).json('Não foi possível cadastrar o Curso');
                     }
                 });
 
             })();
 
         } else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
 
     });
@@ -145,7 +145,7 @@ exports.postCourse = (req, res) => {
             }
 
             if (newcourse.teacher.length < 2){
-                return res.status(401).send('O curso deverá ter ao menos dois professores válidos.');
+                return res.status(401).json('O curso deverá ter ao menos dois professores válidos.');
 
             }
             courseModel.insertOne(newcourse)
@@ -153,13 +153,13 @@ exports.postCourse = (req, res) => {
 
                     // If some invalid teacher id was informed
                     if (invalidos.length > 0)
-                        return res.status(201).send(`Curso Cadastrado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidos}`);
+                        return res.status(201).json(`Curso Cadastrado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidos}`);
 
-                    return res.status(201).send("Curso Cadastrado com Sucesso.");
+                    return res.status(201).json("Curso Cadastrado com Sucesso.");
                 })
                 .catch(err => {
                     console.error("Erro ao Criar Um Novo Curso", err);
-                    res.status(500).send("Erro ao Criar Um Novo Curso");
+                    res.status(500).json("Erro ao Criar Um Novo Curso");
                 });
 
         })();
@@ -203,14 +203,14 @@ exports.putCourse = (req, res) =>{
                             return courseModel.update(where, {$set: course})
                                 .then(result => {
                                     //console.log(result)
-                                    res.status(200).send('Curso ediatdo com sucesso!');
+                                    res.status(200).json('Curso ediatdo com sucesso!');
                                 })
                                 .catch(err => {
                                     console.error("Erro ao conectar a collection course: ", err);
                                     res.status(500);
                                 });
                         } else {
-                            res.status(401).send('Não foi possível editar o Curso');
+                            res.status(401).json('Não foi possível editar o Curso');
                         }
                     });
                 }
@@ -218,7 +218,7 @@ exports.putCourse = (req, res) =>{
             })();
 
         }else{
-            res.status(401).send('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
+            res.status(401).json('Campos obrigatórios não preenchidos ou preenchidos de forma incorreta');
         }
 
     });
@@ -258,7 +258,7 @@ exports.putCourse = (req, res) =>{
             }
 
             if (alterCourse.teacher.length < 2){
-                return res.status(401).send('O curso deverá ter ao menos dois professores válidos.');
+                return res.status(401).json('O curso deverá ter ao menos dois professores válidos.');
             }
 
             let query = { id: parseInt(req.params.id), status: 1 };
@@ -274,10 +274,10 @@ exports.putCourse = (req, res) =>{
 
                                 // If some invalid teacher id was informed
                                 if (invalidos.length > 0)
-                                    return res.status(201).send(`Curso Atualizado com Sucesso. Os ids dos professores não foram encontrados: ${invalidos}`);
+                                    return res.status(201).json(`Curso Atualizado com Sucesso. Os ids dos professores não foram encontrados: ${invalidos}`);
 
                                 //console.log(`INF: Curso Atualizado`);
-                                res.status(200).send(`Curso Atualizado`);
+                                res.status(200).json(`Curso Atualizado`);
 
                             // })
                             // .catch(err => {
@@ -286,13 +286,13 @@ exports.putCourse = (req, res) =>{
 
                     //} else {
                     //     console.log('Curso não Encontrado.');
-                    //     res.status(404).send('Curso não Encontrado.');
+                    //     res.status(404).json('Curso não Encontrado.');
                     // }
 
                 })
                 .catch(err => {
                     console.error("Erro ao conectar a collection course", err);
-                    res.status(500).send("Erro ao conectar a collection course");
+                    res.status(500).json("Erro ao conectar a collection course");
                 });
 
         })();
@@ -314,9 +314,9 @@ exports.deleteCourse =  (req, res) => {
     //
     //     if (result) {
     //         await studentModel.deleteCourse(parseInt(req.params.id));
-    //         res.status(200).send('O curso foi removido com sucesso');
+    //         res.status(200).json('O curso foi removido com sucesso');
     //     } else {
-    //         res.status(204).send('Nenhum curso foi removido');
+    //         res.status(204).json('Nenhum curso foi removido');
     //     }
     //
     //
@@ -336,10 +336,10 @@ exports.deleteCourse =  (req, res) => {
             //console.log("DELETE NO CURSO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", result2);
             if(result){
                 //console.log('O curso foi removido');
-                res.status(200).send('O curso foi removido com sucesso');
+                res.status(200).json('O curso foi removido com sucesso');
             }else{
                 //console.log('Nenhum curso foi removido');
-                res.status(204).send('Nenhum curso foi removido');
+                res.status(204).json('Nenhum curso foi removido');
             }
         })
         .catch(err => {

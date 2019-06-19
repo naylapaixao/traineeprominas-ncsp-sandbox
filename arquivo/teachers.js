@@ -42,9 +42,9 @@ router.get('/', function(req, res) {
     .toArray((err, users) => {
       if (err) {
         console.error("Erro ao conectar a collection 'teacher'", err);
-        res.status(500).send("Erro ao conectar a collection 'teacher'");
+        res.status(500).json("Erro ao conectar a collection 'teacher'");
       } else {
-        res.send(users);
+        res.json(users);
       }
     });
 });
@@ -53,7 +53,7 @@ router.post('/', function(req, res) {
   
   // validation
   if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName'))
-    return res.status(401).send('Os campos name, lastName são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName são obrigatórios.');
 
   // if valid creates the teacher object
   let teacher = {
@@ -76,9 +76,9 @@ router.post('/', function(req, res) {
 
       if (err) {
         console.error("Erro ao Criar Um Novo Professor", err);
-        res.status(500).send("Erro ao Criar Um Novo Professor");
+        res.status(500).json("Erro ao Criar Um Novo Professor");
       } else {
-        res.status(201).send("Professor Cadastrado com Sucesso.");
+        res.status(201).json("Professor Cadastrado com Sucesso.");
       }
     });
 
@@ -95,7 +95,7 @@ router.delete('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao remover o Professor", err);
-      res.status(500).send("Erro ao remover o Professor");
+      res.status(500).json("Erro ao remover o Professor");
     } else {
 
       if (result.value) {
@@ -114,13 +114,13 @@ router.delete('/:id', function(req, res) {
           }
 
           console.log(`INF: Professor Removido`);
-          res.status(200).send(`Professor Removido`);
+          res.status(200).json(`Professor Removido`);
 
         })();
 
       } else {
         console.log('Nenhum Professor Removido');
-        res.status(204).send('Nenhum Professor Removido');
+        res.status(204).json('Nenhum Professor Removido');
       }
     }
 
@@ -138,13 +138,13 @@ router.get('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'teacher'", err);
-      res.status(500).send("Erro ao conectar a collection 'teacher'");
+      res.status(500).json("Erro ao conectar a collection 'teacher'");
     } else {
 
       if (teacher)
-        res.send(teacher);
+        res.json(teacher);
       else
-        res.status(404).send("Professor não Encontrado.");
+        res.status(404).json("Professor não Encontrado.");
     }
   });
 
@@ -154,7 +154,7 @@ router.put('/:id', function(req, res) {
   
   // validation
   if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName'))
-    return res.status(401).send('Os campos name, lastName são obrigatórios.');
+    return res.status(401).json('Os campos name, lastName são obrigatórios.');
 
   // if valid creates the teacher object
   let teacher = {
@@ -174,7 +174,7 @@ router.put('/:id', function(req, res) {
 
     if (err) {
       console.error("Erro ao conectar a collection 'teacher'", err);
-      res.status(500).send("Erro ao conectar a collection 'teacher'");
+      res.status(500).json("Erro ao conectar a collection 'teacher'");
     } else {
 
       if (result.value) {
@@ -200,13 +200,13 @@ router.put('/:id', function(req, res) {
           }
 
           console.log(`INF: Professor Atualizado`);
-          res.status(200).send(`Professor Atualizado`);
+          res.status(200).json(`Professor Atualizado`);
 
         })();
 
       } else {
         console.log('Professor não Encontrado.');
-        res.status(404).send('Professor não Encontrado.');
+        res.status(404).json('Professor não Encontrado.');
       }
     }
 
