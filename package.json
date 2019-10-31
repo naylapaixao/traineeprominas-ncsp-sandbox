@@ -21,7 +21,7 @@
     "jwks": "^1.0.0",
     "jwks-rsa": "^1.5.1",
     "mongodb": "^3.2.6",
-    "mongoose": "^5.5.13",
+    "mongoose": "^5.7.5",
     "request": "^2.88.0"
   },
   "devDependencies": {
